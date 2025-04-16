@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "version": "1.0.11",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
+  "options_ui": {
+    "page": "src/pages/options/index.html"
+  },
+  "action": {
+    "default_icon": {
+      "128": "logo-128.png"
+    }
+  },
+  "icons": {
+    "128": "logo-128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "assets/index.tsx-loader-BVqN34Eh.js"
+      ],
+      "matches": [
+        "https://pi.ai/*"
+      ],
+      "css": [
+        "contentStyle.css",
+        "assets/index-CKNsX7Id.css"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "devtools_page": "src/pages/devtools/index.html",
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://pi.ai/*"
+      ],
+      "resources": [
+        "contentStyle.css",
+        "icon-128.png",
+        "icon-32.png",
+        "logo-128.png",
+        "pdf.worker.js",
+        "injected.js",
+        "assets/client-C-PqnIbe.js",
+        "assets/utils-3_VkQky6.js",
+        "assets/_commonjsHelpers-BosuxZz1.js",
+        "assets/__vite-browser-external-BIHI7g3E.js",
+        "assets/index.tsx-rwUbXrzN.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  }
+}

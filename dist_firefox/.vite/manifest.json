@@ -1,0 +1,86 @@
+{
+  "../../../../../@crx/manifest": {
+    "file": "assets/crx-manifest.js-BH2bDx_R.js",
+    "name": "crx-manifest.js",
+    "src": "../../../../../@crx/manifest",
+    "isEntry": true
+  },
+  "__commonjsHelpers-BosuxZz1.js": {
+    "file": "assets/_commonjsHelpers-BosuxZz1.js",
+    "name": "_commonjsHelpers"
+  },
+  "__vite-browser-external": {
+    "file": "assets/__vite-browser-external-BIHI7g3E.js",
+    "name": "__vite-browser-external",
+    "src": "__vite-browser-external",
+    "isDynamicEntry": true
+  },
+  "_client-C-PqnIbe.js": {
+    "file": "assets/client-C-PqnIbe.js",
+    "name": "client"
+  },
+  "_index.tsx-loader-BVqN34Eh.js": {
+    "file": "assets/index.tsx-loader-BVqN34Eh.js",
+    "src": "_index.tsx-loader-BVqN34Eh.js"
+  },
+  "_modulepreload-polyfill-B5Qt9EMX.js": {
+    "file": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "name": "modulepreload-polyfill"
+  },
+  "_utils-3_VkQky6.js": {
+    "file": "assets/utils-3_VkQky6.js",
+    "name": "utils"
+  },
+  "src/pages/background/index.ts": {
+    "file": "assets/index.ts-D6hsdxvf.js",
+    "name": "index.ts",
+    "src": "src/pages/background/index.ts",
+    "isEntry": true,
+    "imports": [
+      "_utils-3_VkQky6.js"
+    ]
+  },
+  "src/pages/content/index.tsx": {
+    "file": "assets/index.tsx-rwUbXrzN.js",
+    "name": "index.tsx",
+    "src": "src/pages/content/index.tsx",
+    "isEntry": true,
+    "imports": [
+      "_client-C-PqnIbe.js",
+      "_utils-3_VkQky6.js",
+      "__commonjsHelpers-BosuxZz1.js"
+    ],
+    "dynamicImports": [
+      "__vite-browser-external",
+      "__vite-browser-external",
+      "__vite-browser-external",
+      "__vite-browser-external"
+    ],
+    "css": [
+      "assets/index-CKNsX7Id.css"
+    ]
+  },
+  "src/pages/devtools/index.html": {
+    "file": "assets/index.html-C7gtCTZf.js",
+    "name": "index.html",
+    "src": "src/pages/devtools/index.html",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill-B5Qt9EMX.js",
+      "__commonjsHelpers-BosuxZz1.js"
+    ]
+  },
+  "src/pages/options/index.html": {
+    "file": "assets/index.html-CxiRY757.js",
+    "name": "index.html",
+    "src": "src/pages/options/index.html",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill-B5Qt9EMX.js",
+      "_client-C-PqnIbe.js"
+    ],
+    "css": [
+      "assets/index-tNvtlvL0.css"
+    ]
+  }
+}
