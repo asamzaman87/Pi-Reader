@@ -27,60 +27,124 @@ export function formatBytes(
 }
 
 //split text to small chunks
+// export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
+//   // Split the text into sentences based on common delimiters
+//   const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
+//   // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
+//   let currentChunk = "";
+//   let chunkId = 0;
+
+//   const initialChunkSize = chunkSize; // Initial chunk size in characters
+//   let targetSize = initialChunkSize;   // Current target chunk size
+//   const maxChunkSize = 4000;           // Maximum chunk size in characters
+
+//   const chunks = sentences.reduce((chunks, sentence, i, arr) => {
+//     // Calculate the potential new chunk if the current sentence is added
+//     const potentialChunk = currentChunk ? currentChunk + ' ' + sentence.trim() : sentence.trim();
+//     const potentialSize = potentialChunk.length;
+
+//     const isCurrentChunkSizeGreaterThanOrEqualTargetSize = potentialSize >= targetSize;
+//     const isEnd = i === arr.length - 1; // Check if it's the last sentence
+
+//     if (isCurrentChunkSizeGreaterThanOrEqualTargetSize) {
+//       // Push the current chunk to the chunks array if it's not empty
+//       if (currentChunk.trim().length > 0) {
+//         chunks.push({ id: `${chunkId++}`, text: currentChunk.trim(), completed: false });
+//       }
+
+//       // Start a new chunk with the current sentence
+//       currentChunk = sentence.trim();
+
+//       // Determine if the next chunk should reset based on chunkId
+//       const isEvery9thChunk = (chunkId % 9) === 0;
+
+//       // Adjust the target size based on conditions
+//       if (isEvery9thChunk) {
+//         // Reset to the initial chunk size
+//         targetSize = initialChunkSize;
+//       } else {
+//         // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
+//         targetSize = Math.min(Math.floor(targetSize * 1.5), maxChunkSize);
+//       }
+//     } else {
+//       // Accumulate the sentence into the current chunk
+//       currentChunk = potentialChunk;
+//     }
+
+//     // If it's the last sentence, we need to ensure the last chunk is pushed
+//     if (isEnd) {
+//       // Always push the last chunk if it has content
+//       if (currentChunk.trim().length > 0) {
+//         chunks.push({ id: `${chunkId}`, text: currentChunk.trim(), completed: false });
+//       }
+//     }
+
+//     return chunks;
+//   }, [] as Chunk[]);
+
+//   return chunks;
+// }
+
 export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
-  // Split the text into sentences based on common delimiters
-  const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
-  // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
-  let currentChunk = "";
+  const lines = text.split('\n');
+  let currentChunk = '';
   let chunkId = 0;
 
-  const initialChunkSize = chunkSize; // Initial chunk size in characters
-  let targetSize = initialChunkSize;   // Current target chunk size
-  const maxChunkSize = 4000;           // Maximum chunk size in characters
+  const chunks: Chunk[] = [];
 
-  const chunks = sentences.reduce((chunks, sentence, i, arr) => {
-    // Calculate the potential new chunk if the current sentence is added
-    const potentialChunk = currentChunk ? currentChunk + ' ' + sentence.trim() : sentence.trim();
-    const potentialSize = potentialChunk.length;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i] + '\n'; // Add newline back to preserve line endings
+    const potentialChunk = currentChunk + line;
 
-    const isCurrentChunkSizeGreaterThanOrEqualTargetSize = potentialSize >= targetSize;
-    const isEnd = i === arr.length - 1; // Check if it's the last sentence
-
-    if (isCurrentChunkSizeGreaterThanOrEqualTargetSize) {
-      // Push the current chunk to the chunks array if it's not empty
+    if (potentialChunk.length > chunkSize) {
+      // If the current chunk has content, push it and start a new one
       if (currentChunk.trim().length > 0) {
-        chunks.push({ id: `${chunkId++}`, text: currentChunk.trim(), completed: false });
+        chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
       }
-
-      // Start a new chunk with the current sentence
-      currentChunk = sentence.trim();
-
-      // Determine if the next chunk should reset based on chunkId
-      const isEvery9thChunk = (chunkId % 9) === 0;
-
-      // Adjust the target size based on conditions
-      if (isEvery9thChunk) {
-        // Reset to the initial chunk size
-        targetSize = initialChunkSize;
-      } else {
-        // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
-        targetSize = Math.min(Math.floor(targetSize * 1.5), maxChunkSize);
-      }
+      currentChunk = line; // Start new chunk with this line
     } else {
-      // Accumulate the sentence into the current chunk
       currentChunk = potentialChunk;
     }
+  }
 
-    // If it's the last sentence, we need to ensure the last chunk is pushed
-    if (isEnd) {
-      // Always push the last chunk if it has content
+  // Push the last chunk if there is any content left
+  if (currentChunk.trim().length > 0) {
+    chunks.push({ id: `${chunkId}`, text: currentChunk.trimEnd(), completed: false });
+  }
+
+  return chunks;
+}
+
+export function splitIntoChunksV3(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
+  let currentChunk = '';
+  let chunkId = 0;
+  const chunks: Chunk[] = [];
+
+  // Split the text into sentences based on a period followed by a space
+  const sentences = text.split(/(?<=\.)\s+/);
+
+  for (let i = 0; i < sentences.length; i++) {
+    const sentence = sentences[i].trim();
+    const potentialChunk = currentChunk ? `${currentChunk} ${sentence}` : sentence;
+
+    // Check if adding this sentence exceeds the chunk size
+    if (potentialChunk.length > chunkSize) {
+      // If the current chunk is not empty and the sentence has ended, push it as a completed chunk
       if (currentChunk.trim().length > 0) {
-        chunks.push({ id: `${chunkId}`, text: currentChunk.trim(), completed: false });
+        chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
       }
+      // Start a new chunk with the current sentence
+      currentChunk = sentence;
+    } else {
+      // Otherwise, add the sentence to the current chunk
+      currentChunk = potentialChunk;
     }
+  }
 
-    return chunks;
-  }, [] as Chunk[]);
+  // Push the last chunk if it exists
+  if (currentChunk.trim().length > 0) {
+    chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
+  }
 
   return chunks;
 }
@@ -92,7 +156,7 @@ export function splitIntoChunksV1(text: string, chunkSize: number = DOWLOAD_CHUN
 
   return sentences.reduce((chunks, sentence, i, arr) => {
     const isCurrentChunkSizeGreaterThanOrEqualChunkSize = (currentChunk + sentence).length >= chunkSize;
-    const isEnd = i === arr.length-1
+    const isEnd = i === arr.length - 1
     if (isCurrentChunkSizeGreaterThanOrEqualChunkSize) {
       chunks.push({ id: `${chunkId++}`, text: currentChunk.trim(), completed: false });
       currentChunk = sentence.trim();
@@ -138,11 +202,11 @@ export const switchToActiveTab = async () => {
   const activeTab = await getGPTTabs();
   if (!activeTab?.length || !activeTab[0].id) {
     const tab = await chrome.tabs.create({ url: "https://chatgpt.com" });
-    if(tab.id){
-        await chrome.tabs.update(tab.id, { active: true });
-        return tab.id +"::new_tab";
+    if (tab.id) {
+      await chrome.tabs.update(tab.id, { active: true });
+      return tab.id + "::new_tab";
     }
-    return 
+    return
   }
   await chrome.tabs.update(activeTab[0].id, { active: true });
   return activeTab[0].id;
@@ -180,7 +244,7 @@ export function observeElement(toObserve: string, cb?: (s: boolean) => void): vo
     const isPresent: boolean = !!document.querySelector(toObserve);
 
     cb && cb(isPresent);
-  
+
   };
 
   // Create the observer

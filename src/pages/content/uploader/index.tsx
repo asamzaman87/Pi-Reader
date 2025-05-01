@@ -17,6 +17,7 @@ export interface PromptProps {
 }
 
 function Uploader() {
+  const isInitialRender = useRef(true);
   const [prompts, setPrompts] = useState<PromptProps[]>([]);
   const [isActive, setIsActive] = useState<boolean>(false);
   const activateButton = useRef<HTMLButtonElement>(null);
@@ -140,68 +141,88 @@ function Uploader() {
   //   return false
   // };
 
+  // Avoid calling `onOpenChange` during the first render
+  useEffect(() => {
+    isInitialRender.current = true; // Set true initially
+    return () => {
+      isInitialRender.current = false; // Set false on cleanup (after the first render)
+    };
+  }, []);
+  
   const onOpenChange = (open: boolean) => {
-    console.log('Button Clicked: Open: ', open);
-    if (!open) {
-      //show confirmation for cancel download if download is in progress
-      const download = window.localStorage.getItem("gptr/download");
-      if (download && download === "true") {
-        setIsCancelDownloadConfirmation(true);
-        return;
-      }
-      setIsActive(false);
-      return
-    }
-    const aoc = window.localStorage.getItem("gptr/aoc");
-    //return if overlay is already active.
-    if (open && aoc && +aoc > 0) {
-      setIsOverlayFallback(true);
+    // Skip the automatic call during the initial render
+    if (isInitialRender.current) {
+      isInitialRender.current = false; // Set it to false after first render
       return;
     }
 
-    //redirect to login if click on button if not authorised
-    if (!isAuthenticated) {
-      const currentPath = window.location.pathname;
-      const isOnProfilePage = currentPath === "/profile/account";
-      if (!isOnProfilePage) {
-        window.localStorage.setItem("gptr/redirect-to-login", "true");
-        chrome.runtime.sendMessage({ type: "SET_ORIGIN" });
 
-        // Redirect to profile page
-        window.location.href = "https://pi.ai/profile/account";
-      }
-      return;
-    }
+    // console.log('Button Clicked: Open: ', open);
+    // if (!open) {
+    //   //show confirmation for cancel download if download is in progress
+    //   const download = window.localStorage.getItem("gptr/download");
+    //   if (download && download === "true") {
+    //     setIsCancelDownloadConfirmation(true);
+    //     return
+    //   }
+    //   setIsActive(false);
+    //   return
+    // }
 
-    window.localStorage.removeItem("gptr/redirect-to-login");
-
-    //check if the user has selected o1-preview or o1-mini and prompt them to select other models
-    // if(isO1PreviewOrO1MiniModelSelected()){
-    //   const {id} = toast({ description:"GPT Reader does not support o1 based models due to their slower speeds. Please switch to another ChatGPT model by using the model drop down on the top left.", duration:5000, style: TOAST_STYLE_CONFIG });
-    //   supportModelToast.current = id;
+    // const aoc = window.localStorage.getItem("gptr/aoc");
+    // //return if overlay is already active.
+    // if (open && aoc && +aoc > 0) {
+    //   setIsOverlayFallback(true);
     //   return;
     // }
-    //clear the toast if model is supported
-    // if(supportModelToast.current) dismiss(supportModelToast.current);
 
-    //gpt has a new update, shows speech button by default instead of the send button until the user types in text
-    if (isComposerSpeechButtonPresentOnDom()) {
-      //if the speech button is present on the dom, add speech found text to the input and open the popup
-      addTextToInputAndOpen(chrome.i18n.getMessage("gpt_reader"));
-      return setIsActive(true);
-    }
+    // //redirect to login if click on button if not authorised
+    // if (!isAuthenticated) {
+    //   const currentPath = window.location.pathname;
+    //   const isOnProfilePage = currentPath === "/profile/account";
+    //   // const alreadyRedirected = window.localStorage.getItem("pir/alreadyRedirected");
 
-    // if the send button is not present on the dom show error message
-    if (!isSendButtonPresentOnDom() && open) {
+    //   // console.log({ alreadyRedirected, isOnProfilePage });
+    //   if (!isOnProfilePage) {
+    //     window.localStorage.setItem("gptr/redirect-to-login", "true");
+    //     chrome.runtime.sendMessage({ type: "SET_ORIGIN" });
+    //     window.localStorage.setItem("pir/alreadyRedirected", "true");
 
-      setIsActive(false);
-      setOpenTries(tries => tries + 1);
-      if (openTries >= 1) {
-        toast({ description: chrome.i18n.getMessage("chat_error"), style: TOAST_STYLE_CONFIG });
-        setTimeout(() => setOpenTries(0), 5000);
-      }
-      return;
-    }
+    //     // Redirect to profile page
+    //     window.location.href = "https://pi.ai/profile/account";
+    //   }
+    //   return;
+    // }
+
+    // window.localStorage.removeItem("gptr/redirect-to-login");
+
+    // //check if the user has selected o1-preview or o1-mini and prompt them to select other models
+    // // if(isO1PreviewOrO1MiniModelSelected()){
+    // //   const {id} = toast({ description:"GPT Reader does not support o1 based models due to their slower speeds. Please switch to another ChatGPT model by using the model drop down on the top left.", duration:5000, style: TOAST_STYLE_CONFIG });
+    // //   supportModelToast.current = id;
+    // //   return;
+    // // }
+    // //clear the toast if model is supported
+    // // if(supportModelToast.current) dismiss(supportModelToast.current);
+
+    // //gpt has a new update, shows speech button by default instead of the send button until the user types in text
+    // if (isComposerSpeechButtonPresentOnDom()) {
+    //   //if the speech button is present on the dom, add speech found text to the input and open the popup
+    //   addTextToInputAndOpen(chrome.i18n.getMessage("gpt_reader"));
+    //   return setIsActive(true);
+    // }
+
+    // // if the send button is not present on the dom show error message
+    // if (!isSendButtonPresentOnDom() && open) {
+
+    //   setIsActive(false);
+    //   setOpenTries(tries => tries + 1);
+    //   if (openTries >= 1) {
+    //     toast({ description: chrome.i18n.getMessage("chat_error"), style: TOAST_STYLE_CONFIG });
+    //     setTimeout(() => setOpenTries(0), 5000);
+    //   }
+    //   return;
+    // }
 
     setIsActive(open);
   }
@@ -247,8 +268,8 @@ function Uploader() {
           >
             <img src={LOGO} alt="GPT Reader Logo" className="size-6" />{!minimised && (
               <>
-                {!isAuthenticated && chrome.i18n.getMessage("login_to_use")}
-                {isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
+                {/* {!isAuthenticated && chrome.i18n.getMessage("login_to_use")} */}
+                {!isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
               </>
             )}
           </Button>

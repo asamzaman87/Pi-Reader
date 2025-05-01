@@ -18,9 +18,26 @@ const useVoice = () => {
     }, []);
 
     const getVoices = useCallback(() => {
-        setIsLoading(true);
-        const voicesEvent = new CustomEvent(LISTENERS.GET_VOICES)
-        window.dispatchEvent(voicesEvent)
+        // setIsLoading(true);
+        // const voicesEvent = new CustomEvent(LISTENERS.GET_VOICES)
+        // window.dispatchEvent(voicesEvent)
+        
+        // [Currently Hardcoded: Finding a way to make it aligned with apis]
+        let voices: Voice = {
+            voices : [
+                {voice: 'Pi 1 ✨', name: 'voice1', bloop_color: '', description: 'Voice 1', preview_url: 'https://pi.ai/public/media/voice-previews/voice-1.mp3'},
+                {voice: 'Pi 2 ✨', name: 'voice2', bloop_color: '', description: 'Voice 2', preview_url: 'https://pi.ai/public/media/voice-previews/voice-2.mp3'},
+                {voice: 'Pi 3 ✨', name: 'voice3', bloop_color: '', description: 'Voice 3', preview_url: 'https://pi.ai/public/media/voice-previews/voice-3.mp3'},
+                {voice: 'Pi 4 ✨', name: 'voice4', bloop_color: '', description: 'Voice 4', preview_url: 'https://pi.ai/public/media/voice-previews/voice-4.mp3'},
+                {voice: 'Pi 5', name: 'voice5', bloop_color: '', description: 'Voice 5', preview_url: 'https://pi.ai/public/media/voice-previews/voice-5.mp3'},
+                {voice: 'Pi 6', name: 'voice6', bloop_color: '', description: 'Voice 6', preview_url: 'https://pi.ai/public/media/voice-previews/voice-6.mp3'},
+                {voice: 'Pi 7', name: 'voice7', bloop_color: '', description: 'Voice 7', preview_url: 'https://pi.ai/public/media/voice-previews/voice-7.mp3'},
+                {voice: 'Pi 8', name: 'voice8', bloop_color: '', description: 'Voice 8', preview_url: 'https://pi.ai/public/media/voice-previews/voice-8.mp3'}
+            ],
+            selected: "Pi 1 ✨",
+        }
+        setVoices(voices);
+
     }, []);
 
     const handleVoiceChange = useCallback((voice: string) => {

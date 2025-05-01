@@ -21,7 +21,7 @@ const useAudioPlayer = (isDownload: boolean) => {
     const [isPresenceModalOpen, setIsPresenceModalOpen] = useState<boolean>(false);
     const [audioUrlsBeforeStop, setAudioUrlsBeforeStop] = useState<number>(audioUrls.length);
     const toast15SecRef = useRef<string | null>(null);
-
+    const [currentTime, setCurrentTime] = useState(0);
     const audioPlayer = useMemo(() => new Audio(), []);
 
     //handles onpause event to set isPlaying and isPaused states
@@ -37,8 +37,12 @@ const useAudioPlayer = (isDownload: boolean) => {
     }
 
     useMemo(() => {
-        if (audioUrls.length > 0 && (audioUrls.length === completedPlaying.length) && !isLoading && chunks.length === audioUrls.length) {
-            //console.log("PLAYER COMPLETED ALL CHUNKS");
+
+        if (audioUrls.length > 0 
+            && (audioUrls.length === completedPlaying.length)
+            // && !isLoading && chunks.length === audioUrls.length
+        ) {
+            // console.log("PLAYER COMPLETED ALL CHUNKS");
             setHasCompletePlaying(true);
             setAudioUrls(completedPlaying);
             audioPlayer.src = completedPlaying[0];
@@ -54,14 +58,14 @@ const useAudioPlayer = (isDownload: boolean) => {
 
     const playNext = useCallback(async (index: number) => {
         try {
-            if (token) {
+            // if (token) {
                 audioPlayer.src = audioUrls[index];
                 audioPlayer.id = (index + 1).toString();
                 audioPlayer.playbackRate = playRate;
                 audioPlayer.play();
                 setIsPlaying(true);
                 setIsPaused(false);
-            }
+            // }
         } catch (e) {
             const error = e as Error;
             toast({ description: chrome.i18n.getMessage("something_went_wrong") + "\n" + JSON.stringify(error), style: TOAST_STYLE_CONFIG });
@@ -107,12 +111,13 @@ const useAudioPlayer = (isDownload: boolean) => {
 
     const markCompleted = (url: string) => {
         const tempComp = [...completedPlaying];
-        tempComp.push(url)
+        tempComp.push(url);
+        // console.log('tempComp: ', tempComp);
         setCompletedPlaying(tempComp);
     }
 
     const handleAudioEnd = useCallback(async () => {
-        // console.log("HANDLE_AUDIO_END");
+        console.log("HANDLE_AUDIO_END");
         const current = currentIndex + 1;
 
         if (isPromptingPaused) {
@@ -153,6 +158,8 @@ const useAudioPlayer = (isDownload: boolean) => {
     const pause = () => {
         if (isPlaying && audioPlayer.src) {
             audioPlayer.pause();
+            // Save the current playback position
+            setCurrentTime(audioPlayer.currentTime);
         }
     }
 
@@ -163,11 +170,19 @@ const useAudioPlayer = (isDownload: boolean) => {
     }, [audioPlayer, reset])
 
     const play = useCallback(() => {
-        if (!isPlaying) {
-            audioPlayer.playbackRate = playRate;
-            audioPlayer.play();
+        if (!isPlaying && audioUrls.length) {
+            if (audioPlayer.currentTime === 0) {
+                audioPlayer.playbackRate = playRate;
+                audioPlayer.src = audioUrls[currentIndex];
+                audioPlayer.play();
+            } else {
+                // Resume from the saved position (if needed)
+                audioPlayer.currentTime = currentTime;
+                audioPlayer.play();
+            }
         }
-    }, [audioPlayer, isPlaying, currentIndex, playRate])
+    
+    }, [audioPlayer, isPlaying, currentIndex, playRate, audioUrls, currentTime])
 
     //handler to toggle rate change from the play button
     const handlePlayRateChange = useCallback((reset?: boolean, rate?: number) => {
@@ -235,7 +250,7 @@ const useAudioPlayer = (isDownload: boolean) => {
         setAudioLoading(audioUrls.length === 0); //initial loading state if the first chunk is being prompted and not playing
         localStorage.setItem("gptr/is-first-audio-loading", String(audioUrls.length === 0));
 
-        if (audioUrls.length === 1) {
+        if (audioUrls.length > 0 && !isPlaying) {
             setCompletedPlaying([]);
             //console.log("INIT PLAY")
             playNext(0)

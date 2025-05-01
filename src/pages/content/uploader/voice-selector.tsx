@@ -80,13 +80,13 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
         }
     }
 
-    if (loading)
-      return (
-        <div className="flex items-center justify-center gap-2">
-          <Skeleton className="rounded-full w-32 h-8" />
-          <Skeleton className="rounded-full w-32 h-8" />
-        </div>
-      );
+    // if (loading)
+    //   return (
+    //     <div className="flex items-center justify-center gap-2">
+    //       <Skeleton className="rounded-full w-32 h-8" />
+    //       <Skeleton className="rounded-full w-32 h-8" />
+    //     </div>
+    //   );
 
     return (
         <div className="flex items-center justify-center gap-2">

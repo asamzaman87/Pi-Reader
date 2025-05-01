@@ -18,12 +18,19 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://pi.ai/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://pi.ai/*"
+      ],
+      "exclude_matches": [
+        "https://pi.ai/onboarding"
       ],
       "js": [
         "src/pages/content/index.tsx"

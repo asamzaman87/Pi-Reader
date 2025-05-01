@@ -26,7 +26,8 @@ export const LISTENERS = {
   "GET_VOICES": "GET_VOICES",
   "STOP_CONVERSATION": "STOP_CONVERSATION",
   "AUDIO_ENDED": "ended",
-  "GET_TOKEN": "GET_TOKEN"
+  "GET_TOKEN": "GET_TOKEN",
+  "SET_AUDIO_URL": 'SET_AUDIO_URL'
 }
 export const MAX_FILE_SIZE = 1024 * 1024 * 24; // 24MB
 export const PROMPT_INPUT_ID = "#prompt-textarea";
@@ -34,7 +35,7 @@ export const HELPER_PROMPT = "Repeat the exact text below without any changes, i
 export const SYNTETHIZE_ENDPOINT = "https://chatgpt.com/backend-api/synthesize";
 export const VOICE = "glimmer";
 export const AUDIO_FORMAT = "aac";
-export const CHUNK_SIZE = 400;
+export const CHUNK_SIZE = 300;
 export const TOAST_STYLE_CONFIG = { backgroundColor: "darkred", color: "#fff", border: "1px solid #b30000" }
 export const TOAST_STYLE_CONFIG_INFO = { backgroundColor: "darkblue", color: "#fff", border: "1px solid #001aff" }
 export const PLAY_RATE_STEP = 0.25;
@@ -53,3 +54,6 @@ export const CHUNK_TO_PAUSE_ON = 9; //end of chunk
 export const LOADING_TIMEOUT = 25000;
 export const LOADING_TIMEOUT_FOR_DOWNLOAD = 40000;
 export const DOWLOAD_CHUNK_SIZE = 4000;
+export const PI_VOICE_STREAM_URL: string | null = "https://pi.ai/api/chat/voice"
+export const PI_CHAT_URL: string = "https://pi.ai/api/v2/chat";
+export const PI_START_URL: string = 'https://pi.ai/api/chat/start';

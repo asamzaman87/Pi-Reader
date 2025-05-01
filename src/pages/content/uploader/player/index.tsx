@@ -18,14 +18,16 @@ interface PlayerProps {
     playRate: number;
     hasPlayBackEnded?: boolean;
     setHasPlayBackEnded: (state: boolean) => void;
+    audioElementRef: React.RefObject<HTMLAudioElement>;
 }
 
-const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading, play, pause, handlePlayRateChange, playRate, hasPlayBackEnded, setHasPlayBackEnded, showControls }) => {
+const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading, play, pause, handlePlayRateChange, playRate, hasPlayBackEnded, setHasPlayBackEnded, showControls, audioElementRef }) => {
     const toastIdRef = useRef<string | null>(null); // Provide the type (string) for useRef
     const { toast, dismiss } = useToast();
 
     const restart = () => {
         setHasPlayBackEnded(false);
+        audioElementRef.current!.currentTime = 0; // Reset to start of the audio
         // handlePlayRateChange(); //true is indicate reset play rate to 1
         play()
     }
