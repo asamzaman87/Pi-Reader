@@ -22,12 +22,13 @@ const options: {
   icon: React.ReactNode;
   meta?: string
 }[] = [
-  {
-    label: chrome.i18n.getMessage('download'),
-    value: "DOWNLOAD",
-    icon: <DownloadCloudIcon className="size-7" aria-hidden="true" />,
-    meta: chrome.i18n.getMessage('download_note'),
-  },
+  // [Disabled Download Feature]
+  // {
+  //   label: chrome.i18n.getMessage('download'),
+  //   value: "DOWNLOAD",
+  //   icon: <DownloadCloudIcon className="size-7" aria-hidden="true" />,
+  //   meta: chrome.i18n.getMessage('download_note'),
+  // },
   {
     label: chrome.i18n.getMessage('listen'),
     value: "LISTEN",

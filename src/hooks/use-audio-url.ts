@@ -28,7 +28,6 @@ const useAudioUrl = (isDownload: boolean) => {
             return;
         }
         if (currentCompletedStream) {
-            console.log('currentCompletedStream : ', currentCompletedStream);
             const text = chunks[+currentCompletedStream?.chunkNumber]?.text ?? "";
             setDownloadPreviewText(t => (t ?? "") + `${text.replaceAll("\n", " ") ?? ""}`);
         }
@@ -100,6 +99,7 @@ const useAudioUrl = (isDownload: boolean) => {
     };
     const startConversation = async (): Promise<string | null> => {
         try {
+            if (conversationId) return conversationId;
             const response = await fetch(PI_START_URL, {
                 method: 'POST',
                 credentials: 'include',
@@ -116,9 +116,7 @@ const useAudioUrl = (isDownload: boolean) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-    
             const data = await response.json();
-            console.log('Response Data:', data);
             return data?.mainConversation?.sid as string;
         } catch (error) {
             console.error('Error in startConversation:', error);
@@ -127,24 +125,15 @@ const useAudioUrl = (isDownload: boolean) => {
     };
 
 
-    const getAudioStream = async (text: any): Promise<string | null> => {
+    const getAudioStream = async (text: any, sid: any): Promise<string | null> => {
         let voiceNote: string | null = null;
         const selectedVoiceObject = voices.voices.find((v: { voice: string }) => v.voice === voices.selected);
 
         try {
-            let sid: string | null = conversationId;
-            
-            if (!conversationId) {
-                sid = await startConversation();
-                setConversationId(sid);
-            }
-            
 
             if (!sid) {
                 throw new Error("SID not found");
             }
-
-            console.log('SID:', sid);
 
             var requestBody = {
                 conversation: sid,
@@ -202,18 +191,19 @@ const useAudioUrl = (isDownload: boolean) => {
 
     const getCompleteTextChunks = async (arr: any[]) => {
         const allVoices: string[] = [];
-
+        let sid: string | null = conversationId;
+            
+        if (!conversationId) {
+            sid = await startConversation();
+            setConversationId(sid);
+        }
         if (arr && arr.length > 0) {
             for (const el of arr) {
-                console.log('Text: ', el.text)
-                let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`); // 👈 await here
+                let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`, sid); // 👈 await here
                 if (audioUrl) {
-                    allVoices.push(audioUrl);
+                    setAudioUrls(prev => [...prev, audioUrl]); // Push incrementally
                 }
             }
-
-            setAudioUrls(allVoices);
-
             // You can do something further with `allVoices` here
         }
     };
@@ -264,7 +254,6 @@ const useAudioUrl = (isDownload: boolean) => {
         setText(text);
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
         const chunks: Chunk[] = await splitIntoChunksV3(textWithoutTags, CHUNK_SIZE);
-        console.log('Chunks : ', chunks);
         getCompleteTextChunks(chunks)
         if (chunks.length > 0) {
             setCurrentChunkBeingPromptedIndex(currentChunkBeingPromptedIndex);
