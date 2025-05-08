@@ -18,7 +18,7 @@ interface PlayerProps {
     playRate: number;
     hasPlayBackEnded?: boolean;
     setHasPlayBackEnded: (state: boolean) => void;
-    audioElementRef: React.RefObject<HTMLAudioElement>;
+    audioElementRef?: React.RefObject<HTMLAudioElement>;
 }
 
 const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading, play, pause, handlePlayRateChange, playRate, hasPlayBackEnded, setHasPlayBackEnded, showControls, audioElementRef }) => {
@@ -27,6 +27,7 @@ const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading,
 
     const restart = () => {
         setHasPlayBackEnded(false);
+        if (audioElementRef)
         audioElementRef.current!.currentTime = 0; // Reset to start of the audio
         // handlePlayRateChange(); //true is indicate reset play rate to 1
         play()

@@ -104,31 +104,35 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
     }, [text])
 
     const onFormSubmit: InputFormProps["onSubmit"] = (values) => {
+        // console.log('submitClicked', values);
         if (isBackPressed) setIsBackPressed(false); //reseting back pressed state if the form is submitted
         setTitle(values.title?.trim().length ? values.title + ".txt" : chrome.i18n.getMessage("untitled_file"));
         setPastedText(values.text)
-        setShowDownloadOrListen(true)
+        // setShowDownloadOrListen(true)
+        onDownloadOrListenSubmit('LISTEN', values.text, values.title);
     }
 
-    const listenOrDownloadAudio = useCallback(async () => {
+    const listenOrDownloadAudio = useCallback(async (text?: string) => {
         if (files.length > 0 && fileExtractedText?.trim()?.length) {
             return splitAndSendPrompt(fileExtractedText).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
-        if (pastedText?.trim().length && !files.length) {
-            return splitAndSendPrompt(pastedText).finally(() => {
+        if (text?.trim().length && !files.length) {
+            return splitAndSendPrompt(text).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
     }, [pastedText, files, fileExtractedText]);
 
-    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN") => {
-        if(value === "DOWNLOAD"){
-            setIsDownload(value === "DOWNLOAD");
-            localStorage.setItem("gptr/download", "true");
-        }
-        listenOrDownloadAudio()
+    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN", text?: string, title?: string) => {
+        // console.log('onDownloadOrListenSubmit - called')
+        // if(value === "DOWNLOAD"){
+        //     setIsDownload(value === "DOWNLOAD");
+        //     localStorage.setItem("gptr/download", "true");
+        // }
+        listenOrDownloadAudio(text)
+        
     }, [listenOrDownloadAudio]);
 
     const handleDownload = () => {

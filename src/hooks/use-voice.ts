@@ -40,10 +40,17 @@ const useVoice = () => {
 
     }, []);
 
-    const handleVoiceChange = useCallback((voice: string) => {
+    // const handleVoiceChange = useCallback((voice: string) => {
+    //     console.log('handleVoiceChange: ', voice, voices);
+    //     if (window) window.localStorage.setItem("gptr/voice", voice);
+    //     setVoices(p => ({ ...p, selected: voice }));
+    // }, []);
+
+    const handleVoiceChange = (voice: string) => {
+        console.log('handleVoiceChange: ', voice, voices);
         if (window) window.localStorage.setItem("gptr/voice", voice);
         setVoices(p => ({ ...p, selected: voice }));
-    }, []);
+    };
 
     useEffect(() => {
         if (voices.voices.length === 0) {

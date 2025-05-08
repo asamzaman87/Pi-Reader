@@ -172,9 +172,11 @@ const useAudioUrl = (isDownload: boolean) => {
     
                     if (event && data) {
                         try {
+                            console.log('selectedVoiceObject: ', selectedVoiceObject);
                             const parsedData = JSON.parse(data);
                             if (event === 'message') {
-                                voiceNote = `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${parsedData.sid}`
+                                let selectedVoice = voices.selected || 'voice1';
+                                voiceNote = `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoice}&messageSid=${parsedData.sid}`
                             }
                         } catch (e) {
                             console.warn("❗ Failed to parse SSE data:", e);
@@ -188,7 +190,7 @@ const useAudioUrl = (isDownload: boolean) => {
         return voiceNote;
     };
     
-
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     const getCompleteTextChunks = async (arr: any[]) => {
         const allVoices: string[] = [];
         let sid: string | null = conversationId;
@@ -197,12 +199,16 @@ const useAudioUrl = (isDownload: boolean) => {
             sid = await startConversation();
             setConversationId(sid);
         }
+        console.log('Array Of Text : ', arr);
         if (arr && arr.length > 0) {
             for (const el of arr) {
                 let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`, sid); // 👈 await here
                 if (audioUrl) {
                     setAudioUrls(prev => [...prev, audioUrl]); // Push incrementally
                 }
+
+                // Wait 6 seconds before next request to avoid rate limiting
+                await delay(6000);
             }
             // You can do something further with `allVoices` here
         }
@@ -254,7 +260,9 @@ const useAudioUrl = (isDownload: boolean) => {
         setText(text);
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
         const chunks: Chunk[] = await splitIntoChunksV3(textWithoutTags, CHUNK_SIZE);
-        getCompleteTextChunks(chunks)
+        getCompleteTextChunks(chunks);
+
+        console.log("Voices: ", voices);
         if (chunks.length > 0) {
             setCurrentChunkBeingPromptedIndex(currentChunkBeingPromptedIndex);
             setChunks(chunks);
