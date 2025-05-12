@@ -1,6 +1,6 @@
-import { CHUNK_SIZE, CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_CHAT_URL, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_ID, TOAST_STYLE_CONFIG } from "@/lib/constants";
+import { CHUNK_SIZE, CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_API_CONVERSATION_API_DELAY, PI_CHAT_URL, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_ID, TOAST_STYLE_CONFIG } from "@/lib/constants";
 import { Chunk, splitIntoChunksV1, splitIntoChunksV2, splitIntoChunksV3 } from "@/lib/utils";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
 import { useToast } from "./use-toast";
@@ -9,6 +9,7 @@ const useAudioUrl = (isDownload: boolean) => {
     const { toast } = useToast();
     const [audioUrls, setAudioUrls] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isBackPressed, setIsBackPressed] = useState<boolean>(false);
     const [text, setText] = useState<string>("");
     const [chunks, setChunks] = useState<Chunk[]>([]);
     const [currentChunkBeingPromptedIndex, setCurrentChunkBeingPromptedIndex] = useState<number>(0);
@@ -18,8 +19,17 @@ const useAudioUrl = (isDownload: boolean) => {
     const { pdfToText, docxToText, textPlainToText } = useFileReader();
     const [progress, setProgress] = useState<number>(0);
     const [downloadPreviewText, setDownloadPreviewText] = useState<string>();
-    const { blobs, isFetching, completedStreams, currentCompletedStream, reset: resetStreamListener, setVoices, voices, isVoiceLoading } = useStreamListener(setIsLoading);
+    // const { setVoices, updateVoiceList} = useVoice();
+    const { blobs, isFetching, completedStreams, currentCompletedStream, reset: resetStreamListener, voices, isVoiceLoading, setVoices, updateVoiceList } = useStreamListener(setIsLoading);
     const [conversationId, setConversationId] = useState<string | null>(null);
+    const isLoopActive = useRef(true);
+    
+    
+    useEffect(()=> {
+        if (isBackPressed) {
+            isLoopActive.current = false; // Stop the loop by setting ref to false
+        }
+    }, [isBackPressed]);
 
     useMemo(() => {
         if (blobs.length === 0) {
@@ -117,6 +127,7 @@ const useAudioUrl = (isDownload: boolean) => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            if (data.voices && data.voices.length) updateVoiceList(data.voices);
             return data?.mainConversation?.sid as string;
         } catch (error) {
             console.error('Error in startConversation:', error);
@@ -125,9 +136,38 @@ const useAudioUrl = (isDownload: boolean) => {
     };
 
 
-    const getAudioStream = async (text: any, sid: any): Promise<string | null> => {
+    // const updateVoiceList =(apiVoices:any)=> {
+    //     const voices = apiVoices.map((v:any) => {
+    //         const voiceNumber = v.tag.match(/\d+/)?.[0] || "";
+    //         return {
+    //           voice: v.displayName,
+    //           name: `voice${voiceNumber}`,
+    //           bloop_color: '',
+    //           description: `Voice ${voiceNumber}`,
+    //           preview_url: `https://pi.ai/public/media/voice-previews/voice-${voiceNumber}.mp3`,
+    //         };
+    //     });
+
+    //     if (voices.length > 0) {
+    //         console.log('Voices Updated')
+    //         setVoices({
+    //             voices: voices,
+    //             selected: voices[0].name
+    //         })
+    //     }
+    //     console.log('API Generated Voices: ', voices);
+    // }
+    useEffect(() => {
+        if (!conversationId) {
+            startConversation().then((sid) => {
+                if (sid) setConversationId(sid);
+            });
+        }
+    },[])
+
+    const getAudioStream = async (text: any, sid: any, voicelist?: any): Promise<string | null> => {
         let voiceNote: string | null = null;
-        const selectedVoiceObject = voices.voices.find((v: { voice: string }) => v.voice === voices.selected);
+        const selectedVoiceObject = voicelist.voices.find((v: { voice: string }) => v.voice === voicelist.selected);
 
         try {
 
@@ -175,8 +215,7 @@ const useAudioUrl = (isDownload: boolean) => {
                             console.log('selectedVoiceObject: ', selectedVoiceObject);
                             const parsedData = JSON.parse(data);
                             if (event === 'message') {
-                                let selectedVoice = voices.selected || 'voice1';
-                                voiceNote = `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoice}&messageSid=${parsedData.sid}`
+                                voiceNote = `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${parsedData.sid}`
                             }
                         } catch (e) {
                             console.warn("❗ Failed to parse SSE data:", e);
@@ -191,7 +230,9 @@ const useAudioUrl = (isDownload: boolean) => {
     };
     
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-    const getCompleteTextChunks = async (arr: any[]) => {
+     // useRef to track the loop's active state
+    
+    const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
         const allVoices: string[] = [];
         let sid: string | null = conversationId;
             
@@ -202,13 +243,15 @@ const useAudioUrl = (isDownload: boolean) => {
         console.log('Array Of Text : ', arr);
         if (arr && arr.length > 0) {
             for (const el of arr) {
-                let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`, sid); // 👈 await here
+                if (!isLoopActive.current) break;
+
+                let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`, sid, voicelist); // 👈 await here
                 if (audioUrl) {
                     setAudioUrls(prev => [...prev, audioUrl]); // Push incrementally
                 }
 
-                // Wait 6 seconds before next request to avoid rate limiting
-                await delay(6000);
+                // Wait 3 seconds before next request to avoid rate limiting
+                await delay(PI_API_CONVERSATION_API_DELAY);
             }
             // You can do something further with `allVoices` here
         }
@@ -255,12 +298,12 @@ const useAudioUrl = (isDownload: boolean) => {
         }
     }, []);
 
-    const splitAndSendPrompt = async (text: string) => {
+    const splitAndSendPrompt = async (text: string, voicelist?: any) => {
         // console.log("SPLIT_AND_SEND_PROMPT");
         setText(text);
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
         const chunks: Chunk[] = await splitIntoChunksV3(textWithoutTags, CHUNK_SIZE);
-        getCompleteTextChunks(chunks);
+        getCompleteTextChunks(chunks, voicelist);
 
         console.log("Voices: ", voices);
         if (chunks.length > 0) {
@@ -379,7 +422,7 @@ const useAudioUrl = (isDownload: boolean) => {
 
     }, [chunks, completedStreams, currentChunkBeingPromptedIndex, currentCompletedStream, injectPrompt, voices.selected, isPromptingPaused])
 
-    return { downloadPreviewText, downloadCombinedFile, progress, setProgress, blobs, isFetching, wasPromptStopped, setWasPromptStopped, chunks, voices, setVoices, isVoiceLoading, text, audioUrls, setAudioUrls, extractText, splitAndSendPrompt, ended: currentCompletedStream?.chunkNumber && +currentCompletedStream?.chunkNumber === chunks.length - 1, isLoading, setIsLoading, reset, is9ThChunk, reStartChunkProcess, setIs9thChunk, isPromptingPaused, setIsPromptingPaused }
+    return { downloadPreviewText, downloadCombinedFile, progress, setProgress, blobs, isFetching, wasPromptStopped, setWasPromptStopped, chunks, voices, setVoices, isVoiceLoading, text, audioUrls, setAudioUrls, extractText, splitAndSendPrompt, ended: currentCompletedStream?.chunkNumber && +currentCompletedStream?.chunkNumber === chunks.length - 1, isLoading, setIsLoading, reset, is9ThChunk, reStartChunkProcess, setIs9thChunk, isPromptingPaused, setIsPromptingPaused, isBackPressed, setIsBackPressed, isLoopActive }
 
 }
 

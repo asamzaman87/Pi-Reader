@@ -38,7 +38,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
     const [showDownloadOrListen, setShowDownloadOrListen] = useState<boolean>(false);
     const [fileExtractedText, setFileExtractedText] = useState<string>(); //ToDo: to find a better way to handle this
     const [showDownloadCancelConfirmation, setShowDownloadCancelConfirmation] = useState<boolean>(false);
-    const { downloadPreviewText, progress, setProgress, downloadCombinedFile, isFetching, isPresenceModalOpen, setIsPresenceModalOpen, isBackPressed, setIsBackPressed, pause, play, extractText, splitAndSendPrompt, text, isPlaying, isLoading, reset, isPaused, playRate, handlePlayRateChange, voices, setVoices, hasCompletePlaying, setHasCompletePlaying, isVoiceLoading, reStartChunkProcess, isStreamLoading } = useAudioPlayer(isDownload);
+    const { downloadPreviewText, progress, setProgress, downloadCombinedFile, isFetching, isPresenceModalOpen, setIsPresenceModalOpen, isBackPressed, setIsBackPressed, pause, play, extractText, splitAndSendPrompt, text, isPlaying, isLoading, reset, isPaused, playRate, handlePlayRateChange, voices, setVoices, hasCompletePlaying, setHasCompletePlaying, isVoiceLoading, reStartChunkProcess, isStreamLoading, isLoopActive } = useAudioPlayer(isDownload);
 
     useMemo(() => {
         if(isCancelDownloadConfirmation) setShowDownloadCancelConfirmation(true);
@@ -51,6 +51,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         setProgress(0);
         setIsBackPressed(true); //to avoid unnecessary audio play on cancel download
         localStorage.removeItem("gptr/download");
+        isLoopActive.current = false;
     }
 
     const resetter = () => {
@@ -104,34 +105,34 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
     }, [text])
 
     const onFormSubmit: InputFormProps["onSubmit"] = (values) => {
-        // console.log('submitClicked', values);
         if (isBackPressed) setIsBackPressed(false); //reseting back pressed state if the form is submitted
         setTitle(values.title?.trim().length ? values.title + ".txt" : chrome.i18n.getMessage("untitled_file"));
         setPastedText(values.text)
         // setShowDownloadOrListen(true)
-        onDownloadOrListenSubmit('LISTEN', values.text, values.title);
+        onDownloadOrListenSubmit('LISTEN', values.text, values.title, voices);
+        isLoopActive.current = true;
     }
 
-    const listenOrDownloadAudio = useCallback(async (text?: string) => {
+    const listenOrDownloadAudio = useCallback(async (text?: string, voicelist?: any) => {
         if (files.length > 0 && fileExtractedText?.trim()?.length) {
-            return splitAndSendPrompt(fileExtractedText).finally(() => {
+            return splitAndSendPrompt(fileExtractedText, voicelist).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
         if (text?.trim().length && !files.length) {
-            return splitAndSendPrompt(text).finally(() => {
+            return splitAndSendPrompt(text, voicelist).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
     }, [pastedText, files, fileExtractedText]);
 
-    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN", text?: string, title?: string) => {
+    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN", text?: string, title?: string, voicelist?: any) => {
         // console.log('onDownloadOrListenSubmit - called')
         // if(value === "DOWNLOAD"){
         //     setIsDownload(value === "DOWNLOAD");
         //     localStorage.setItem("gptr/download", "true");
         // }
-        listenOrDownloadAudio(text)
+        listenOrDownloadAudio(text, voicelist)
         
     }, [listenOrDownloadAudio]);
 

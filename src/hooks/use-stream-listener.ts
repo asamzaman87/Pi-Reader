@@ -12,7 +12,7 @@ const useStreamListener = (setIsLoading: (state: boolean) => void) => {
     const [error, setError] = useState<string | null>(null);
     const [isFetching, setIsFetching] = useState<boolean>(false);
     const { token } = useAuthToken();
-    const { voices, handleVoiceChange, isLoading: isVoiceLoading } = useVoice();
+    const { voices, handleVoiceChange, isLoading: isVoiceLoading, updateVoiceList } = useVoice();
     const [blobs, setBlobs] = useState<Blob[]>([]);
     const retryCount = useRef<number>(0);
 
@@ -105,7 +105,7 @@ const useStreamListener = (setIsLoading: (state: boolean) => void) => {
         };
     }, [handleConvStream]);
 
-    return { isFetching, completedStreams, currentCompletedStream, reset, error, voices, setVoices, isVoiceLoading, blobs }
+    return { isFetching, completedStreams, currentCompletedStream, reset, error, voices, setVoices, isVoiceLoading, blobs, updateVoiceList }
 
 }
 

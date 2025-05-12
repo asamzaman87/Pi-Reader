@@ -17,7 +17,27 @@ const useVoice = () => {
         setIsLoading(false);
     }, []);
 
-    const getVoices = useCallback(() => {
+    const updateVoiceList =(apiVoices:any)=> {
+        const voices = apiVoices.map((v:any) => {
+            const voiceNumber = v.tag.match(/\d+/)?.[0] || "";
+            return {
+              voice: v.displayName,
+              name: `voice${voiceNumber}`,
+              bloop_color: '',
+              description: `Voice ${voiceNumber}`,
+              preview_url: `https://pi.ai/public/media/voice-previews/voice-${voiceNumber}.mp3`,
+            };
+        });
+
+        if (voices.length > 0) {
+            console.log('Voices Updated')
+            setVoices({
+                voices: voices,
+                selected: voices[0].voice
+            })
+        }
+    }
+    const getVoices = useCallback((apiVoices:Voice) => {
         // setIsLoading(true);
         // const voicesEvent = new CustomEvent(LISTENERS.GET_VOICES)
         // window.dispatchEvent(voicesEvent)
@@ -52,17 +72,8 @@ const useVoice = () => {
         setVoices(p => ({ ...p, selected: voice }));
     };
 
-    useEffect(() => {
-        if (voices.voices.length === 0) {
-            getVoices();
-        }
-        window.addEventListener(LISTENERS.VOICES, handleVoiceReceived);
-        return () => {
-            window.removeEventListener(LISTENERS.VOICES, handleVoiceReceived);
-        }
-    }, [voices?.voices.length]);
 
-    return { voices, setVoices, getVoices, handleVoiceChange, isLoading };
+    return { voices, setVoices, getVoices, handleVoiceChange, isLoading, updateVoiceList };
 }
 
 export default useVoice;

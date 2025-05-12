@@ -6,7 +6,7 @@ import { useToast } from "./use-toast";
 
 const useAudioPlayer = (isDownload: boolean) => {
     const { toast, dismiss } = useToast();
-    const {downloadPreviewText, downloadCombinedFile, progress, setProgress, isFetching, wasPromptStopped, setWasPromptStopped, chunks, setIsPromptingPaused, isPromptingPaused, audioUrls, setAudioUrls, ended, extractText, splitAndSendPrompt, text, reset: resetAudioUrl, voices, setVoices, isVoiceLoading, is9ThChunk, reStartChunkProcess, setIs9thChunk, isLoading } = useAudioUrl(isDownload);
+    const {downloadPreviewText, downloadCombinedFile, progress, setProgress, isFetching, wasPromptStopped, setWasPromptStopped, chunks, setIsPromptingPaused, isPromptingPaused, audioUrls, setAudioUrls, ended, extractText, splitAndSendPrompt, text, reset: resetAudioUrl, voices, setVoices, isVoiceLoading, is9ThChunk, reStartChunkProcess, setIs9thChunk, isLoading , isBackPressed, setIsBackPressed, isLoopActive} = useAudioUrl(isDownload);
     const { isAuthenticated, token } = useAuthToken();
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -15,7 +15,6 @@ const useAudioPlayer = (isDownload: boolean) => {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [playRate, setPlayRate] = useState<number>(1);
     const [completedPlaying, setCompletedPlaying] = useState<string[]>([]);
-    const [isBackPressed, setIsBackPressed] = useState<boolean>(false);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
     const [isStreamLoading, setIsStreamLoading] = useState<boolean>(false);
     const [isPresenceModalOpen, setIsPresenceModalOpen] = useState<boolean>(false);
@@ -99,9 +98,9 @@ const useAudioPlayer = (isDownload: boolean) => {
     //show the presence modal if the audio currently being played is from the chunk that we are pausing the processing on
     useMemo(() => {
         if (isPromptingPaused) {
-            // if(currentIndex > 0 && currentIndex % CHUNK_TO_PAUSE_ON === CHUNK_TO_PAUSE_ON - 1){
-            //     setIsPresenceModalOpen(true);
-            // }
+            if(currentIndex > 0 && currentIndex % CHUNK_TO_PAUSE_ON === CHUNK_TO_PAUSE_ON - 1){
+                setIsPresenceModalOpen(true);
+            }
             const chunkPlaying = +audioPlayer.id;
             if (chunkPlaying % CHUNK_TO_PAUSE_ON === 0) {
                 setTimeout(() => setIsPresenceModalOpen(true), 1000); //delay 1 sec to allow the audio to play for a sec
@@ -117,7 +116,7 @@ const useAudioPlayer = (isDownload: boolean) => {
     }
 
     const handleAudioEnd = useCallback(async () => {
-        console.log("HANDLE_AUDIO_END");
+        // console.log("HANDLE_AUDIO_END");
         const current = currentIndex + 1;
 
         if (isPromptingPaused) {
@@ -346,7 +345,8 @@ const useAudioPlayer = (isDownload: boolean) => {
         downloadCombinedFile,
         progress, 
         setProgress,
-        downloadPreviewText
+        downloadPreviewText,
+        isLoopActive
     }
 
 

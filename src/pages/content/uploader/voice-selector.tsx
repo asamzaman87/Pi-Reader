@@ -38,7 +38,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
     }, [])
 
     const preview = useCallback(() => {
-        const currentPreview = voices.find((voice) => voice.name === selected)?.preview_url;
+        const currentPreview = voices.find((voice) => voice.voice === selected)?.preview_url;
         if (currentPreview) {
             setIsPlaying(true)
             audio.src = currentPreview;
@@ -50,7 +50,6 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
         if(audio){
             stop()
         }
-        console.log('onDropItemSelect', voice);
         setVoices(voice)
     }
 
@@ -104,7 +103,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                     {voices.map((voice) => (
-                        <DropdownMenuItem className="items-center justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-200 hover:dark:bg-gray-800/80 rounded" disabled={selected === voice.voice} key={voice.voice} onClick={() => onDropItemSelect(voice.name)}>
+                        <DropdownMenuItem className="items-center justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-200 hover:dark:bg-gray-800/80 rounded" disabled={selected === voice.voice} key={voice.voice} onClick={() => onDropItemSelect(voice.voice)}>
                             {voice.voice.charAt(0).toUpperCase() + voice.voice.slice(1)}
                         </DropdownMenuItem>
                     ))}
