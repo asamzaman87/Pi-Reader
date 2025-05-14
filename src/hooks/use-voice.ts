@@ -1,4 +1,4 @@
-import { LISTENERS, VOICE } from "@/lib/constants";
+import { LISTENERS, PI_VOICE_OTHER_INFO, VOICE } from "@/lib/constants";
 import { Voice } from "@/pages/content/uploader/voice-selector";
 import { useCallback, useEffect, useState } from "react";
 
@@ -24,8 +24,10 @@ const useVoice = () => {
               voice: v.displayName,
               name: `voice${voiceNumber}`,
               bloop_color: '',
-              description: `Voice ${voiceNumber}`,
+              description: PI_VOICE_OTHER_INFO[`voice${voiceNumber}`]?.info,
               preview_url: `https://pi.ai/public/media/voice-previews/voice-${voiceNumber}.mp3`,
+              gender: PI_VOICE_OTHER_INFO[`voice${voiceNumber}`]?.gender
+
             };
         });
 

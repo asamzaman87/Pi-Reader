@@ -29,11 +29,46 @@ export const LISTENERS = {
   "GET_TOKEN": "GET_TOKEN",
   "SET_AUDIO_URL": 'SET_AUDIO_URL'
 }
+
+export const PI_VOICE_OTHER_INFO:any = {
+  voice1: {
+    gender: 'male',
+    info: 'Friendly and clear'
+  },
+  voice2: {
+    gender: 'female',
+    info: 'Confident and enthusiastic'
+  },
+  voice3: {
+    gender: 'male',
+    info: 'Thoughtful and calm'
+  },
+  voice4: {
+      gender: 'female',
+      info: 'Engaging and dynamic'
+    },
+  voice5: {
+      gender: 'female',
+      info: 'Warm and comforting'
+    },
+  voice6: {
+      gender: 'male',
+      info: 'Sophisticated and expressive'
+  },
+  voice7: {
+      gender: 'female',
+      info: 'Helpful and informative'
+  },
+  voice8: {
+      gender: 'male',
+      info: 'Reflective and empathetic'
+  },
+}
 export const MAX_FILE_SIZE = 1024 * 1024 * 24; // 24MB
 export const PROMPT_INPUT_ID = "#prompt-textarea";
 export const HELPER_PROMPT = "Repeat the exact text below without any changes, introduction or additional words. Do not summarize, analyze, or prepend/append anything. Just output the text exactly as provided:"
 export const SYNTETHIZE_ENDPOINT = "https://chatgpt.com/backend-api/synthesize";
-export const VOICE = "voice1";
+export const VOICE = "";
 export const AUDIO_FORMAT = "aac";
 export const CHUNK_SIZE = 300;
 export const TOAST_STYLE_CONFIG = { backgroundColor: "darkred", color: "#fff", border: "1px solid #b30000" }

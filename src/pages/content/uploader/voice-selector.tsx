@@ -1,14 +1,15 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LISTENERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Info, PlayCircle, StopCircle, UserCircle2Icon } from "lucide-react";
+import {  ChevronDown, Info, PlayCircle, StopCircle, UserCircle2Icon } from "lucide-react";
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/components/ui/badge";
 export interface Voice {
     selected: string;
-    voices: { bloop_color: string, description: string, name: string, preview_url: string, voice: string }[];
+    voices: { bloop_color: string, description: string, name: string, preview_url: string, voice: string, gender?: string, }[];
 }
 
 interface VoiceSelectorProps {
@@ -89,13 +90,39 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
     //   );
 
     return (
-        <div className="flex items-center justify-center gap-2">
+        <div className="p-1.5 mx-auto flex items-center justify-center gap-2 border border-gray-500 dark:border-gray-700 rounded-full">
             <Trigger onClick={() => isPlaying ? stop() : preview()}>
                 {!isPlaying && <PlayCircle className={"size-4"} onClick={preview} />}
                 {isPlaying && <StopCircle className="size-4" onClick={stop} />}
                 {!isPlaying ? chrome.i18n.getMessage('play_voice') : chrome.i18n.getMessage('stop')}
             </Trigger>
             <DropdownMenu onOpenChange={onOpenChange}>
+                <DropdownMenuTrigger disabled={disabled}>
+                    <Trigger disabled={disabled}>
+                        <UserCircle2Icon className="size-4" /> {voice.selected.charAt(0).toUpperCase() + voice.selected.slice(1)} <ChevronDown className={cn("size-4", { "rotate-180": open })} />
+                    </Trigger>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <ScrollArea className="h-72 w-full">
+                        {voices.map((voice, i, arr) => (
+                            <>
+                                <DropdownMenuItem className="flex-col items-start justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-700 rounded gap-1" disabled={selected === voice.voice} key={voice.voice} onClick={() => onDropItemSelect(voice.voice)}>
+                                    <span className="inline-flex gap-1 items-center justify-start">
+                                        {voice.voice.charAt(0).toUpperCase() + voice.voice.slice(1)}
+                                        {voice.gender &&
+                                            <Badge className={cn("text-xs font-medium rounded-full text-white", { "bg-blue-800 dark:bg-blue-700": voice.gender === "male", "bg-pink-700 dark:bg-pink-800": voice.gender === "female" })}>
+                                                {voice.gender}
+                                            </Badge>}
+                                    </span>
+                                    {voice.description && <p className="text-xs text-gray-500 dark:text-gray-400">{voice.description}</p>}
+                                </DropdownMenuItem>
+                                {i === arr.length - 1 ? null : <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-700" />}
+                            </>
+                        ))}
+                    </ScrollArea>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            {/* <DropdownMenu onOpenChange={onOpenChange}>
                 <DropdownMenuTrigger disabled={disabled}>
                     <Trigger disabled={disabled}>
                        <UserCircle2Icon className="size-4"/> {voice.selected.charAt(0).toUpperCase() + voice.selected.slice(1)} <ChevronDown className={cn("size-4", { "rotate-180": open })} />
@@ -108,7 +135,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
                         </DropdownMenuItem>
                     ))}
                 </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
             <Popover>
                 <PopoverTrigger><Info className="cursor-pointer size-5 text-gray-600 dark:text-gray-100" /></PopoverTrigger>
                 <PopoverContent className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
