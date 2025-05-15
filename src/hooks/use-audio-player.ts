@@ -249,7 +249,7 @@ const useAudioPlayer = (isDownload: boolean) => {
         setAudioLoading(audioUrls.length === 0); //initial loading state if the first chunk is being prompted and not playing
         localStorage.setItem("gptr/is-first-audio-loading", String(audioUrls.length === 0));
 
-        if (audioUrls.length > 0 && !isPlaying) {
+        if (audioUrls.length > 0 && !isPlaying && !isPaused) {
             setCompletedPlaying([]);
             //console.log("INIT PLAY")
             playNext(0)
