@@ -50,7 +50,21 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				}
-			}
+			},
+			fontFamily: {
+				ui: [
+					'ui-sans-serif',
+					'-apple-system',
+					'system-ui',
+					'Segoe UI',
+					'Helvetica',
+					'Apple Color Emoji',
+					'Arial',
+					'sans-serif',
+					'Segoe UI Emoji',
+					'Segoe UI Symbol',
+				],
+			},
 		}
 	},
 	plugins: [import("tailwindcss-animate")],

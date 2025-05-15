@@ -260,7 +260,7 @@ function Uploader() {
             size="lg"
             onMouseOver={() => setMinimised(false)}
             onMouseOut={() => setMinimised(true)}
-            className={cn("shadow-md absolute flex justify-center items-center z-[101] top-60 right-0 rounded-l-full bg-white dark:bg-gray-900 p-2 border border-r-0 border-gray-200 dark:border-gray-700 transition-all",
+            className={cn("font-ui shadow-md absolute flex justify-center items-center z-[101] top-60 right-0 rounded-l-full bg-white dark:bg-gray-900 p-2 border border-r-0 border-gray-200 dark:border-gray-700 transition-all",
               {
                 "!z-[50]": isActive || isOverlayFallback,
               })
@@ -278,7 +278,7 @@ function Uploader() {
           onInteractOutside={(e: Event) => {
             e.preventDefault(); //prevents mask click close
           }}
-          className={cn("bg-gray-100 dark:bg-gray-800 max-w-screen h-full border-none flex flex-col gap-6", prompts?.length && "pb-0")}
+          className={cn("font-ui bg-gray-100 dark:bg-gray-800 max-w-screen h-full border-none flex flex-col gap-6 font-ui", prompts?.length && "pb-0")}
         >
           {!confirmed && <AlertPopup setConfirmed={handleConfirm} />}
           {confirmed && <Content isCancelDownloadConfirmation={isCancelDownloadConfirmation} setIsCancelDownloadConfirmation={setIsCancelDownloadConfirmation} onOverlayOpenChange={onOpenChange} setPrompts={setPrompts} prompts={prompts} />}
