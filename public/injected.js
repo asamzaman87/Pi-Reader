@@ -62,11 +62,6 @@ window.addEventListener('load', function () {
   );
 });
 
-
-
-    // Access cookies for the current document (web page)
-    const cookies = document.cookie;
-    console.log("📜 Document Cookies:", cookies);
 // window.fetch = async (...args) => {
 //     console.log('Arguments : ', args);
 //     const response = await origFetch(...args);

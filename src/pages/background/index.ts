@@ -54,6 +54,10 @@ chrome.runtime.onMessage.addListener(async (request, sender) => {
             chrome.tabs.create({ url: YOUTUBE_FAQ_VIDEO });
             break;
         }
+        case "OPEN_REVIEWS": {
+            chrome.tabs.create({ url: request.url });
+            break;
+        }
 
         // case "UPDATE_BADGE_STATE":{
         //     if(request.state){

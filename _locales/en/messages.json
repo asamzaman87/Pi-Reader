@@ -217,5 +217,32 @@
   },
   "presence_confirmation_no": {
     "message": "No, I am done listening"
+  },
+  "download_confirm": {
+    "message": "This will download the audio for the portion of your text that has been processed so far. Are you sure you want to continue?"
+  },
+  "male": {
+    "message": "male"
+  },
+  "female": {
+    "message": "female"
+  },
+  "yes": {
+    "message": "Yes"
+  },
+  "no": {
+    "message": "No"
+  },
+  "feedback_thanks": {
+    "message": "Thank you for your valuable feedback!"
+  },
+  "five_stars": {
+    "message": "Your feedback is much appreciated and we remain committed to continually refine our service! Please consider helping us by leaving a five star review on the chrome web store!"
+  },
+  "store_redirect": {
+    "message": "Take me to the store"
+  },
+  "volume": {
+    "message": "Volume"
   }
 }
