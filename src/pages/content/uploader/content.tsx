@@ -27,7 +27,7 @@ interface ContentProps {
 }
 
 const BROWSER = detectBrowser();
-const logo = chrome.runtime.getURL('logo-128.png');
+const logo = chrome.runtime.getURL('logo-pi-reader.png');
 
 const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, isCancelDownloadConfirmation, setIsCancelDownloadConfirmation }) => {
     const { toast } = useToast();

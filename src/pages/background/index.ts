@@ -99,7 +99,7 @@ const setBadState = (state: boolean) => {
     if (!state) {
         // chrome.action.setBadgeText({ text: "ON"});
         // chrome.action.setBadgeTextColor({ color: "#21a108" });
-        chrome.action.setIcon({ path: "logo-128.png" });
+        chrome.action.setIcon({ path: "logo-pi-reader.png" });
     } else {
         // chrome.action.setBadgeText({ text: "OFF" });
         // chrome.action.setBadgeTextColor({ color: "#9e1109" });
@@ -151,6 +151,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (tabId) {
         const id = typeof tabId === "string" ? +tabId.split("::")[0] : tabId; //type is string if new tab was created
         chrome.storage.local.set({ origin: true });
+        // chrome.storage.local.se/
         await chrome.tabs.reload(id); //reload tab to update the content
     }
 })

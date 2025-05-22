@@ -6,7 +6,7 @@ interface AlertPopupProps {
   setConfirmed: (confirmed: boolean) => void
 }
 const AlertPopup: FC<AlertPopupProps> = ({ setConfirmed }) => {
-  const LOGO = chrome.runtime.getURL('logo-128.png');
+  const LOGO = chrome.runtime.getURL('logo-pi-reader.png');
 
   return (
     <div className="flex flex-col justify-center items-center h-full">

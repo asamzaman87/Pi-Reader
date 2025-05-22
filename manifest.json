@@ -9,11 +9,11 @@
   },
   "action": {
     "default_icon": {
-      "128": "logo-128.png"
+      "128": "logo-pi-reader.png"
     }
   },
   "icons": {
-    "128": "logo-128.png"
+    "128": "logo-pi-reader.png"
   },
   "permissions": [
     "activeTab",
@@ -27,7 +27,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://pi.ai/*"
+        "https://pi.ai/talk",
+        "https://pi.ai/discover",
+        "https://pi.ai/profile"
       ],
       "exclude_matches": [
         "https://pi.ai/onboarding"
@@ -48,7 +50,7 @@
         "contentStyle.css",
         "icon-128.png",
         "icon-32.png",
-        "logo-128.png",
+        "logo-pi-reader.png",
         "pdf.worker.js",
         "injected.js"
       ],

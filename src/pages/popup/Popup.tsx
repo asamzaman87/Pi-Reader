@@ -66,7 +66,7 @@ export default function Popup(): JSX.Element {
     statusCheck();
   }, []);
 
-  const logo = chrome.runtime.getURL('logo-128.png');
+  const logo = chrome.runtime.getURL('logo-pi-reader.png');
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 h-screen w-screen p">

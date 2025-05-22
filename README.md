@@ -1,5 +1,5 @@
 <div align="center">
-<img src="public/logo-128.png" alt="logo"/>
+<img src="public/logo-pi-reader.png" alt="logo"/>
 
 <h5>
 GPT READER is a Chrome Extension that simplifies reading long documents with GPT.

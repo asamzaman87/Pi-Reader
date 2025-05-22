@@ -245,7 +245,7 @@ const useAudioUrl = (isDownload: boolean) => {
             for (const el of arr) {
                 if (!isLoopActive.current) break;
 
-                let audioUrl = await getAudioStream(`${HELPER_PROMPT} ${el.text}`, sid, voicelist); // 👈 await here
+                let audioUrl = await getAudioStream(`${HELPER_PROMPT}\n${el.text}`, sid, voicelist); // 👈 await here
                 if (audioUrl) {
                     setAudioUrls(prev => [...prev, audioUrl]); // Push incrementally
                 }

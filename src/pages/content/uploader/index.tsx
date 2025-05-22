@@ -30,7 +30,7 @@ function Uploader() {
 
   const { toast } = useToast();
   const { isAuthenticated } = useAuthToken();
-  const LOGO = chrome.runtime.getURL('logo-128.png');
+  const LOGO = chrome.runtime.getURL('logo-pi-reader.png');
 
   // sending the auth status to the background script
   useMemo(() => {

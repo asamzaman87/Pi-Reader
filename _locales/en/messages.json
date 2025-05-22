@@ -120,7 +120,7 @@
     "message": "Pi Reader Notice"
   },
   "gpt_reader_chunk_explanation": {
-    "message": "Pi Reader works by breaking down large text into smaller chunks and sending them to Pi.ai for analysis. This is a normal and expected process. However, depending on your usage, you might temporarily reach PiAi's rate limits. If this happens, you may need to wait about an hour before using Pi or this extension again."
+    "message": "Pi Reader works by breaking down large text into smaller chunks and sending them to Pi.ai for analysis. This is a normal and expected process. However, depending on your usage, you might temporarily reach Pi.ai's rate limits."
   },
   "acknowledge_and_accept": {
     "message": "By continuing, you acknowledge and accept this as part of using the extension."
