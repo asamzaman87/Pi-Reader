@@ -70,7 +70,7 @@ function Uploader() {
     chrome.runtime.sendMessage({ type: "CONTENT_LOADED" }); //indicate to background script that content is loaded
 
     //checking if user has already confirmed the extension
-    const cnf = window.localStorage.getItem("gptr/confirmation");
+    const cnf = window.localStorage.getItem("pir/confirmation");
     setConfirmed(cnf === "true");
   }, []);
 
@@ -229,7 +229,7 @@ function Uploader() {
 
   const handleConfirm = (state: boolean) => {
     if (!state) return onOpenChange(false);
-    window.localStorage.setItem("gptr/confirmation", String(state));
+    window.localStorage.setItem("pir/confirmation", String(state));
     setConfirmed(state)
   }
 

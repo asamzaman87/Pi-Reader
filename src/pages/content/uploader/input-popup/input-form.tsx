@@ -47,7 +47,10 @@ const InputForm: FC<InputFormProps> = ({ onSubmit, disabled }) => {
                         <FormItem className="w-full">
                             <FormLabel>{chrome.i18n.getMessage('title')}</FormLabel>
                             <FormControl>
-                                <Input className="rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800" {...field} />
+                                <Textarea
+                                    className="min-h-[40px] border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 resize-none rounded h-[40px] focus:border-gray-200 dark:focus:border-gray-700 outline-none"
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage className="text-red-600" />
                         </FormItem>
