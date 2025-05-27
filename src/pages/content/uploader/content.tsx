@@ -89,7 +89,9 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         extractText(files[0]).then((text) => {
             setTitle(files[0].name);
             setFileExtractedText(text);
-            setShowDownloadOrListen(true)
+            // setShowDownloadOrListen(true)
+            onDownloadOrListenSubmit('LISTEN', text, files[0].name, voices);
+            isLoopActive.current = true;
         }).catch((e) => {
             toast({ description: e.message, style: TOAST_STYLE_CONFIG });
             resetter();
