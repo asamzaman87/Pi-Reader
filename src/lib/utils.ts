@@ -120,34 +120,46 @@ export function splitIntoChunksV3(text: string, chunkSize: number = CHUNK_SIZE):
   let chunkId = 0;
   const chunks: Chunk[] = [];
 
-  // Split the text into sentences based on a period followed by a space
-  const sentences = text.split(/(?<=\.)\s+/);
+  // Split the text into sentences using punctuation followed by a space
+  const sentences = text.split(/(?<=[.?!])\s+/);
 
   for (let i = 0; i < sentences.length; i++) {
-    const sentence = sentences[i].trim();
-    const potentialChunk = currentChunk ? `${currentChunk} ${sentence}` : sentence;
+    let sentence = sentences[i].trim();
 
-    // Check if adding this sentence exceeds the chunk size
-    if (potentialChunk.length > chunkSize) {
-      // If the current chunk is not empty and the sentence has ended, push it as a completed chunk
-      if (currentChunk.trim().length > 0) {
-        chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
+    while (sentence.length > 0) {
+      const potentialChunk = currentChunk ? `${currentChunk} ${sentence}` : sentence;
+
+      if (potentialChunk.length <= chunkSize) {
+        currentChunk = potentialChunk;
+        break;
+      } else {
+        // If currentChunk is not empty, push it and continue with the sentence
+        if (currentChunk) {
+          chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
+          currentChunk = '';
+        }
+
+        // If the sentence itself is longer than chunkSize, break it
+        if (sentence.length > chunkSize) {
+          const chunkText = sentence.slice(0, chunkSize);
+          chunks.push({ id: `${chunkId++}`, text: chunkText.trimEnd(), completed: false });
+          sentence = sentence.slice(chunkSize).trim();
+        } else {
+          currentChunk = sentence;
+          break;
+        }
       }
-      // Start a new chunk with the current sentence
-      currentChunk = sentence;
-    } else {
-      // Otherwise, add the sentence to the current chunk
-      currentChunk = potentialChunk;
     }
   }
 
-  // Push the last chunk if it exists
+  // Push any remaining text in currentChunk
   if (currentChunk.trim().length > 0) {
     chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
   }
 
   return chunks;
 }
+
 
 export function splitIntoChunksV1(text: string, chunkSize: number = DOWLOAD_CHUNK_SIZE): Chunk[] {
   const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || []; //matches sentences based on the delimiters

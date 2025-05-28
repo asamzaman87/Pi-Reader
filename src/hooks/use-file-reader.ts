@@ -54,18 +54,43 @@ async function getParagraphs(content: any) {
     return result.value;
 }
 
+const cleanText = (text: string): string => {
+    return text
+        .replace(/[\r\n]+/g, " ")       // Replace all line breaks with a space
+        .replace(/[ \t]+/g, " ")        // Replace multiple spaces/tabs with a single space
+        .replace(/^\s+|\s+$/g, "");     // Trim leading/trailing whitespace
+};
+
 const docxToText = async <T = string>(file: File): Promise<T | string> =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = async (e: ProgressEvent<FileReader>) => {
-            const content = e.target?.result as ArrayBuffer;
-            const text = await getParagraphs(content);
-            if(text.trim().length > 0) return resolve(text);
-            reject(new Error("There was an error parsing the file! It might not have valid text content."));
+            const arrayBuffer = e.target?.result as ArrayBuffer;
+            try {
+                const { value: rawText } = await mammoth.extractRawText({ arrayBuffer });
+                const text = cleanText(rawText);
+                if (text.length > 0) return resolve(text as T);
+                reject(new Error("The file contains no valid text."));
+            } catch (error) {
+                reject(error);
+            }
         };
         reader.onerror = (err) => reject(err);
         reader.readAsArrayBuffer(file);
     });
+// const docxToText = async <T = string>(file: File): Promise<T | string> =>
+//     new Promise((resolve, reject) => {
+//         const reader = new FileReader();
+//         reader.onload = async (e: ProgressEvent<FileReader>) => {
+//             const content = e.target?.result as ArrayBuffer;
+//             const { value: text } = await mammoth.extractRawText({ arrayBuffer });
+//             // const text = await getParagraphs(content);
+//             if(text.trim().length > 0) return resolve(text);
+//             reject(new Error("There was an error parsing the file! It might not have valid text content."));
+//         };
+//         reader.onerror = (err) => reject(err);
+//         reader.readAsArrayBuffer(file);
+//     });
 
 const textPlainToText = async (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
