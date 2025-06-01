@@ -68,7 +68,7 @@ const docxToText = async <T = string>(file: File): Promise<T | string> =>
             const arrayBuffer = e.target?.result as ArrayBuffer;
             try {
                 const { value: rawText } = await mammoth.extractRawText({ arrayBuffer });
-                const text = cleanText(rawText);
+                const text = rawText;
                 if (text.length > 0) return resolve(text as T);
                 reject(new Error("The file contains no valid text."));
             } catch (error) {

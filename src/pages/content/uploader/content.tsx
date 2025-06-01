@@ -115,9 +115,18 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         isLoopActive.current = true;
     }
 
+    const cleanText = (text: string): string => {
+        return text
+            .replace(/[\r\n]+/g, " ")       // Replace all line breaks with a space
+            .replace(/[ \t]+/g, " ")        // Replace multiple spaces/tabs with a single space
+            .replace(/^\s+|\s+$/g, "");     // Trim leading/trailing whitespace
+    };
+
     const listenOrDownloadAudio = useCallback(async (text?: string, voicelist?: any) => {
         if (files.length > 0 && fileExtractedText?.trim()?.length) {
-            return splitAndSendPrompt(fileExtractedText, voicelist).finally(() => {
+
+            let rawText = cleanText(fileExtractedText);
+            return splitAndSendPrompt(rawText, voicelist).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }

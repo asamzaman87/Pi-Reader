@@ -109,7 +109,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn("text-sm opacity-90 flex items-center gap-4", className)}
+    className={cn("font-ui text-sm opacity-90 flex items-center gap-4", className)}
     {...props}
   ><CircleAlertIcon className="size-6"/>
     <div className="w-full">{props.children}</div>

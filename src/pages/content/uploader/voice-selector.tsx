@@ -90,7 +90,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
     //   );
 
     return (
-        <div className="p-1.5 mx-auto flex items-center justify-center gap-2 border border-gray-500 dark:border-gray-700 rounded-full">
+        <div className="font-ui p-1.5 mx-auto flex items-center justify-center gap-2 border border-gray-500 dark:border-gray-700 rounded-full">
             <Trigger onClick={() => isPlaying ? stop() : preview()}>
                 {!isPlaying && <PlayCircle className={"size-4"} onClick={preview} />}
                 {isPlaying && <StopCircle className="size-4" onClick={stop} />}
@@ -106,7 +106,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
                     <ScrollArea className="h-72 w-full">
                         {voices.map((voice, i, arr) => (
                             <>
-                                <DropdownMenuItem className="flex-col items-start justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-700 rounded gap-1" disabled={selected === voice.voice} key={voice.voice} onClick={() => onDropItemSelect(voice.voice)}>
+                                <DropdownMenuItem className="font-ui flex-col items-start justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-700 rounded gap-1" disabled={selected === voice.voice} key={voice.voice} onClick={() => onDropItemSelect(voice.voice)}>
                                     <span className="inline-flex gap-1 items-center justify-start">
                                         {voice.voice.charAt(0).toUpperCase() + voice.voice.slice(1)}
                                         {voice.gender &&
@@ -138,7 +138,7 @@ const VoiceSelector: FC<VoiceSelectorProps> = ({ voice, setVoices, disabled, loa
             </DropdownMenu> */}
             <Popover>
                 <PopoverTrigger><Info className="cursor-pointer size-5 text-gray-600 dark:text-gray-100" /></PopoverTrigger>
-                <PopoverContent className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                <PopoverContent className="font-ui bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                 <p className="text-wrap text-left font-medium text-sm">{chrome.i18n.getMessage('voice_selector_description')}</p>
                 </PopoverContent>
             </Popover>

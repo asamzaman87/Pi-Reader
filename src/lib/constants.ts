@@ -77,7 +77,7 @@ export const PLAY_RATE_STEP = 0.25;
 export const DOMAINS = ["chat.com", "chatgpt.com"];
 export const MATCH_URLS = ["https://*.pi.ai/*"];
 export const FEEDBACK_ENDPOINT = "https://www.readeon.com/api/feedbacks/gpt-feedback";
-export const FEEDBACK_GOOGLE_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSdarz80UfaTlU_dZVsN5a_0LBq9FT_wcwNXJ5HtaP9052cEdw/viewform?usp=sharing";
+export const FEEDBACK_GOOGLE_FORM = "https://docs.google.com/forms/d/e/1FAIpQLScg5UUqvat9zBFcXOKe4hzc1xQd7KCXzjqjBGbHgfbSqhDxjA/viewform?usp=header";
 export const UNINSTALL_GOOGLE_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSfdA6qXAw11ojS2Z9uBIrb2M1-wBmXG4EnCqI_xksjAq0QxmA/viewform?usp=sharing&ouid=105161295630410831674";
 export const YOUTUBE_FAQ_VIDEO = "https://youtu.be/zhiRjPAtOHI";
 export const MAX_SLIDER_VALUE = 2;

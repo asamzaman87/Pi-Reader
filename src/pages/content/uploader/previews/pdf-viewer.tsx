@@ -49,7 +49,7 @@ const PdfViewer: FC<PdfViewerProps> = ({ file }) => {
 
 
     return (
-        <div className='flex flex-row justify-center items-center gap-2 size-full'>
+        <div className='flex flex-row justify-center items-center gap-2 size-full mb-[120px]'>
             <Button
                 className="rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
                 variant={"ghost"}

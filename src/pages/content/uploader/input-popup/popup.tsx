@@ -17,7 +17,7 @@ const InputPopup: FC<InputPopupProps> = ({ disabled, onSubmit, ...props }) => {
     return (
         <Dialog {...props}>
             <DialogTrigger asChild disabled={disabled}>
-                <div className={cn("group relative grid size-full cursor-pointer place-items-center rounded-2xl border-2 border-dashed border-gray-500 dark:hover:border-gray-200 hover:border-gray-700 px-5 py-2.5 text-center transition hover:bg-gray-200 dark:hover:bg-gray-700",
+                <div className={cn("font-ui group relative grid size-full cursor-pointer place-items-center rounded-2xl border-2 border-dashed border-gray-500 dark:hover:border-gray-200 hover:border-gray-700 px-5 py-2.5 text-center transition hover:bg-gray-200 dark:hover:bg-gray-700",
                     "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",)}>
                     <div className="flex flex-col items-center justify-center gap-4 sm:px-5 cursor-pointer">
                         <div className="rounded-full border border-gray-500 border-dashed flex items-center justify-center size-20">
@@ -27,7 +27,7 @@ const InputPopup: FC<InputPopupProps> = ({ disabled, onSubmit, ...props }) => {
                             />
                         </div>
                         <div className="flex flex-col items-end justify-center gap-px">
-                            <p className="font-medium text-center">
+                            <p className="font-ui font-medium text-center">
                                 {chrome.i18n.getMessage('type_or_paste_text')}
                             </p>
                         </div>
@@ -40,7 +40,7 @@ const InputPopup: FC<InputPopupProps> = ({ disabled, onSubmit, ...props }) => {
                 }}
                 className="bg-gray-100 dark:bg-gray-800 border-none min-w-[50dvw]"
             >
-                <DialogHeader>
+                <DialogHeader className="font-ui">
                     <DialogTitle className="text-center">{chrome.i18n.getMessage('type_or_paste_text')}</DialogTitle>
                     <DialogDescription className="sr-only">{chrome.i18n.getMessage('type_or_paste_text_v2')}</DialogDescription>
                 </DialogHeader>

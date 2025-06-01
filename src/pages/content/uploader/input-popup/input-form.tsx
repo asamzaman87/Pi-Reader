@@ -38,8 +38,8 @@ const InputForm: FC<InputFormProps> = ({ onSubmit, disabled }) => {
     }
 
     return (
-        <Form {...form}>
-            <form className="w-full space-y-4 [&_label]:text-lg" onSubmit={form.handleSubmit(onFormSubmit)}>
+        <Form {...form} >
+            <form className="font-ui w-full space-y-4 [&_label]:text-lg" onSubmit={form.handleSubmit(onFormSubmit)}>
                 <FormField
                     control={form.control}
                     name="title"
