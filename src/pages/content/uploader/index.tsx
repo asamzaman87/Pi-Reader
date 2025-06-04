@@ -27,7 +27,7 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 				&times;
 			</button>
 
-			<p className="text-sm leading-snug pr-6"> {/* padding right to prevent overlap */}
+			<p className="font-ui text-sm leading-snug pr-6"> {/* padding right to prevent overlap */}
 				To use the <strong>Pi Reader</strong> extension, please complete the setup process at <strong>pi.ai</strong>.
 				Once completed, the extension will open automatically.
 			</p>
