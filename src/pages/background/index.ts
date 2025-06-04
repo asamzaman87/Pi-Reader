@@ -151,6 +151,9 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (tabId) {
         const id = typeof tabId === "string" ? +tabId.split("::")[0] : tabId; //type is string if new tab was created
         chrome.storage.local.set({ origin: true });
+        if (typeof tabId !== "string") {
+            chrome.tabs.sendMessage(tabId, { type: "OPEN_POPUP", payload: "ORIGIN_VERIFIED" });
+        }
         // chrome.storage.local.se/
         await chrome.tabs.reload(id); //reload tab to update the content
     }

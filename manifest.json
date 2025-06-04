@@ -29,9 +29,7 @@
       "matches": [
         "https://pi.ai/talk",
         "https://pi.ai/discover",
-        "https://pi.ai/profile"
-      ],
-      "exclude_matches": [
+        "https://pi.ai/profile",
         "https://pi.ai/onboarding"
       ],
       "js": [
