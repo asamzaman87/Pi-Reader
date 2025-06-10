@@ -75,7 +75,7 @@ export const TOAST_STYLE_CONFIG = { backgroundColor: "darkred", color: "#fff", b
 export const TOAST_STYLE_CONFIG_INFO = { backgroundColor: "darkblue", color: "#fff", border: "1px solid #001aff" }
 export const PLAY_RATE_STEP = 0.25;
 export const DOMAINS = ["pi.ai", "pi.ai"];
-export const MATCH_URLS = ["https://*.pi.ai/*"];
+export const MATCH_URLS = ["https://*.pi.ai/onboarding"];
 export const FEEDBACK_ENDPOINT = "https://www.readeon.com/api/feedbacks/gpt-feedback";
 export const FEEDBACK_GOOGLE_FORM = "https://docs.google.com/forms/d/e/1FAIpQLScg5UUqvat9zBFcXOKe4hzc1xQd7KCXzjqjBGbHgfbSqhDxjA/viewform?usp=header";
 export const UNINSTALL_GOOGLE_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSfdA6qXAw11ojS2Z9uBIrb2M1-wBmXG4EnCqI_xksjAq0QxmA/viewform?usp=sharing&ouid=105161295630410831674";

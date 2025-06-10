@@ -193,11 +193,11 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
                 <div className={cn("absolute top-4 left-16 size-max", { "translate-x-16 transition-transform":( prompts.length > 0 || isDownload)})}>
                     <FeedbackPopup />
                 </div>
-                <div className={cn("absolute top-4 right-16 size-max")}>
+                {/* <div className={cn("absolute top-4 right-16 size-max")}>
                     <Button variant="ghost" onClick={()=> chrome.runtime.sendMessage({ type: "OPEN_FAQ_VIDEO" })} className="rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 [&_svg]:size-6 transition-all">
                         <HelpCircleIcon/> {chrome.i18n.getMessage("having_issues")}
                     </Button>
-                </div>
+                </div> */}
 
                  <PresenceConfirmationPopup loading={isLoading} handleYes={handleYes} handleNo={handleNo} open={isPresenceModalOpen} setOpen={setIsPresenceModalOpen} />       
                  <DownloadOrListen onSubmit={onDownloadOrListenSubmit} open={showDownloadOrListen} onOpenChange={(state)=>{

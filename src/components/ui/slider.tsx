@@ -16,7 +16,7 @@ const Slider = React.forwardRef<
   // const mid = React.useMemo(() => Math.floor(range.length / 2), [range]);
 
   return (
-    <div>
+    <div className="font-ui">
       <p className="text-lg font-medium text-center mx-auto w-max mb-2.5 text-gray-800 dark:text-gray-100">
         {chrome.i18n.getMessage("playback_speed")}
       </p>

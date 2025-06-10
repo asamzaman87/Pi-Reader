@@ -67,7 +67,7 @@ function Uploader() {
 			(document.head || document.documentElement).appendChild(s);
 
 			chrome.runtime.onMessage.addListener((message) => {
-				console.log('Message: ', message);
+				// console.log('Message: ', message);
 				if (message.type === "OPEN_POPUP") {
 					//if origin is not verified, verify it
 					if (message.payload === "VERIFY_ORIGIN") {
@@ -98,16 +98,16 @@ function Uploader() {
 
 		const route = window.location.pathname;
 		const routesToShowPopup = ["/onboarding"]; // define your routes here
-		console.log('CurrentRoute: ', route);
-		if (routesToShowPopup.includes(route)) {
-			setShowRoutePopup(true);
-		}
+		// console.log('CurrentRoute: ', route);
+		// if (routesToShowPopup.includes(route)) {
+		// 	setShowRoutePopup(true);
+		// }
 		// const route = window.location.pathname;
 		// const routesToShowPopup = ["/onboarding"];
-		console.log('CurrentRoute: ', route);
+		// console.log('CurrentRoute: ', route);
 
 		if (routesToShowPopup.includes(route)) {
-			setShowRoutePopup(true);
+			// setShowRoutePopup(true);
 
 			// Automatically click the onboarding buttons
 			const BUTTON_TEXTS = ["Continue to Pi Classic", "Next"];
@@ -161,28 +161,28 @@ function Uploader() {
 	}, [isAuthenticated, isActive]);
 
 	//check if the send button is present on the dom
-	const isSendButtonPresentOnDom = () => {
-		const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
-		return sendButton !== null;
-	}
+	// const isSendButtonPresentOnDom = () => {
+	// 	const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
+	// 	return sendButton !== null;
+	// }
 
-	//check if the speech button is present on the dom
-	const isComposerSpeechButtonPresentOnDom = () => {
-		const speechButton: HTMLDivElement | null = document.querySelector("[data-testid='composer-speech-button']");
-		return speechButton !== null;
-	}
+	// //check if the speech button is present on the dom
+	// const isComposerSpeechButtonPresentOnDom = () => {
+	// 	const speechButton: HTMLDivElement | null = document.querySelector("[data-testid='composer-speech-button']");
+	// 	return speechButton !== null;
+	// }
 
-	//add speech found text to the input and open the popup
-	const addTextToInputAndOpen = (text: string) => {
-		const textarea = document.querySelector(PROMPT_INPUT_ID) as HTMLTextAreaElement;
-		if (textarea) {
-			textarea.innerHTML = `<p>${text}</p>`;
-			textarea.focus();
-			// setTimeout(()=>setIsActive(true), 200);
-			return
-		}
-		return toast({ description: chrome.i18n.getMessage("ongoing_conversation_error"), duration: 5000, style: TOAST_STYLE_CONFIG });
-	}
+	// //add speech found text to the input and open the popup
+	// const addTextToInputAndOpen = (text: string) => {
+	// 	const textarea = document.querySelector(PROMPT_INPUT_ID) as HTMLTextAreaElement;
+	// 	if (textarea) {
+	// 		textarea.innerHTML = `<p>${text}</p>`;
+	// 		textarea.focus();
+	// 		// setTimeout(()=>setIsActive(true), 200);
+	// 		return
+	// 	}
+	// 	return toast({ description: chrome.i18n.getMessage("ongoing_conversation_error"), duration: 5000, style: TOAST_STYLE_CONFIG });
+	// }
 
 	// const isO1PreviewOrO1MiniModelSelected = () => {
 	//   const isSupportedModel = (models: string | string[]) => MODELS_TO_REJECT.some((model) => models.includes(model));
@@ -317,7 +317,7 @@ function Uploader() {
 		<>
 			<Dialog open={isActive} onOpenChange={onOpenChange}>
 				<DialogTrigger asChild>
-					{!showRoutePopup && <Button
+					<Button
 						ref={activateButton}
 						variant="outline"
 						size="lg"
@@ -337,7 +337,7 @@ function Uploader() {
 							</>
 						)}
 					</Button>
-					}
+					
 				</DialogTrigger>
 				<DialogContent
 					onInteractOutside={(e: Event) => {
@@ -351,9 +351,9 @@ function Uploader() {
 			</Dialog>
 			<Toaster />
 			{/* <RouteSpecificPopup onClose={() => setShowRoutePopup(false)} /> */}
-			{showRoutePopup && (
+			{/* {showRoutePopup && (
 				<RouteSpecificPopup onClose={() => setShowRoutePopup(false)} />
-			)}
+			)} */}
 
 		</>
 	);
