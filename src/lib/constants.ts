@@ -93,6 +93,5 @@ export const DOWLOAD_CHUNK_SIZE = 4000;
 export const PI_VOICE_STREAM_URL: string | null = "https://pi.ai/api/chat/voice"
 export const PI_CHAT_URL: string = "https://pi.ai/api/v2/chat";
 export const PI_START_URL: string = 'https://pi.ai/api/chat/start';
-export const PI_API_CONVERSATION_API_DELAY = 10000;
 export const REVIEWS_CHROME = "https://chromewebstore.google.com/detail/gpt-reader-free-ai-text-t/aeggkceabpfajnglgaeadofdmeboimml/reviews";
 export const REVIEWS_FIREFOX = "https://addons.mozilla.org/en-US/firefox/addon/gpt-reader";

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
 import { useToast } from "./use-toast";
-import { set } from "react-hook-form";
 
 const useAudioUrl = (isDownload: boolean) => {
     const { toast } = useToast();
@@ -173,7 +172,6 @@ const useAudioUrl = (isDownload: boolean) => {
         const handler = (e: CustomEvent) => {
             window.removeEventListener("PI_CHAT_STREAM", handler as any);
             resolve(e.detail);
-            console.log('Chat Stream Received');
         };
         window.addEventListener("PI_CHAT_STREAM", handler as any);
         });
@@ -191,7 +189,6 @@ const useAudioUrl = (isDownload: boolean) => {
         if (arr && arr.length > 0) {
             for (const el of arr) {
                 if (!isLoopActive.current) break;
-                console.log('Chunk Text: ', el.text);
                 // 1) inject the prompt (fires off the real /api/v2/chat from the page)
                 injectPrompt(el.text);
 
@@ -200,7 +197,6 @@ const useAudioUrl = (isDownload: boolean) => {
 
                 // 3) pull out the “message” event, build your voice-note URL
                 const msgEvent = events.find(ev => ev.event === "message");
-                console.log('msgEvent: ', msgEvent);
                 setIsLoading(false);
                 // TODO: make use of mode here
                 const audioUrl = msgEvent
@@ -214,7 +210,6 @@ const useAudioUrl = (isDownload: boolean) => {
                     if (!resp.ok) throw new Error(`Audio fetch failed: ${resp.status}`);
                     const blob = await resp.blob();
                     const blobUrl = URL.createObjectURL(blob);
-                    console.log('retrieved audioUrl');
                     if (isLoopActive.current) setAudioUrls(prev => [...prev, blobUrl]);
                 } else {
                     console.warn('No audio URL for chunk, skipping:', el.text);
