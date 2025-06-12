@@ -86,31 +86,59 @@ export function formatBytes(
 // }
 
 export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
-  const lines = text.split('\n');
-  let currentChunk = '';
+  // Split the text into sentences based on common delimiters
+  const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
+  // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
+  let currentChunk = "";
   let chunkId = 0;
 
-  const chunks: Chunk[] = [];
+  const initialChunkSize = chunkSize; // Initial chunk size in characters
+  let targetSize = initialChunkSize;   // Current target chunk size
+  const maxChunkSize = 3000;           // Maximum chunk size in characters
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i] + '\n'; // Add newline back to preserve line endings
-    const potentialChunk = currentChunk + line;
+  const chunks = sentences.reduce((chunks, sentence, i, arr) => {
+    // Calculate the potential new chunk if the current sentence is added
+    const potentialChunk = currentChunk ? currentChunk + ' ' + sentence.trim() : sentence.trim();
+    const potentialSize = potentialChunk.length;
 
-    if (potentialChunk.length > chunkSize) {
-      // If the current chunk has content, push it and start a new one
+    const isCurrentChunkSizeGreaterThanOrEqualTargetSize = potentialSize >= targetSize;
+    const isEnd = i === arr.length - 1; // Check if it's the last sentence
+
+    if (isCurrentChunkSizeGreaterThanOrEqualTargetSize) {
+      // Push the current chunk to the chunks array if it's not empty
       if (currentChunk.trim().length > 0) {
-        chunks.push({ id: `${chunkId++}`, text: currentChunk.trimEnd(), completed: false });
+        chunks.push({ id: `${chunkId++}`, text: currentChunk.trim(), completed: false });
       }
-      currentChunk = line; // Start new chunk with this line
+
+      // Start a new chunk with the current sentence
+      currentChunk = sentence.trim();
+
+      // Determine if the next chunk should reset based on chunkId
+      const isEvery12thChunk = (chunkId % 12) === 0;
+
+      // Adjust the target size based on conditions
+      if (isEvery12thChunk) {
+        // Reset to the initial chunk size
+        targetSize = initialChunkSize;
+      } else {
+        // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
+        targetSize = Math.min(Math.floor(targetSize * 10), maxChunkSize);
+      }
     } else {
+      // Accumulate the sentence into the current chunk
       currentChunk = potentialChunk;
     }
-  }
 
-  // Push the last chunk if there is any content left
-  if (currentChunk.trim().length > 0) {
-    chunks.push({ id: `${chunkId}`, text: currentChunk.trimEnd(), completed: false });
-  }
+    // If it's the last sentence, we need to ensure the last chunk is pushed
+    if (isEnd) {
+      // Always push the last chunk if it has content
+      if (currentChunk.trim().length > 0) {
+        chunks.push({ id: `${chunkId}`, text: currentChunk.trim(), completed: false });
+      }
+    }
+
+    return chunks;
+  }, [] as Chunk[]);
 
   return chunks;
 }
@@ -213,14 +241,14 @@ export const getGPTTabs = async () => {
 export const switchToActiveTab = async () => {
   const activeTab = await getGPTTabs();
   if (!activeTab?.length || !activeTab[0].id) {
-    const tab = await chrome.tabs.create({ url: "https://pi.ai/onboarding" });
+    const tab = await chrome.tabs.create({ url: "https://pi.ai/talk" });
     if (tab.id) {
       await chrome.tabs.update(tab.id, { active: true });
       return tab.id + "::new_tab";
     }
     return
   }
-  await chrome.tabs.update(activeTab[0].id, { active: true });
+  await chrome.tabs.update(activeTab[0].id, { active: true, url: "https://pi.ai/chat" });
   return activeTab[0].id;
 }
 

@@ -207,12 +207,19 @@ function Uploader() {
 	// Avoid calling `onOpenChange` during the first render
 	useEffect(() => {
 		isInitialRender.current = true; // Set true initially
+		if (localStorage.getItem("pi/onload-open") === "true") {
+			console.log("onload-open");
+			onOpenChange(true);
+			localStorage.removeItem("pi/onload-open");
+		} else {console.log("no pi/onload-open");}
+		
 		return () => {
 			isInitialRender.current = false; // Set false on cleanup (after the first render)
 		};
 	}, []);
 
 	const onOpenChange = (open: boolean) => {
+		if (window.location.href !== `https://pi.ai/talk` && window.location.href !== `https://pi.ai/discover`) return;
 		setIsActive(open);
 		// Skip the automatic call during the initial render
 		if (isInitialRender.current) {

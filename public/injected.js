@@ -255,6 +255,7 @@ window.fetch = async function (...args) {
             }
           }
         }
+        window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
       
         // console.log("✅ Parsed SSE Events:", events);
     } else if (contentType.includes("event-stream")) {

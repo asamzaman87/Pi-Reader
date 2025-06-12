@@ -1,5 +1,5 @@
-import { CHUNK_SIZE, CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_API_CONVERSATION_API_DELAY, PI_CHAT_URL, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_ID, TOAST_STYLE_CONFIG } from "@/lib/constants";
-import { Chunk, splitIntoChunksV1, splitIntoChunksV2, splitIntoChunksV3 } from "@/lib/utils";
+import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR } from "@/lib/constants";
+import { Chunk, splitIntoChunksV2 } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
@@ -23,6 +23,7 @@ const useAudioUrl = (isDownload: boolean) => {
     const { blobs, isFetching, completedStreams, currentCompletedStream, reset: resetStreamListener, voices, isVoiceLoading, setVoices, updateVoiceList } = useStreamListener(setIsLoading);
     const [conversationId, setConversationId] = useState<string | null>(null);
     const isLoopActive = useRef(true);
+    let activeSendObserver: MutationObserver | null = null;
     
     
     useEffect(()=> {
@@ -165,75 +166,19 @@ const useAudioUrl = (isDownload: boolean) => {
         }
     },[])
 
-    const getAudioStream = async (text: any, sid: any, voicelist?: any): Promise<string | null> => {
-        let voiceNote: string | null = null;
-        const selectedVoiceObject = voicelist.voices.find((v: { voice: string }) => v.voice === voicelist.selected);
-
-        try {
-
-            if (!sid) {
-                throw new Error("SID not found");
-            }
-
-            var requestBody = {
-                conversation: sid,
-                text: text
-            }
-            const response = await fetch(PI_CHAT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(requestBody)
-            });
-
-            
+    // wait until injected.js fires back the parsed SSE events
+    const waitForChatStream = (): Promise<{ event: string; data: any }[]> =>
+        new Promise(resolve => {
+        const handler = (e: CustomEvent) => {
+            window.removeEventListener("PI_CHAT_STREAM", handler as any);
+            resolve(e.detail);
+        };
+        window.addEventListener("PI_CHAT_STREAM", handler as any);
+        });
     
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    
-            const contentType = response.headers.get("content-type") || "";
-            if (contentType.includes("text")) {
-                const raw = await response.text();
-                const chunks = raw.split("\n\n");
-    
-                for (const chunk of chunks) {
-                    const lines = chunk.split("\n");
-                    let event = null;
-                    let data = "";
-    
-                    for (const line of lines) {
-                        if (line.startsWith("event:")) {
-                            event = line.replace("event:", "").trim();
-                        } else if (line.startsWith("data:")) {
-                            data += line.replace("data:", "").trim();
-                        }
-                    }
-    
-                    if (event && data) {
-                        try {
-                            console.log('selectedVoiceObject: ', selectedVoiceObject);
-                            const parsedData = JSON.parse(data);
-                            if (event === 'message') {
-                                voiceNote = `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${parsedData.sid}`
-                            }
-                        } catch (e) {
-                            console.warn("❗ Failed to parse SSE data:", e);
-                        }
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-        return voiceNote;
-    };
-    
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-     // useRef to track the loop's active state
-    
-    const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
+     const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
         const allVoices: string[] = [];
+        const selectedVoiceObject = voicelist.voices.find((v: { voice: string }) => v.voice === voicelist.selected);
         let sid: string | null = conversationId;
             
         if (!conversationId) {
@@ -244,52 +189,111 @@ const useAudioUrl = (isDownload: boolean) => {
         if (arr && arr.length > 0) {
             for (const el of arr) {
                 if (!isLoopActive.current) break;
+                // 1) inject the prompt (fires off the real /api/v2/chat from the page)
+                injectPrompt(el.text);
 
-                let audioUrl = await getAudioStream(`${HELPER_PROMPT}\n${el.text}`, sid, voicelist); // 👈 await here
+                // 2) wait for injected.js to hand back the parsed SSE events
+                const events = await waitForChatStream();
+
+                // 3) pull out the “message” event, build your voice-note URL
+                const msgEvent = events.find(ev => ev.event === "message");
+                setIsLoading(false);
+                // TODO: make use of mode here
+                const audioUrl = msgEvent
+                ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
+                : null;
+                
+                // 3) only add if we actually got one
                 if (audioUrl) {
-                    setAudioUrls(prev => [...prev, audioUrl]); // Push incrementally
+                    const resp = await fetch(audioUrl, { credentials: 'include' });
+                    // TODO: add retry logic here to re-inject prompt upon failure
+                    if (!resp.ok) throw new Error(`Audio fetch failed: ${resp.status}`);
+                    const blob = await resp.blob();
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (isLoopActive.current) setAudioUrls(prev => [...prev, blobUrl]);
+                } else {
+                    console.warn('No audio URL for chunk, skipping:', el.text);
                 }
-
-                // Wait 3 seconds before next request to avoid rate limiting
-                await delay(PI_API_CONVERSATION_API_DELAY);
             }
             // You can do something further with `allVoices` here
         }
     };
 
 
+    const sendPrompt = () => {
+        console.log('Prompt Sending...');
+        setIsLoading(true);
     
+        const sendButton = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
+        if (sendButton && !sendButton.disabled) {
+            sendButton.click();
+            return;
+        }
+    
+        // Prevent multiple observers
+        if (activeSendObserver) {
+            activeSendObserver.disconnect();
+            activeSendObserver = null;
+        }
 
-    const injectPrompt = useCallback((text: string, id: string) => {
-        //console.log("INJECT_PROMPT", id);
-        const textarea = document.querySelector('textarea');
-        // const textarea = document.querySelector('body > main textarea') as HTMLTextAreaElement;
-        // console.log('textarea: ', textarea)
-        if (textarea) {
+        const observer = new MutationObserver((mutations, obs) => {
+            const btn = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
+            if (btn && !btn.disabled) {
+                btn.click();
+                obs.disconnect();
+                activeSendObserver = null;
+                clearTimeout(timeout);
+            }
+        });
+    
+        observer.observe(document.body, { childList: true, subtree: true });
+        activeSendObserver = observer;
+    
+        const timeout = setTimeout(() => {
+            observer.disconnect();
+            activeSendObserver = null;
+            console.error("[sendPrompt] Send button not found after 35 seconds.");
+            toast({
+                description: `Pi Reader is having trouble, please refresh your page and try again`,
+                style: TOAST_STYLE_CONFIG
+            })
+        }, 35000);
+    };
 
-            // textarea.value = `${HELPER_PROMPT} ${text}`;
-            // getAudioStream(`${HELPER_PROMPT} ${text}`);
-            // Create and dispatch events
-            // textarea.dispatchEvent(new Event('change', { bubbles: true }));
-            // textarea.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'a', code: 'KeyA' }));
-            // textarea.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'a', code: 'KeyA' }));
-
-            // const button = textarea?.closest('div.relative')?.querySelector('button');
-            // console.log('Button: ', button);
-
-            // const audio = document.querySelector('main audio');
-            // const AudioButton = audio?.closest('main')?.querySelector('button');
-            // setTimeout(() => {
-                // sendPrompt();
-                // if (AudioButton) {
-                //     AudioButton.click(); // Unmutte the voice
-                // }
-                // if (button) {
-                //     button.click(); //  triggers the click
-                // }
-            // }, 200);
+    
+    function setNativeValue(el: HTMLTextAreaElement, value: string) {
+        // Try the prototype setter first (this is what React wired up)
+        const proto = Object.getPrototypeOf(el);
+        const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+        const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
+      
+        if (protoSetter) {
+          protoSetter.call(el, value);
+        } else if (valueSetter) {
+          valueSetter.call(el, value);
         } else {
-            const errorMessage = chrome.i18n.getMessage('chatgpt_issue');
+          el.value = value;               // last-ditch fallback
+        }
+      }
+    
+    const injectPrompt = useCallback((text: string) => {
+        const textarea = document.querySelector(PROMPT_INPUT_SELECTOR) as HTMLTextAreaElement;
+
+        if (textarea) {
+            const raw = `${HELPER_PROMPT}\n\n${text}`;
+            // ── Use the native setter so React sees the change ──
+            if (document.activeElement !== textarea) {
+                textarea.focus();
+            }
+            setNativeValue(textarea, raw);
+
+            // ── Let React’s onChange/onInput fire ──
+            textarea.dispatchEvent(new Event("input",  { bubbles: true }));
+            textarea.dispatchEvent(new Event("change", { bubbles: true }));
+
+            sendPrompt();
+        } else {
+            const errorMessage = `Pi Reader is having trouble, please refresh your page and try again`;
             window.dispatchEvent(new CustomEvent(LISTENERS.ERROR, { detail: { message: errorMessage } }));
             toast({
                 description: errorMessage,
@@ -298,11 +302,13 @@ const useAudioUrl = (isDownload: boolean) => {
         }
     }, []);
 
+
     const splitAndSendPrompt = async (text: string, voicelist?: any) => {
         // console.log("SPLIT_AND_SEND_PROMPT");
         setText(text);
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
-        const chunks: Chunk[] = await splitIntoChunksV3(textWithoutTags, CHUNK_SIZE);
+        const chunks: Chunk[] = await splitIntoChunksV2(textWithoutTags);
+        setChunks(chunks);
         getCompleteTextChunks(chunks, voicelist);
 
         console.log("Voices: ", voices);
@@ -349,9 +355,14 @@ const useAudioUrl = (isDownload: boolean) => {
         setText("");
         setIsLoading(false);
         resetStreamListener();
+        isLoopActive.current = false;
         if (isDownload) {
             setProgress(0);
             setDownloadPreviewText(undefined);
+        }
+        if (activeSendObserver) {
+            activeSendObserver.disconnect();
+            activeSendObserver = null;
         }
     }
 
@@ -371,7 +382,7 @@ const useAudioUrl = (isDownload: boolean) => {
             //console.log("RESTART WITH NEXT_CHUNK");
             setIsPromptingPaused(false);
             setCurrentChunkBeingPromptedIndex(+currentCompletedStream.chunkNumber + 1);
-            injectPrompt(nextChunk.text, nextChunk.id);
+            injectPrompt(nextChunk.text);
         }
     };
 
@@ -414,7 +425,7 @@ const useAudioUrl = (isDownload: boolean) => {
                     setCurrentChunkBeingPromptedIndex(
                         +currentCompletedStream.chunkNumber + 1
                     );
-                    injectPrompt(nextChunk.text, nextChunk.id);
+                    injectPrompt(nextChunk.text);
                 }
             }
         }
