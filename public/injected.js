@@ -178,7 +178,7 @@ window.fetch = async function (...args) {
     headers.forEach((value, key) => {
       headersObject[key] = value;
     });
-    console.log("📜 Request Headers:", headersObject);
+    // console.log("📜 Request Headers:", headersObject);
   }
   
 // Convert Headers object to plain object and log it
@@ -188,14 +188,14 @@ window.fetch = async function (...args) {
     headers.forEach((value, key) => {
       headersObject[key] = value; // Convert to a plain object
     });
-    console.log("📜 Request Headers:", headersObject); // Log the headers as a plain object
+    // console.log("📜 Request Headers:", headersObject); // Log the headers as a plain object
   } else if (headers) {
-    console.log("📜 Request Headers (Object):", headers);
+    // console.log("📜 Request Headers (Object):", headers);
   } else {
-    console.log("📜 No Headers Found");
+    // console.log("📜 No Headers Found");
   }
 
-  console.log("📜 Request Headers:", headers, url); // Log the headers
+  // console.log("📜 Request Headers:", headers, url); // Log the headers
   const hasConversationEndpoint = url.includes(CONVERSATION_ENDPOINT);
 
   const response = await originalFetch.apply(this, args);
@@ -255,6 +255,7 @@ window.fetch = async function (...args) {
             }
           }
         }
+        window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
       
         // console.log("✅ Parsed SSE Events:", events);
     } else if (contentType.includes("event-stream")) {

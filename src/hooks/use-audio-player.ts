@@ -12,7 +12,7 @@ const useAudioPlayer = (isDownload: boolean) => {
     const [isPaused, setIsPaused] = useState<boolean>(false);
     const [isAudioLoading, setAudioLoading] = useState<boolean>(false);
     const [hasCompletePlaying, setHasCompletePlaying] = useState<boolean>(false);
-    const [currentIndex, setCurrentIndex] = useState<number>(0)
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [playRate, setPlayRate] = useState<number>(1);
     const [completedPlaying, setCompletedPlaying] = useState<string[]>([]);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -79,13 +79,23 @@ const useAudioPlayer = (isDownload: boolean) => {
         }
     }
 
-    const reset = useCallback((full: boolean = false, completeAudio?: boolean) => {
+    const reset = useCallback(async (full: boolean = false, completeAudio?: boolean, onBackClick?: boolean, noRefresh?: boolean) => {
         //console.log("RESETTING");
+        if (onBackClick) {
+            localStorage.setItem("pi/onload-open", "true");
+            while (isBackPressed && !localStorage.getItem("pi/onload-open")) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        if (!noRefresh) {
+            window.location.reload();
+        }
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
         setCurrentIndex(0);
         setIsPlaying(false);
         setIsPaused(false);
+        setAudioLoading(false);
         setHasCompletePlaying(!!completeAudio);
         resetTimeout();
         if (full) {
@@ -132,12 +142,15 @@ const useAudioPlayer = (isDownload: boolean) => {
         markCompleted(audioPlayer.src)
 
         if (currentIndex === audioUrls.length - 1 && !isLoading) {
-            return reset(false, true);
+            return reset(false, true, undefined, true);
         }
 
         if (audioUrls.length > current) {
             setCurrentIndex(current);
             playNext(current);
+        } else {
+            setIsPlaying(false);
+            setIsPaused(false);
         }
         if (isLoading && !isPlaying && audioUrls.length === current) return setIsStreamLoading(true);
         if (isLoading && !isPlaying && audioUrls.length < current) return setIsStreamLoading(true); //fixes a bug where the stream is loading when it shouldn't be on skip -> back -> play -> skip
@@ -243,16 +256,21 @@ const useAudioPlayer = (isDownload: boolean) => {
     useMemo(() => {
         //resetting audio url if back pressed as the synthesize api might return a delayed response after back press while a chunk had called it
         if (audioUrls.length && isBackPressed) {
-            return reset(true);
+            return reset(true, undefined, true);
         }
 
         setAudioLoading(audioUrls.length === 0); //initial loading state if the first chunk is being prompted and not playing
         localStorage.setItem("gptr/is-first-audio-loading", String(audioUrls.length === 0));
 
-        if (audioUrls.length > 0 && !isPlaying && !isPaused) {
+        if (audioUrls.length === 1) {
             setCompletedPlaying([]);
-            //console.log("INIT PLAY")
-            playNext(0)
+            playNext(0);
+        }
+        
+        if (audioUrls.length > 1 && !isPlaying && !isPaused) {
+            const current = currentIndex + 1;
+            playNext(current);
+            setCurrentIndex(current);
         }
 
         //play new audio if presence modal is open and stream is processing after click on yes

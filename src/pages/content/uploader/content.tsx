@@ -54,8 +54,8 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         isLoopActive.current = false;
     }
 
-    const resetter = () => {
-        reset(true);
+    const resetter = (isBackClick?: boolean) => {
+        reset(true, undefined, isBackClick);
         setFiles([]);
         setPrompts([]);
         setTitle(undefined);
@@ -67,10 +67,10 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         //if is playing, wait for 500ms before resetting to avoid further chunk from being sent (May not work with 2g-3g networks)
         if(isPlaying){
             setTimeout(()=>{
-                resetter();
+                resetter(true);
             }, 500)
         }else{
-            resetter();
+            resetter(true);
         }
         setIsBackPressed(true);
     }
