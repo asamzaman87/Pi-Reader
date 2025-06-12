@@ -16,20 +16,16 @@ export interface PromptProps {
 	text: string | undefined
 }
 function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
-	return (
-		<div className="fixed top-10 right-10 bg-white text-black p-3 rounded-lg shadow-lg z-[9999] border w-80 max-w-[90vw]">
-			{/* Close Icon */}
-			<button
-				onClick={onClose}
-				className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl font-bold leading-none"
-				aria-label="Close"
-			>
-				&times;
-			</button>
 
-			<p className="font-ui text-sm leading-snug pr-6"> {/* padding right to prevent overlap */}
-				To use the <strong>Pi Reader</strong> extension, please complete the setup process at <strong>pi.ai</strong>.
-				Once completed, the extension will open automatically.
+	const LOGO = chrome.runtime.getURL('logo-pi-reader.png');
+	return (
+		<div className="fixed top-10 right-10 bg-white text-black p-4 rounded-lg shadow-lg border w-80 max-w-[90vw] z-[9999]">
+			<div className="flex items-center gap-2 mb-3">
+				<img src={LOGO} alt="GPT Reader Logo" className="w-6 h-6" />
+				<span className="text-base font-semibold">Pi Reader</span>
+			</div>
+			<p className="text-sm leading-snug font-ui">
+				To use the <strong>Pi Reader</strong> extension, please complete the setup process at <strong>pi.ai</strong>. Once completed, the extension will open automatically.
 			</p>
 		</div>
 
@@ -98,17 +94,22 @@ function Uploader() {
 
 		const route = window.location.pathname;
 		const routesToShowPopup = ["/onboarding"]; // define your routes here
-		// console.log('CurrentRoute: ', route);
-		// if (routesToShowPopup.includes(route)) {
-		// 	setShowRoutePopup(true);
-		// }
-		// const route = window.location.pathname;
-		// const routesToShowPopup = ["/onboarding"];
-		// console.log('CurrentRoute: ', route);
+		const routesToShowExtension = ["/talk", "/discover"];
+		if (routesToShowPopup.includes(route)) {
+			setShowRoutePopup(true);
+			window.localStorage.setItem("pi-reader-onboarding", "true");
+		} else if (routesToShowExtension.includes(route) ) {
+			let userComeFromOnBoarding = window.localStorage.getItem("pi-reader-onboarding");
+			if (userComeFromOnBoarding === 'true') {
+				chrome.runtime.sendMessage({ type: "VERIFY_ORIGIN" });
+				setIsActive(true);
+				window.localStorage.setItem("pi-reader-onboarding", "false");
+			}
+		}
 
 		if (routesToShowPopup.includes(route)) {
-			// setShowRoutePopup(true);
 
+			setShowRoutePopup(true);
 			// Automatically click the onboarding buttons
 			const BUTTON_TEXTS = ["Continue to Pi Classic", "Next"];
 			let attempts = 0;
@@ -323,29 +324,31 @@ function Uploader() {
 	return (
 		<>
 			<Dialog open={isActive} onOpenChange={onOpenChange}>
-				<DialogTrigger asChild>
-					<Button
-						ref={activateButton}
-						variant="outline"
-						size="lg"
-						onMouseOver={() => setMinimised(false)}
-						onMouseOut={() => setMinimised(true)}
-						className={cn(
-							"font-ui shadow-md absolute flex justify-center items-center z-[101] top-60 right-0 rounded-l-full bg-white text-black hover:text-black p-2 border border-r-0 border-gray-200 transition-all",
-							{
-								"!z-[50]": isActive || isOverlayFallback,
-							}
-						)}
-					>
-						<img src={LOGO} alt="GPT Reader Logo" className="size-6" />
-						{!minimised && (
-							<>
-								{!isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
-							</>
-						)}
-					</Button>
-					
-				</DialogTrigger>
+				{
+					!showRoutePopup &&
+					<DialogTrigger asChild>
+						<Button
+							ref={activateButton}
+							variant="outline"
+							size="lg"
+							onMouseOver={() => setMinimised(false)}
+							onMouseOut={() => setMinimised(true)}
+							className={cn(
+								"font-ui shadow-md absolute flex justify-center items-center z-[101] top-60 right-0 rounded-l-full bg-white text-black hover:text-black p-2 border border-r-0 border-gray-200 transition-all",
+								{
+									"!z-[50]": isActive || isOverlayFallback,
+								}
+							)}
+						>
+							<img src={LOGO} alt="GPT Reader Logo" className="size-6" />
+							{!minimised && (
+								<>
+									{!isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
+								</>
+							)}
+						</Button>
+					</DialogTrigger>
+				}
 				<DialogContent
 					onInteractOutside={(e: Event) => {
 						e.preventDefault(); //prevents mask click close
@@ -358,9 +361,10 @@ function Uploader() {
 			</Dialog>
 			<Toaster />
 			{/* <RouteSpecificPopup onClose={() => setShowRoutePopup(false)} /> */}
-			{/* {showRoutePopup && (
+			{
+				showRoutePopup &&
 				<RouteSpecificPopup onClose={() => setShowRoutePopup(false)} />
-			)} */}
+			}
 
 		</>
 	);
