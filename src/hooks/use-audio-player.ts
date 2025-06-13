@@ -86,9 +86,10 @@ const useAudioPlayer = (isDownload: boolean) => {
             while (isBackPressed && !localStorage.getItem("pi/onload-open")) {
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
+            window.location.reload();
         }
         if (!noRefresh) {
-            window.location.reload();
+            // window.location.reload();
         }
         audioPlayer.pause();
         audioPlayer.currentTime = 0;

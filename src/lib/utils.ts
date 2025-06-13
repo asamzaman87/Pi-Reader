@@ -248,7 +248,7 @@ export const switchToActiveTab = async () => {
     }
     return
   }
-  await chrome.tabs.update(activeTab[0].id, { active: true, url: "https://pi.ai/chat" });
+  await chrome.tabs.update(activeTab[0].id, { active: true });
   return activeTab[0].id;
 }
 
@@ -308,3 +308,48 @@ export const findMatchLocalStorageKey = (key: string) => {
   }
   return null;
 }
+
+export const waitForElement = (
+  selector: string | string[],
+  timeout = 5000
+): Promise<Element> => {
+  const combinedSelector = Array.isArray(selector) ? selector.join(", ") : selector;
+
+  return new Promise((resolve, reject) => {
+    const el = document.querySelector(combinedSelector);
+    if (el) return resolve(el);
+
+    const observer = new MutationObserver(() => {
+      const elFound = document.querySelector(combinedSelector);
+      if (elFound) {
+        observer.disconnect();
+        resolve(elFound);
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    setTimeout(() => {
+      observer.disconnect();
+      reject(new Error(`Timeout: Element ${combinedSelector} not found.`));
+    }, timeout);
+  });
+};
+
+export function setNativeValue(el: HTMLTextAreaElement, value: string) {
+        // Try the prototype setter first (this is what React wired up)
+        const proto = Object.getPrototypeOf(el);
+        const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+        const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
+      
+        if (protoSetter) {
+          console.log('protoSetter');
+          protoSetter.call(el, value);
+        } else if (valueSetter) {
+          console.log('valueSetter');
+          valueSetter.call(el, value);
+        } else {
+          console.log('last-ditch fallback');
+          el.value = value;               // last-ditch fallback
+        }
+      }

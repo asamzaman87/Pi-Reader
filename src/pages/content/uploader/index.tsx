@@ -7,9 +7,10 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import useAuthToken from "@/hooks/use-auth-token";
 import { useToast } from "@/hooks/use-toast";
-import { LISTENERS, PROMPT_INPUT_ID, TOAST_STYLE_CONFIG } from "@/lib/constants";
+import { LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { waitForElement } from "@/lib/utils"; 
 import AlertPopup from "./alert-popup";
 import Content from "./content";
 export interface PromptProps {
@@ -48,13 +49,76 @@ function Uploader() {
 	const { toast } = useToast();
 	const { isAuthenticated } = useAuthToken();
 	const LOGO = chrome.runtime.getURL('logo-pi-reader.png');
+	const wasActive = useRef<boolean>(false);
+	const wasPopup = useRef<boolean>(false);
+	const isOnboarding = window.location.pathname === "/onboarding";
 
+	// useEffect(() => {
+	// 	if (!isActive) return;
+	  
+	// 	const checkOcclusion = () => {
+	// 	  const overlay = document.querySelector<HTMLElement>('[data-pi-reader-dialog]');
+	// 	  if (!overlay) return;
+	  
+	// 	  // sample the center of the overlay
+	// 	  const { left, top, width, height } = overlay.getBoundingClientRect();
+	// 	  const x = left + width  / 2;
+	// 	  const y = top  + height / 2;
+	  
+	// 	  // who’s actually at that point?
+	// 	  const hit = document.elementFromPoint(x, y);
+	// 	  if (hit && !overlay.contains(hit)) {
+	// 		// something else is covering us
+	// 		console.log('Something else is covering us');
+	// 		setIsActive(false);
+	// 	  }
+	// 	};
+	  
+	// 	// initial snap-check + poll
+	// 	checkOcclusion();
+	// 	const iv = setInterval(checkOcclusion, 200);
+	  
+	// 	return () => clearInterval(iv);
+	//   }, [isActive]);
+
+
+	useEffect(() => {
+		if (isActive) {
+			wasActive.current = true;
+		}
+		if (!isActive && wasActive.current && !wasPopup.current) {
+			window.location.reload();
+		}
+		
+		wasPopup.current = false;
+		if (!isActive) return;
+	  
+		const checkForPiAIPopup = () => {
+		  // Pi.ai's "Just checking..." modal is that full-screen fixed div:
+          // TODO: fix this as needed
+		  const piPopup = document.querySelector('div.fixed.inset-0.bg-neutral-50');
+		  if (piPopup) {
+			wasPopup.current = true;
+			setIsActive(false);
+		  }
+		};
+	  
+		// immediate snap-check + poll every 200ms
+		checkForPiAIPopup();
+		const iv = setInterval(checkForPiAIPopup, 200);
+		return () => clearInterval(iv);
+	  }, [isActive]);
+	  
+	  
+	  
+	  
 	// sending the auth status to the background script
 	useMemo(() => {
 		chrome.runtime.sendMessage({ isAuthenticated: isAuthenticated, type: LISTENERS.AUTH_RECEIVED });
 	}, [isAuthenticated]);
 
 
+	// CHATGPT TODO: In this case if a user onload happens to be on the onboarding page then we should automatically click the continue to pi classic and next buttons for them currently they are only automatically triggered if i am on the page and then refresh it and not if the onboarding was just opened through my extension. 
 	useEffect(() => {
 		if (!document.getElementById("gpt-reader-injected")) {
 			const s = document.createElement('script');
@@ -219,9 +283,26 @@ function Uploader() {
 		};
 	}, []);
 
-	const onOpenChange = (open: boolean) => {
+	const onOpenChange = async (open: boolean) => {
 		if (window.location.href !== `https://pi.ai/talk` && window.location.href !== `https://pi.ai/discover`) return;
-		setIsActive(open);
+		if (document.querySelector('div.fixed.inset-0.bg-neutral-50')) {
+			console.log('Pi.ai modal is already up — not opening ours.');
+			return;
+		}	  
+		console.log('the location is', window.location.href);
+		// TODO CHATGPT: I am having an issue here where as soon as the pi.ai is page loaded, pi.ai opens a pop-up and that pop-up ends up opening above our own overlay which just make the UI impossible to use. How can i solve that issue so if a pop-up ends up appearing over the page with the input bar and send button then we give priority to that.
+		try {
+			await waitForElement(PROMPT_INPUT_SELECTOR, 10000);
+		  } catch (error) {
+			return toast({ description: `Pi Reader is having trouble opening, continue signing in or refresh and try again`, duration: 8000, style: TOAST_STYLE_CONFIG });
+		}
+		const sendButton = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement;
+		if (sendButton) {
+			setIsActive(open);
+		} else {
+			return toast({ description: `Pi Reader is having trouble opening, continue signing in or refresh and try again`, duration: 8000, style: TOAST_STYLE_CONFIG });
+		}
+		
 		// Skip the automatic call during the initial render
 		if (isInitialRender.current) {
 			isInitialRender.current = false; // Set it to false after first render
@@ -343,13 +424,16 @@ function Uploader() {
 							<img src={LOGO} alt="GPT Reader Logo" className="size-6" />
 							{!minimised && (
 								<>
-									{!isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
+									{isOnboarding
+										? "Login to pi.ai to use Pi Reader"
+										: `${chrome.i18n.getMessage("activate")} Pi Reader`}
 								</>
 							)}
 						</Button>
 					</DialogTrigger>
 				}
 				<DialogContent
+					data-pi-reader-dialog
 					onInteractOutside={(e: Event) => {
 						e.preventDefault(); //prevents mask click close
 					}}

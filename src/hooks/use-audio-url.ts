@@ -1,5 +1,5 @@
 import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR } from "@/lib/constants";
-import { Chunk, splitIntoChunksV2 } from "@/lib/utils";
+import { Chunk, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
@@ -260,21 +260,6 @@ const useAudioUrl = (isDownload: boolean) => {
         }, 35000);
     };
 
-    
-    function setNativeValue(el: HTMLTextAreaElement, value: string) {
-        // Try the prototype setter first (this is what React wired up)
-        const proto = Object.getPrototypeOf(el);
-        const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
-        const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
-      
-        if (protoSetter) {
-          protoSetter.call(el, value);
-        } else if (valueSetter) {
-          valueSetter.call(el, value);
-        } else {
-          el.value = value;               // last-ditch fallback
-        }
-      }
     
     const injectPrompt = useCallback((text: string) => {
         const textarea = document.querySelector(PROMPT_INPUT_SELECTOR) as HTMLTextAreaElement;
