@@ -26,7 +26,7 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 				<span className="text-base font-semibold">Pi Reader</span>
 			</div>
 			<p className="text-sm leading-snug font-ui">
-				To use the <strong>Pi Reader</strong> extension, please complete the setup process on this page. Once completed, the extension will open automatically. <strong>It is highly recommended to use an account via the log in button instead of simply entering your name!</strong>
+				To use the <strong>Pi Reader</strong> extension, please complete the setup process on this page. Once completed, the extension will open automatically. <strong>It is highly recommended to use an account via the "Log in" button instead of simply entering your name!</strong>
 			</p>
 		</div>
 
@@ -52,6 +52,7 @@ function Uploader() {
 	const wasActive = useRef<boolean>(false);
 	const wasPopup = useRef<boolean>(false);
 	const isOnboarding = window.location.pathname === "/onboarding";
+	const isActiveRef = useRef(isActive);
 
 
 	useEffect(() => {
@@ -133,7 +134,7 @@ function Uploader() {
 	// for the name sign-in case case where there is no redirection that happens
 	// TODO: This needs to be improved and made more specific, hmm not sure about specificity...
 	useEffect(() => {
-		if (!showRoutePopup) return;	
+		if (!showRoutePopup) return;
 		let lastPath = window.location.pathname;
 		const interval = setInterval(() => {
 		const current = window.location.pathname;
@@ -192,22 +193,28 @@ function Uploader() {
 		  
 	  
 		const interval = setInterval(() => {
+		  // 1) don’t start polling if we’re on /onboarding
+		  if (window.location.pathname === '/onboarding') {
+			return;
+		  }
+		  console.log('checking for popup');
 		  if (detectPopup()) {
 			console.log('popup detected');
 			if (!wasPopup.current) {
 			  console.log('detected popup');
-			  if (isActive) {
+			  if (isActiveRef.current) {
 				console.log('closing overlay/wasPopup assignment');
 				wasPopup.current = true;
 			  	setIsActive(false);
+				isActiveRef.current = false;
 			  }
 			  toast({
-				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. Note that you must be 18+ to use Pi Reader.",
 				duration: 15000,
 				style: TOAST_STYLE_CONFIG,
 			  });
 			}
-		  } else if (wasPopup.current && !isActive) {
+		  } else if (wasPopup.current && !isActiveRef.current) {
 			console.log("🟢 overlay cleared, reopening");
 			wasPopup.current = false;
 			onOpenChange(true);
@@ -217,9 +224,30 @@ function Uploader() {
 		return () => clearInterval(interval);
 	  }, [toast, isActive]);
 	  
-
+	/**
+	 * Continuously watches the “/onboarding” page and clicks the first available button
+	 * whose text matches one of the supplied labels in priority order.
+	*/
+	async function skipOnboardingFlow(firstRun?: boolean) {
+		const btnTexts = ['do it later', 'my own topic', 'continue', 'next'];
+	
+		while (window.location.pathname === '/onboarding') {
+			// wait a second before each check
+			if (!firstRun) await new Promise(resolve => setTimeout(resolve, 1000));
+		
+			// look for the highest-priority button
+			const btn = await waitForButtonWithText(btnTexts);
+			if (btn) {
+				btn.click();
+				firstRun = false;
+			}
+		}
+	}
+		
+	
 	const onOpenChange = async (open: boolean) => {
 		console.log('trying to open the overlay...')
+		isActiveRef.current = open;	
 		if (wasPopup.current) {
 			return toast({
 				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
@@ -229,25 +257,15 @@ function Uploader() {
 		}
 		const SubmitBtn = await waitForElement(SUBMIT_BUTTON_SELECTOR, 1_500);
 		// const SubmitBtn = document.querySelector(SUBMIT_BUTTON_SELECTOR);
-		if (!SubmitBtn) {
-			const continueBtn = await waitForButtonWithText("Continue to Pi Classic", 4_000);
-			if (continueBtn) {
-				localStorage.setItem("pi/onload-open", "true");
-				setShowRoutePopup(true);
-				continueBtn.click();
-			} else {
-				return;
-			}
-			while (true) {
-				// wait a second to make sure we are not clicking too fast
-				await new Promise(resolve => setTimeout(resolve, 1000));
-				const nxtBtn = await waitForButtonWithText("Next", 4_000);
-				if (nxtBtn) {
-					nxtBtn.click();
-				} else {
-					break;
-				}
-			}
+		if (!['/onboarding', '/talk', '/discover', '/profile'].includes(window.location.pathname)) {
+			localStorage.setItem("pi/onload-open", "true");
+			window.location.href = "https://pi.ai/talk";
+		}
+
+		if (!SubmitBtn && window.location.pathname === '/onboarding') {
+			localStorage.setItem("pi/onload-open", "true");
+			setShowRoutePopup(true);
+			await skipOnboardingFlow(true);
 		} 
 		
 		if (SubmitBtn) {
@@ -308,7 +326,7 @@ function Uploader() {
 							{!minimised && (
 								<>
 									{isOnboarding
-										? "Login to pi.ai to use Pi Reader"
+										? "Click to use Pi Reader"
 										: `${chrome.i18n.getMessage("activate")} Pi Reader`}
 								</>
 							)}

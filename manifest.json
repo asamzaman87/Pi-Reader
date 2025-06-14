@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0.11",
+  "version": "1.0.0",
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
@@ -27,10 +27,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://pi.ai/talk",
-        "https://pi.ai/discover",
-        "https://pi.ai/profile",
-        "https://pi.ai/onboarding"
+        "https://pi.ai/*"
       ],
       "js": [
         "src/pages/content/index.tsx"
@@ -38,7 +35,7 @@
       "css": [
         "contentStyle.css"
       ],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   "devtools_page": "src/pages/devtools/index.html",

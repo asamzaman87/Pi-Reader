@@ -4,7 +4,25 @@ import './style.css';
 import Uploader from './uploader';
 import { observeElement } from "@/lib/utils";
 
+// ===== SPA URL‐change detector =====
+;(function () {
+  const notify = () => render(false);
+  const wrap = (method: "pushState" | "replaceState") => {
+    const orig = history[method];
+    history[method] = function (...args) {
+      const rv = orig.apply(this, args);
+      window.dispatchEvent(new Event("locationchange"));
+      return rv;
+    };
+  };
+  wrap("pushState");
+  wrap("replaceState");
+  window.addEventListener("popstate", () => window.dispatchEvent(new Event("locationchange")));
+  window.addEventListener("locationchange", notify);
+})();
+
 const render = (state: boolean) => {
+  console.log('pi reader render');
   if (state) return; //return if shadow root is already present
 
   const div = document.createElement('div');
@@ -27,6 +45,18 @@ const render = (state: boolean) => {
     </ThemeProvider>
   );
 }
-
+console.log('pi reader content');
 //observes the shadow root of the extension and renders the component if it is not present
 observeElement("div#__gpt-reader-shadow", render);
+
+// ensure an immediate first‐pass render
+render(false);
+
+// polling fallback (tries every 500ms until it sees your container)
+const __gptReaderPoll = setInterval(() => {
+  if (!document.querySelector('#__gpt-reader-shadow')) {
+    render(false);
+  } else {
+    clearInterval(__gptReaderPoll);
+  }
+}, 500);

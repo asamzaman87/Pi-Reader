@@ -85,7 +85,7 @@ export function formatBytes(
 //   return chunks;
 // }
 
-export function splitIntoChunksV2(text: string, chunkSize: number = 10): Chunk[] {
+export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
   // Split the text into sentences based on common delimiters
   const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
   // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
@@ -122,7 +122,7 @@ export function splitIntoChunksV2(text: string, chunkSize: number = 10): Chunk[]
         targetSize = initialChunkSize;
       } else {
         // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
-        targetSize = Math.min(Math.floor(targetSize * 1), maxChunkSize);
+        targetSize = Math.min(Math.floor(targetSize * 1.5), maxChunkSize);
       }
     } else {
       // Accumulate the sentence into the current chunk
@@ -335,27 +335,42 @@ export const waitForElement = (
     }, timeout);
   });
 };
-
+// I need to refactor this below method so it takes a list of button texts and the earlier the text is in the list, the more likely it should be that it gets returned, in other words we return the first one with a match
 export const waitForButtonWithText = (
-  text: string,
+  texts: string[],
   timeout = 5_000,
   intervalMs = 200
-): Promise<HTMLButtonElement|null> =>
+): Promise<HTMLButtonElement | null> =>
   new Promise((resolve) => {
+    if (!texts.length) {
+      resolve(null);
+      return;
+    }
+
     const start = Date.now();
+    const lowercased = texts.map(t => t.toLowerCase().trim());
+
     const id = setInterval(() => {
-      const btn = Array.from(document.querySelectorAll("button")).find(
-        b => (b.textContent || "").trim().toLowerCase() === text.toLowerCase()
-      );
-      if (btn && !btn.disabled) {
-        clearInterval(id);
-        resolve(btn);
-      } else if (Date.now() - start > timeout) {
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("button"));
+
+      for (const target of lowercased) {
+        const match = buttons.find(
+          b => !b.disabled && (b.textContent || "").toLowerCase().trim().includes(target) && !b.textContent?.toLowerCase().trim().includes('continue with')
+        );
+        if (match) {
+          clearInterval(id);
+          resolve(match);
+          return;
+        }
+      }
+
+      if (Date.now() - start > timeout) {
         clearInterval(id);
         resolve(null);
       }
     }, intervalMs);
   });
+
 
 export function setNativeValue(el: HTMLTextAreaElement, value: string) {
         // Try the prototype setter first (this is what React wired up)
