@@ -138,7 +138,6 @@ function Uploader() {
 	}, [isAuthenticated, isActive]);
 
 	// for the name sign-in case case where there is no redirection that happens
-	// TODO: This needs to be improved and made more specific, hmm not sure about specificity...
 	useEffect(() => {
 		if (!showRoutePopup) return;
 		let lastPath = window.location.pathname;
@@ -203,13 +202,9 @@ function Uploader() {
 		  if (window.location.pathname === '/onboarding') {
 			return;
 		  }
-		  console.log('checking for popup');
 		  if (detectPopup()) {
-			console.log('popup detected');
 			if (!wasPopup.current) {
-			  console.log('detected popup');
 			  if (isActiveRef.current) {
-				console.log('closing overlay/wasPopup assignment');
 				wasPopup.current = true;
 			  	setIsActive(false);
 				isActiveRef.current = false;
@@ -221,7 +216,6 @@ function Uploader() {
 			  });
 			}
 		  } else if (wasPopup.current && !isActiveRef.current) {
-			console.log("🟢 overlay cleared, reopening");
 			wasPopup.current = false;
 			onOpenChange(true);
 		  }
@@ -252,7 +246,6 @@ function Uploader() {
 		
 	
 	const onOpenChange = async (open: boolean) => {
-		console.log('trying to open the overlay...')
 		isActiveRef.current = open;	
 		if (wasPopup.current) {
 			return toast({
@@ -275,7 +268,6 @@ function Uploader() {
 		} 
 		
 		if (SubmitBtn) {
-			console.log('overlay opened');
 			setIsActive(open);
 			// Skip the automatic call during the initial render
 			if (isInitialRender.current) {

@@ -335,7 +335,7 @@ export const waitForElement = (
     }, timeout);
   });
 };
-// I need to refactor this below method so it takes a list of button texts and the earlier the text is in the list, the more likely it should be that it gets returned, in other words we return the first one with a match
+
 export const waitForButtonWithText = (
   texts: string[],
   timeout = 5_000,
@@ -373,19 +373,19 @@ export const waitForButtonWithText = (
 
 
 export function setNativeValue(el: HTMLTextAreaElement, value: string) {
-        // Try the prototype setter first (this is what React wired up)
-        const proto = Object.getPrototypeOf(el);
-        const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
-        const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
-      
-        if (protoSetter) {
-          console.log('protoSetter');
-          protoSetter.call(el, value);
-        } else if (valueSetter) {
-          console.log('valueSetter');
-          valueSetter.call(el, value);
-        } else {
-          console.log('last-ditch fallback');
-          el.value = value;               // last-ditch fallback
-        }
-      }
+  // Try the prototype setter first (this is what React wired up)
+  const proto = Object.getPrototypeOf(el);
+  const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+  const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
+
+  if (protoSetter) {
+    console.log('protoSetter');
+    protoSetter.call(el, value);
+  } else if (valueSetter) {
+    console.log('valueSetter');
+    valueSetter.call(el, value);
+  } else {
+    console.log('last-ditch fallback');
+    el.value = value;               // last-ditch fallback
+  }
+}
