@@ -26,7 +26,13 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 				<span className="text-base font-semibold">Pi Reader</span>
 			</div>
 			<p className="text-sm leading-snug font-ui">
-				To use the <strong>Pi Reader</strong> extension, please complete the setup process on this page. Once completed, the extension will open automatically. <strong>It is highly recommended to use an account via the "Log in" button instead of simply entering your name!</strong>
+				To use the <strong>Pi Reader</strong> extension, please complete the setup
+				process on this page. Once completed, the extension will open
+				automatically. <strong>It is highly recommended to use an account via
+				the "Log in" button instead of simply entering your name!</strong>
+			</p>
+			<p className="text-sm leading-snug font-ui mt-3 text-red-800">
+				<strong>Note: You must be 18+ to use this extension.</strong>
 			</p>
 		</div>
 
