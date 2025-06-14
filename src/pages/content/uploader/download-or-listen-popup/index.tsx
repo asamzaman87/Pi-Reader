@@ -43,6 +43,7 @@ const DownloadOrListen: FC<InputPopupProps> = ({ onSubmit, ...props }) => {
         <Button>Download/Listen</Button>
       </DialogTrigger>
       <DialogContent
+        data-pi-reader-dialog
         onInteractOutside={(e) => {
           e.preventDefault(); //prevents mask click close
         }}

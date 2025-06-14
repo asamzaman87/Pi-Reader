@@ -82,14 +82,12 @@ const useAudioPlayer = (isDownload: boolean) => {
     const reset = useCallback(async (full: boolean = false, completeAudio?: boolean, onBackClick?: boolean, noRefresh?: boolean) => {
         //console.log("RESETTING");
         if (onBackClick) {
+            console.log("BACK CLICKED");
             localStorage.setItem("pi/onload-open", "true");
             while (isBackPressed && !localStorage.getItem("pi/onload-open")) {
                 await new Promise(resolve => setTimeout(resolve, 500));
             }
             window.location.reload();
-        }
-        if (!noRefresh) {
-            // window.location.reload();
         }
         audioPlayer.pause();
         audioPlayer.currentTime = 0;

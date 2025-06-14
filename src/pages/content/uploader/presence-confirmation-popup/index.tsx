@@ -25,6 +25,7 @@ const PresenceConfirmationPopup: FC<PresenceConfirmationPopupProps> = ({ open, s
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
+        data-pi-reader-dialog
         closeButton={false}
         onInteractOutside={(e) => {
           e.preventDefault(); //prevents mask click close

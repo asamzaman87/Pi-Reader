@@ -35,6 +35,7 @@ const InputPopup: FC<InputPopupProps> = ({ disabled, onSubmit, ...props }) => {
                 </div>
             </DialogTrigger>
             <DialogContent
+                data-pi-reader-dialog
                 onInteractOutside={(e) => {
                     e.preventDefault(); //prevents mask click close
                 }}

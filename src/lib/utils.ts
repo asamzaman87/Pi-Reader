@@ -85,7 +85,7 @@ export function formatBytes(
 //   return chunks;
 // }
 
-export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
+export function splitIntoChunksV2(text: string, chunkSize: number = 10): Chunk[] {
   // Split the text into sentences based on common delimiters
   const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
   // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
@@ -122,7 +122,7 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
         targetSize = initialChunkSize;
       } else {
         // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
-        targetSize = Math.min(Math.floor(targetSize * 10), maxChunkSize);
+        targetSize = Math.min(Math.floor(targetSize * 1), maxChunkSize);
       }
     } else {
       // Accumulate the sentence into the current chunk
@@ -312,10 +312,10 @@ export const findMatchLocalStorageKey = (key: string) => {
 export const waitForElement = (
   selector: string | string[],
   timeout = 5000
-): Promise<Element> => {
+): Promise<Element|null> => {
   const combinedSelector = Array.isArray(selector) ? selector.join(", ") : selector;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const el = document.querySelector(combinedSelector);
     if (el) return resolve(el);
 
@@ -331,10 +331,31 @@ export const waitForElement = (
 
     setTimeout(() => {
       observer.disconnect();
-      reject(new Error(`Timeout: Element ${combinedSelector} not found.`));
+      resolve(null);
     }, timeout);
   });
 };
+
+export const waitForButtonWithText = (
+  text: string,
+  timeout = 5_000,
+  intervalMs = 200
+): Promise<HTMLButtonElement|null> =>
+  new Promise((resolve) => {
+    const start = Date.now();
+    const id = setInterval(() => {
+      const btn = Array.from(document.querySelectorAll("button")).find(
+        b => (b.textContent || "").trim().toLowerCase() === text.toLowerCase()
+      );
+      if (btn && !btn.disabled) {
+        clearInterval(id);
+        resolve(btn);
+      } else if (Date.now() - start > timeout) {
+        clearInterval(id);
+        resolve(null);
+      }
+    }, intervalMs);
+  });
 
 export function setNativeValue(el: HTMLTextAreaElement, value: string) {
         // Try the prototype setter first (this is what React wired up)
