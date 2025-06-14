@@ -26,7 +26,7 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 				<span className="text-base font-semibold">Pi Reader</span>
 			</div>
 			<p className="text-sm leading-snug font-ui">
-				To use the <strong>Pi Reader</strong> extension, please complete the setup process at <strong>pi.ai</strong>. Once completed, the extension will open automatically.
+				To use the <strong>Pi Reader</strong> extension, please complete the setup process on this page. Once completed, the extension will open automatically. <strong>It is highly recommended to use an account via the log in button instead of simply entering your name!</strong>
 			</p>
 		</div>
 
@@ -131,7 +131,7 @@ function Uploader() {
 	}, [isAuthenticated, isActive]);
 
 	// for the name sign-in case case where there is no redirection that happens
-	// TODO: This needs to be improved and made more specific
+	// TODO: This needs to be improved and made more specific, hmm not sure about specificity...
 	useEffect(() => {
 		if (!showRoutePopup) return;	
 		let lastPath = window.location.pathname;
@@ -202,7 +202,7 @@ function Uploader() {
 			  	setIsActive(false);
 			  }
 			  toast({
-				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please close it to continue using Pi Reader.",
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
 				duration: 15000,
 				style: TOAST_STYLE_CONFIG,
 			  });
@@ -222,14 +222,13 @@ function Uploader() {
 		console.log('trying to open the overlay...')
 		if (wasPopup.current) {
 			return toast({
-				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please close it to continue using Pi Reader.",
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
 				duration: 15000,
 				style: TOAST_STYLE_CONFIG,
 			})
 		}
-		// we can probably remove this 2.5 second wait
-		// const SubmitBtn = await waitForElement(SUBMIT_BUTTON_SELECTOR, 2_500);
-		const SubmitBtn = document.querySelector(SUBMIT_BUTTON_SELECTOR);
+		const SubmitBtn = await waitForElement(SUBMIT_BUTTON_SELECTOR, 1_500);
+		// const SubmitBtn = document.querySelector(SUBMIT_BUTTON_SELECTOR);
 		if (!SubmitBtn) {
 			const continueBtn = await waitForButtonWithText("Continue to Pi Classic", 4_000);
 			if (continueBtn) {
