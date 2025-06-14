@@ -7,11 +7,12 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import useAuthToken from "@/hooks/use-auth-token";
 import { useToast } from "@/hooks/use-toast";
-import { LISTENERS, PROMPT_INPUT_ID, TOAST_STYLE_CONFIG } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG, TOAST_STYLE_CONFIG_INFO } from "@/lib/constants";
+import { cn, waitForButtonWithText, waitForElement } from "@/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import AlertPopup from "./alert-popup";
 import Content from "./content";
+import { set } from "react-hook-form";
 export interface PromptProps {
 	text: string | undefined
 }
@@ -25,7 +26,13 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 				<span className="text-base font-semibold">Pi Reader</span>
 			</div>
 			<p className="text-sm leading-snug font-ui">
-				To use the <strong>Pi Reader</strong> extension, please complete the setup process at <strong>pi.ai</strong>. Once completed, the extension will open automatically.
+				To use the <strong>Pi Reader</strong> extension, please complete the setup
+				process on this page. Once completed, the extension will open
+				automatically. <strong>It is highly recommended to use an account via
+				the "Log in" button instead of simply entering your name!</strong>
+			</p>
+			<p className="text-sm leading-snug font-ui mt-3 text-red-800">
+				<strong>Note: You must be 18+ to use this extension.</strong>
 			</p>
 		</div>
 
@@ -48,12 +55,28 @@ function Uploader() {
 	const { toast } = useToast();
 	const { isAuthenticated } = useAuthToken();
 	const LOGO = chrome.runtime.getURL('logo-pi-reader.png');
+	const wasActive = useRef<boolean>(false);
+	const wasPopup = useRef<boolean>(false);
+	const isOnboarding = window.location.pathname === "/onboarding";
+	const isActiveRef = useRef(isActive);
 
+
+	useEffect(() => {
+		if (isActive) {
+			wasActive.current = true;
+		}
+		if (!isActive && wasActive.current && !wasPopup.current) {
+			window.location.reload();
+		}
+	  }, [isActive]);
+	  
+	  
+	  
+	  
 	// sending the auth status to the background script
 	useMemo(() => {
 		chrome.runtime.sendMessage({ isAuthenticated: isAuthenticated, type: LISTENERS.AUTH_RECEIVED });
 	}, [isAuthenticated]);
-
 
 	useEffect(() => {
 		if (!document.getElementById("gpt-reader-injected")) {
@@ -89,53 +112,6 @@ function Uploader() {
 		//checking if user has already confirmed the extension
 		const cnf = window.localStorage.getItem("pir/confirmation");
 		setConfirmed(cnf === "true");
-
-
-
-		const route = window.location.pathname;
-		const routesToShowPopup = ["/onboarding"]; // define your routes here
-		const routesToShowExtension = ["/talk", "/discover"];
-		if (routesToShowPopup.includes(route)) {
-			setShowRoutePopup(true);
-			window.localStorage.setItem("pi-reader-onboarding", "true");
-		} else if (routesToShowExtension.includes(route) ) {
-			let userComeFromOnBoarding = window.localStorage.getItem("pi-reader-onboarding");
-			if (userComeFromOnBoarding === 'true') {
-				chrome.runtime.sendMessage({ type: "VERIFY_ORIGIN" });
-				setIsActive(true);
-				window.localStorage.setItem("pi-reader-onboarding", "false");
-			}
-		}
-
-		if (routesToShowPopup.includes(route)) {
-
-			setShowRoutePopup(true);
-			// Automatically click the onboarding buttons
-			const BUTTON_TEXTS = ["Continue to Pi Classic", "Next"];
-			let attempts = 0;
-			const MAX_ATTEMPTS = 50;
-
-			const clickNextButton = () => {
-				const buttons = Array.from(document.querySelectorAll("button"));
-				const nextButton = buttons.find(
-					btn => BUTTON_TEXTS.includes(btn.textContent?.trim() || "")
-				);
-				if (nextButton) {
-					nextButton.click();
-				}
-			};
-
-			// Retry click if new "Next" button appears after each step
-			const interval = setInterval(() => {
-				attempts += 1;
-				clickNextButton();
-				if (attempts > MAX_ATTEMPTS) clearInterval(interval);
-			}, 500);
-
-			return () => clearInterval(interval);
-		}
-
-
 	}, []);
 
 	//toddo: refactor as this might exceed space
@@ -161,141 +137,145 @@ function Uploader() {
 		}
 	}, [isAuthenticated, isActive]);
 
-	//check if the send button is present on the dom
-	// const isSendButtonPresentOnDom = () => {
-	// 	const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
-	// 	return sendButton !== null;
-	// }
-
-	// //check if the speech button is present on the dom
-	// const isComposerSpeechButtonPresentOnDom = () => {
-	// 	const speechButton: HTMLDivElement | null = document.querySelector("[data-testid='composer-speech-button']");
-	// 	return speechButton !== null;
-	// }
-
-	// //add speech found text to the input and open the popup
-	// const addTextToInputAndOpen = (text: string) => {
-	// 	const textarea = document.querySelector(PROMPT_INPUT_ID) as HTMLTextAreaElement;
-	// 	if (textarea) {
-	// 		textarea.innerHTML = `<p>${text}</p>`;
-	// 		textarea.focus();
-	// 		// setTimeout(()=>setIsActive(true), 200);
-	// 		return
-	// 	}
-	// 	return toast({ description: chrome.i18n.getMessage("ongoing_conversation_error"), duration: 5000, style: TOAST_STYLE_CONFIG });
-	// }
-
-	// const isO1PreviewOrO1MiniModelSelected = () => {
-	//   const isSupportedModel = (models: string | string[]) => MODELS_TO_REJECT.some((model) => models.includes(model));
-	//   //checking if the user has a last used model stored in local storage
-	//   if (userId) {
-	//     const lastUsedModelKey = findMatchLocalStorageKey(userId);
-	//     if (lastUsedModelKey) {
-	//       const lastUsedModel = localStorage.getItem(lastUsedModelKey);
-	//       if (lastUsedModel) {
-	//         return isSupportedModel(lastUsedModel);
-	//       }
-	//     }
-	//   }
-	//   // if the user has not used a model before, check if the model switcher is present on the dom
-	//   const modelSwitcher = document.querySelector('[data-testid="model-switcher-dropdown-button"]') as HTMLButtonElement;
-	//   if (modelSwitcher) {
-	//     return isSupportedModel(modelSwitcher.innerHTML);
-	//   }
-	//   return false
-	// };
-
-	// Avoid calling `onOpenChange` during the first render
+	// for the name sign-in case case where there is no redirection that happens
 	useEffect(() => {
+		if (!showRoutePopup) return;
+		let lastPath = window.location.pathname;
+		const interval = setInterval(() => {
+		const current = window.location.pathname;
+		if (current !== lastPath) {
+			lastPath = current;
+			if (current !== "/onboarding") {
+				console.log('NOT ONBOARDING');
+				setShowRoutePopup(false);
+				onOpenChange(true);
+				localStorage.removeItem("pi/onload-open");
+				clearInterval(interval);
+			}
+		}
+		}, 200);
+	}, [showRoutePopup]);
+
+	useEffect(() => {
+		console.log('checking for gptr/onload-open');
 		isInitialRender.current = true; // Set true initially
 		if (localStorage.getItem("pi/onload-open") === "true") {
-			console.log("onload-open");
+			setShowRoutePopup(false);
 			onOpenChange(true);
 			localStorage.removeItem("pi/onload-open");
-		} else {console.log("no pi/onload-open");}
-		
+		}
 		return () => {
 			isInitialRender.current = false; // Set false on cleanup (after the first render)
 		};
 	}, []);
 
-	const onOpenChange = (open: boolean) => {
-		if (window.location.href !== `https://pi.ai/talk` && window.location.href !== `https://pi.ai/discover`) return;
-		setIsActive(open);
-		// Skip the automatic call during the initial render
-		if (isInitialRender.current) {
-			isInitialRender.current = false; // Set it to false after first render
+	
+    useEffect(() => {
+		const onboardingMarkers = [
+			'Sorry to interrupt',
+			'better when you create an account',
+		];
+		const popupMarkers = [
+		...onboardingMarkers,
+		'Just checking',
+		"Try Pi's new features",
+		];
+	  
+		const detectPopup = () => {
+			const headings = Array.from(document.querySelectorAll('.t-heading-m'));
+			return headings.some(h => {
+			  const txt = h.textContent?.trim() ?? '';
+		  
+			  // if this is one of the onboarding modals, set the onload flag
+			  if (onboardingMarkers.some(marker => txt.includes(marker))) {
+				localStorage.setItem('pi/onload-open', 'true');
+			  }
+		  
+			  // return true for any of our popups
+			  return popupMarkers.some(marker => txt.includes(marker));
+			});
+		  };
+		  
+	  
+		const interval = setInterval(() => {
+		  // 1) don’t start polling if we’re on /onboarding
+		  if (window.location.pathname === '/onboarding') {
 			return;
+		  }
+		  if (detectPopup()) {
+			if (!wasPopup.current) {
+			  if (isActiveRef.current) {
+				wasPopup.current = true;
+			  	setIsActive(false);
+				isActiveRef.current = false;
+			  }
+			  toast({
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. Note that you must be 18+ to use Pi Reader.",
+				duration: 15000,
+				style: TOAST_STYLE_CONFIG,
+			  });
+			}
+		  } else if (wasPopup.current && !isActiveRef.current) {
+			wasPopup.current = false;
+			onOpenChange(true);
+		  }
+		}, 1000);
+	  
+		return () => clearInterval(interval);
+	  }, [toast, isActive]);
+	  
+	/**
+	 * Continuously watches the “/onboarding” page and clicks the first available button
+	 * whose text matches one of the supplied labels in priority order.
+	*/
+	async function skipOnboardingFlow(firstRun?: boolean) {
+		const btnTexts = ['do it later', 'my own topic', 'continue', 'next'];
+	
+		while (window.location.pathname === '/onboarding') {
+			// wait a second before each check
+			if (!firstRun) await new Promise(resolve => setTimeout(resolve, 1000));
+		
+			// look for the highest-priority button
+			const btn = await waitForButtonWithText(btnTexts);
+			if (btn) {
+				btn.click();
+				firstRun = false;
+			}
+		}
+	}
+		
+	
+	const onOpenChange = async (open: boolean) => {
+		isActiveRef.current = open;	
+		if (wasPopup.current) {
+			return toast({
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
+				duration: 15000,
+				style: TOAST_STYLE_CONFIG,
+			})
+		}
+		const SubmitBtn = await waitForElement(SUBMIT_BUTTON_SELECTOR, 1_500);
+		// const SubmitBtn = document.querySelector(SUBMIT_BUTTON_SELECTOR);
+		if (!['/onboarding', '/talk', '/discover', '/profile'].includes(window.location.pathname)) {
+			localStorage.setItem("pi/onload-open", "true");
+			window.location.href = "https://pi.ai/talk";
 		}
 
-
-		// console.log('Button Clicked: Open: ', open);
-		// if (!open) {
-		//   //show confirmation for cancel download if download is in progress
-		//   const download = window.localStorage.getItem("gptr/download");
-		//   if (download && download === "true") {
-		//     setIsCancelDownloadConfirmation(true);
-		//     return
-		//   }
-		//   setIsActive(false);
-		//   return
-		// }
-
-		// const aoc = window.localStorage.getItem("gptr/aoc");
-		// //return if overlay is already active.
-		// if (open && aoc && +aoc > 0) {
-		//   setIsOverlayFallback(true);
-		//   return;
-		// }
-
-		// //redirect to login if click on button if not authorised
-		// if (!isAuthenticated) {
-		//   const currentPath = window.location.pathname;
-		//   const isOnProfilePage = currentPath === "/profile/account";
-		//   // const alreadyRedirected = window.localStorage.getItem("pir/alreadyRedirected");
-
-		//   // console.log({ alreadyRedirected, isOnProfilePage });
-		//   if (!isOnProfilePage) {
-		//     window.localStorage.setItem("gptr/redirect-to-login", "true");
-		//     chrome.runtime.sendMessage({ type: "SET_ORIGIN" });
-		//     window.localStorage.setItem("pir/alreadyRedirected", "true");
-
-		//     // Redirect to profile page
-		//     window.location.href = "https://pi.ai/profile/account";
-		//   }
-		//   return;
-		// }
-
-		// window.localStorage.removeItem("gptr/redirect-to-login");
-
-		// //check if the user has selected o1-preview or o1-mini and prompt them to select other models
-		// // if(isO1PreviewOrO1MiniModelSelected()){
-		// //   const {id} = toast({ description:"GPT Reader does not support o1 based models due to their slower speeds. Please switch to another ChatGPT model by using the model drop down on the top left.", duration:5000, style: TOAST_STYLE_CONFIG });
-		// //   supportModelToast.current = id;
-		// //   return;
-		// // }
-		// //clear the toast if model is supported
-		// // if(supportModelToast.current) dismiss(supportModelToast.current);
-
-		// //gpt has a new update, shows speech button by default instead of the send button until the user types in text
-		// if (isComposerSpeechButtonPresentOnDom()) {
-		//   //if the speech button is present on the dom, add speech found text to the input and open the popup
-		//   addTextToInputAndOpen(chrome.i18n.getMessage("gpt_reader"));
-		//   return setIsActive(true);
-		// }
-
-		// // if the send button is not present on the dom show error message
-		// if (!isSendButtonPresentOnDom() && open) {
-
-		//   setIsActive(false);
-		//   setOpenTries(tries => tries + 1);
-		//   if (openTries >= 1) {
-		//     toast({ description: chrome.i18n.getMessage("chat_error"), style: TOAST_STYLE_CONFIG });
-		//     setTimeout(() => setOpenTries(0), 5000);
-		//   }
-		//   return;
-		// }
-
+		if (!SubmitBtn && window.location.pathname === '/onboarding') {
+			localStorage.setItem("pi/onload-open", "true");
+			setShowRoutePopup(true);
+			await skipOnboardingFlow(true);
+		} 
+		
+		if (SubmitBtn) {
+			setIsActive(open);
+			// Skip the automatic call during the initial render
+			if (isInitialRender.current) {
+				isInitialRender.current = false; // Set it to false after first render
+				return;
+			}
+		}	
+			
 	}
 
 	const handleConfirm = (state: boolean) => {
@@ -343,13 +323,16 @@ function Uploader() {
 							<img src={LOGO} alt="GPT Reader Logo" className="size-6" />
 							{!minimised && (
 								<>
-									{!isAuthenticated && chrome.i18n.getMessage("activate")} Pi Reader
+									{isOnboarding
+										? "Click to use Pi Reader"
+										: `${chrome.i18n.getMessage("activate")} Pi Reader`}
 								</>
 							)}
 						</Button>
 					</DialogTrigger>
 				}
 				<DialogContent
+					data-pi-reader-dialog
 					onInteractOutside={(e: Event) => {
 						e.preventDefault(); //prevents mask click close
 					}}
@@ -365,7 +348,6 @@ function Uploader() {
 				showRoutePopup &&
 				<RouteSpecificPopup onClose={() => setShowRoutePopup(false)} />
 			}
-
 		</>
 	);
 }

@@ -87,6 +87,7 @@ const FeedbackPopup: FC<FeedbackPopupProps> = ({ ...props }) => {
                 </Button>
             </DialogTrigger>
             <DialogContent
+                data-pi-reader-dialog
                 onInteractOutside={(e) => {
                     e.preventDefault(); //prevents mask click close
                 }}

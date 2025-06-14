@@ -122,7 +122,7 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
         targetSize = initialChunkSize;
       } else {
         // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
-        targetSize = Math.min(Math.floor(targetSize * 10), maxChunkSize);
+        targetSize = Math.min(Math.floor(targetSize * 1.5), maxChunkSize);
       }
     } else {
       // Accumulate the sentence into the current chunk
@@ -248,7 +248,7 @@ export const switchToActiveTab = async () => {
     }
     return
   }
-  await chrome.tabs.update(activeTab[0].id, { active: true, url: "https://pi.ai/chat" });
+  await chrome.tabs.update(activeTab[0].id, { active: true });
   return activeTab[0].id;
 }
 
@@ -307,4 +307,85 @@ export const findMatchLocalStorageKey = (key: string) => {
     }
   }
   return null;
+}
+
+export const waitForElement = (
+  selector: string | string[],
+  timeout = 5000
+): Promise<Element|null> => {
+  const combinedSelector = Array.isArray(selector) ? selector.join(", ") : selector;
+
+  return new Promise((resolve) => {
+    const el = document.querySelector(combinedSelector);
+    if (el) return resolve(el);
+
+    const observer = new MutationObserver(() => {
+      const elFound = document.querySelector(combinedSelector);
+      if (elFound) {
+        observer.disconnect();
+        resolve(elFound);
+      }
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    setTimeout(() => {
+      observer.disconnect();
+      resolve(null);
+    }, timeout);
+  });
+};
+
+export const waitForButtonWithText = (
+  texts: string[],
+  timeout = 5_000,
+  intervalMs = 200
+): Promise<HTMLButtonElement | null> =>
+  new Promise((resolve) => {
+    if (!texts.length) {
+      resolve(null);
+      return;
+    }
+
+    const start = Date.now();
+    const lowercased = texts.map(t => t.toLowerCase().trim());
+
+    const id = setInterval(() => {
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("button"));
+
+      for (const target of lowercased) {
+        const match = buttons.find(
+          b => !b.disabled && (b.textContent || "").toLowerCase().trim().includes(target) && !b.textContent?.toLowerCase().trim().includes('continue with')
+        );
+        if (match) {
+          clearInterval(id);
+          resolve(match);
+          return;
+        }
+      }
+
+      if (Date.now() - start > timeout) {
+        clearInterval(id);
+        resolve(null);
+      }
+    }, intervalMs);
+  });
+
+
+export function setNativeValue(el: HTMLTextAreaElement, value: string) {
+  // Try the prototype setter first (this is what React wired up)
+  const proto = Object.getPrototypeOf(el);
+  const protoSetter = Object.getOwnPropertyDescriptor(proto, "value")?.set;
+  const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
+
+  if (protoSetter) {
+    console.log('protoSetter');
+    protoSetter.call(el, value);
+  } else if (valueSetter) {
+    console.log('valueSetter');
+    valueSetter.call(el, value);
+  } else {
+    console.log('last-ditch fallback');
+    el.value = value;               // last-ditch fallback
+  }
 }
