@@ -17,4 +17,34 @@
             display: none;
         }
     }
+
+    @media (min-width: 1024px) {
+        .lg\:w-\[375px\] {
+            width: 375px;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .lg\:flex-col {
+          flex-direction: column;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .lg\:flex {
+          display: flex;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .lg\:hidden {
+          display: none;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .md\:flex-row {
+          flex-direction: row;
+        }
+      }
 }
