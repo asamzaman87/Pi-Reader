@@ -379,7 +379,6 @@ export function setNativeValue(el: HTMLTextAreaElement, value: string) {
   const valueSetter = Object.getOwnPropertyDescriptor(el, "value")?.set;
 
   if (protoSetter) {
-    console.log('protoSetter');
     protoSetter.call(el, value);
   } else if (valueSetter) {
     console.log('valueSetter');

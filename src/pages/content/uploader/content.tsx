@@ -38,7 +38,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
     const [showDownloadOrListen, setShowDownloadOrListen] = useState<boolean>(false);
     const [fileExtractedText, setFileExtractedText] = useState<string>(); //ToDo: to find a better way to handle this
     const [showDownloadCancelConfirmation, setShowDownloadCancelConfirmation] = useState<boolean>(false);
-    const { downloadPreviewText, progress, setProgress, downloadCombinedFile, isFetching, isPresenceModalOpen, setIsPresenceModalOpen, isBackPressed, setIsBackPressed, pause, play, extractText, splitAndSendPrompt, text, isPlaying, isLoading, reset, isPaused, playRate, handlePlayRateChange, voices, setVoices, hasCompletePlaying, setHasCompletePlaying, isVoiceLoading, reStartChunkProcess, isStreamLoading, isLoopActive } = useAudioPlayer(isDownload);
+    const { downloadPreviewText, progress, setProgress, downloadCombinedFile, isFetching, isPresenceModalOpen, setIsPresenceModalOpen, isBackPressed, setIsBackPressed, pause, play, extractText, splitAndSendPrompt, text, isPlaying, isLoading, reset, isPaused, playRate, handlePlayRateChange, voices, setVoices, hasCompletePlaying, setHasCompletePlaying, isVoiceLoading, reStartChunkProcess, isStreamLoading, isLoopActive, isChunkProcessing } = useAudioPlayer(isDownload);
 
     useMemo(() => {
         if(isCancelDownloadConfirmation) setShowDownloadCancelConfirmation(true);
@@ -222,7 +222,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
                         />
                 }
 
-                <Player isFirstChunk={isLoading} showControls={prompts.length > 0} hasPlayBackEnded={hasCompletePlaying} setHasPlayBackEnded={setHasCompletePlaying} isPaused={isPaused} isPlaying={isPlaying} isLoading={isLoading || isStreamLoading} play={play} pause={pause} handlePlayRateChange={handlePlayRateChange} playRate={playRate} />
+                <Player isChunkProcessing={isChunkProcessing} isFirstChunk={isLoading} showControls={prompts.length > 0} hasPlayBackEnded={hasCompletePlaying} setHasPlayBackEnded={setHasCompletePlaying} isPaused={isPaused} isPlaying={isPlaying} isLoading={isLoading || isStreamLoading} play={play} pause={pause} handlePlayRateChange={handlePlayRateChange} playRate={playRate} />
 
                 {
                     (!prompts?.length && !isDownload) ?
