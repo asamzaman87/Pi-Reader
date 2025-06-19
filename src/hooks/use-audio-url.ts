@@ -5,7 +5,12 @@ import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
 import { useToast } from "./use-toast";
 
-const useAudioUrl = (isDownload: boolean) => {
+interface ExtractedText {
+    rawText: string;
+    html: string;
+  }
+  
+const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: number) => {
     const { toast } = useToast();
     const [audioUrls, setAudioUrls] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -52,7 +57,7 @@ const useAudioUrl = (isDownload: boolean) => {
     //     //console.log("SEND_PROMPT");
     //     // setIsLoading(true);
     //     // const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
-    //     // // toast({ description:"It seems that ChatGPT might be either displaying an error, generating a prompt, or you've reached your hourly limit. Please check on the ChatGPT website for the exact error.", style: TOAST_STYLE_CONFIG });
+    //     // // toast({ description:"It seems that ChatGPT might be either disPlaying an error, generating a prompt, or you've reached your hourly limit. Please check on the ChatGPT website for the exact error.", style: TOAST_STYLE_CONFIG });
     //     // if (!sendButton) return
     //     // sendButton.click();
 
@@ -185,9 +190,9 @@ const useAudioUrl = (isDownload: boolean) => {
             sid = await startConversation();
             setConversationId(sid);
         }
-        console.log('Array Of Text : ', arr);
         if (arr && arr.length > 0) {
-            for (const el of arr) {
+
+            for (const [index, el] of arr.entries()) {
                 if (!isLoopActive.current) break;
                 // 1) inject the prompt (fires off the real /api/v2/chat from the page)
                 injectPrompt(el.text);
@@ -197,7 +202,6 @@ const useAudioUrl = (isDownload: boolean) => {
 
                 // 3) pull out the “message” event, build your voice-note URL
                 const msgEvent = events.find(ev => ev.event === "message");
-                setIsLoading(false);
                 // TODO: make use of mode here
                 const audioUrl = msgEvent
                 ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
@@ -221,8 +225,11 @@ const useAudioUrl = (isDownload: boolean) => {
 
 
     const sendPrompt = () => {
-        console.log('Prompt Sending...');
-        setIsLoading(true);
+        if (!isPlaying && audioUrls.length < chunks.length) {
+            setIsLoading(true);
+        } else {
+            setIsLoading(false)
+        }    
     
         const sendButton = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
         if (sendButton && !sendButton.disabled) {
@@ -288,15 +295,16 @@ const useAudioUrl = (isDownload: boolean) => {
     }, []);
 
 
-    const splitAndSendPrompt = async (text: string, voicelist?: any) => {
+    const splitAndSendPrompt = async (text: string, voicelist?: any, isDocxType?: boolean, html?: any) => {
         // console.log("SPLIT_AND_SEND_PROMPT");
-        setText(text);
+        const displayText = isDocxType ? (html?.trim() || text) : text;
+        setText(displayText);
+        
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
         const chunks: Chunk[] = await splitIntoChunksV2(textWithoutTags);
         setChunks(chunks);
         getCompleteTextChunks(chunks, voicelist);
 
-        console.log("Voices: ", voices);
         if (chunks.length > 0) {
             setCurrentChunkBeingPromptedIndex(currentChunkBeingPromptedIndex);
             setChunks(chunks);
@@ -306,31 +314,38 @@ const useAudioUrl = (isDownload: boolean) => {
         return
     };
 
-    const extractText = async (file: File) => {
-        //console.log("EXTRACT_TEXT");
+    const extractText = async (file: File): Promise<ExtractedText | undefined> => {
         switch (file.type) {
-            case "application/pdf": {
-                // const text = await pdfToText(file);
-                // splitAndSendPrompt(text);
-                return await pdfToText(file);
-            }
-            case "application/msword":
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-                // const text = await docxToText(file);
-                // splitAndSendPrompt(text);
-                return await docxToText(file);
-            }
-            case "text/plain":
-            case "text/rtf": {
-                // const text = await textPlainToText(file);
-                // splitAndSendPrompt(text);
-                return await textPlainToText(file);
-            }
-            default:
-                toast({ description: chrome.i18n.getMessage('unsupported_file_type'), style: TOAST_STYLE_CONFIG });
-                break;
+          case "application/pdf": {
+            const text = await pdfToText(file); // returns string
+            return {
+              rawText: text,
+              html: `<p>${text.replace(/\n/g, "</p><p>")}</p>`,
+            };
+          }
+      
+          case "application/msword":
+          case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+            return await docxToText(file); // returns { rawText, html }
+          }
+      
+          case "text/plain":
+          case "text/rtf": {
+            const text = await textPlainToText(file); // returns string
+            return {
+              rawText: text,
+              html: `<p>${text.replace(/\n/g, "</p><p>")}</p>`,
+            };
+          }
+      
+          default:
+            toast({
+              description: chrome.i18n.getMessage("unsupported_file_type"),
+              style: TOAST_STYLE_CONFIG,
+            });
+            return;
         }
-    }
+      };
 
     const reset = () => {
         setAudioUrls([]);

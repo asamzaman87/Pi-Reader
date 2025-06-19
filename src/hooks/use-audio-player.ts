@@ -6,13 +6,14 @@ import { useToast } from "./use-toast";
 
 const useAudioPlayer = (isDownload: boolean) => {
     const { toast, dismiss } = useToast();
-    const {downloadPreviewText, downloadCombinedFile, progress, setProgress, isFetching, wasPromptStopped, setWasPromptStopped, chunks, setIsPromptingPaused, isPromptingPaused, audioUrls, setAudioUrls, ended, extractText, splitAndSendPrompt, text, reset: resetAudioUrl, voices, setVoices, isVoiceLoading, is9ThChunk, reStartChunkProcess, setIs9thChunk, isLoading , isBackPressed, setIsBackPressed, isLoopActive} = useAudioUrl(isDownload);
-    const { isAuthenticated, token } = useAuthToken();
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
+    const {downloadPreviewText, downloadCombinedFile, progress, setProgress, isFetching, wasPromptStopped, setWasPromptStopped, chunks, setIsPromptingPaused, isPromptingPaused, audioUrls, setAudioUrls, ended, extractText, splitAndSendPrompt, text, reset: resetAudioUrl, voices, setVoices, isVoiceLoading, is9ThChunk, reStartChunkProcess, setIs9thChunk, isLoading , setIsLoading, isBackPressed, setIsBackPressed, isLoopActive} = useAudioUrl(isDownload, isPlaying, currentIndex);
+    const { isAuthenticated, token } = useAuthToken();
     const [isPaused, setIsPaused] = useState<boolean>(false);
     const [isAudioLoading, setAudioLoading] = useState<boolean>(false);
     const [hasCompletePlaying, setHasCompletePlaying] = useState<boolean>(false);
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [isChunkProcessing, setIsChunkProcessing] = useState<boolean>(false);
     const [playRate, setPlayRate] = useState<number>(1);
     const [completedPlaying, setCompletedPlaying] = useState<string[]>([]);
     const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
@@ -35,12 +36,8 @@ const useAudioPlayer = (isDownload: boolean) => {
         setIsPaused(false);
     }
 
-    useMemo(() => {
-
-        if (audioUrls.length > 0 
-            && (audioUrls.length === completedPlaying.length)
-            // && !isLoading && chunks.length === audioUrls.length
-        ) {
+    useEffect(() => {
+        if (audioUrls.length > 0  && (audioUrls.length === completedPlaying.length) && chunks.length === audioUrls.length) {
             // console.log("PLAYER COMPLETED ALL CHUNKS");
             setHasCompletePlaying(true);
             setAudioUrls(completedPlaying);
@@ -52,8 +49,23 @@ const useAudioPlayer = (isDownload: boolean) => {
             setTimeout(() => {
                 setCompletedPlaying([]);
             }, 200);
+        } else if ((audioUrls.length - 1) === currentIndex && chunks.length > audioUrls.length && !isPlaying && !isPaused ) {
+            // console.log('LOADING_STARTED_HERE');
+            setIsLoading(true);
+            setIsPlaying(false)
+            setIsChunkProcessing(true);
+            setHasCompletePlaying(true);
+        } else if (isPlaying 
+            && completedPlaying.length > 0 
+            && audioUrls.length > completedPlaying.length 
+            && currentIndex < audioUrls.length 
+            && chunks.length > audioUrls.length 
+        ) {
+            setIsLoading(false);
+            setIsChunkProcessing(false);
+            setHasCompletePlaying(false);
         }
-    }, [completedPlaying]);
+    }, [completedPlaying, audioUrls, chunks, currentIndex, isPlaying]);
 
     const playNext = useCallback(async (index: number) => {
         try {
@@ -123,7 +135,7 @@ const useAudioPlayer = (isDownload: boolean) => {
         setCompletedPlaying(tempComp);
     }
 
-    const handleAudioEnd = useCallback(async () => {
+    const handleAudioEnd = async () => {
         // console.log("HANDLE_AUDIO_END");
         const current = currentIndex + 1;
 
@@ -139,7 +151,7 @@ const useAudioPlayer = (isDownload: boolean) => {
 
         markCompleted(audioPlayer.src)
 
-        if (currentIndex === audioUrls.length - 1 && !isLoading) {
+        if (currentIndex === audioUrls.length - 1 && !isLoading && audioUrls.length === chunks.length) {
             return reset(false, true, undefined, true);
         }
 
@@ -152,8 +164,7 @@ const useAudioPlayer = (isDownload: boolean) => {
         }
         if (isLoading && !isPlaying && audioUrls.length === current) return setIsStreamLoading(true);
         if (isLoading && !isPlaying && audioUrls.length < current) return setIsStreamLoading(true); //fixes a bug where the stream is loading when it shouldn't be on skip -> back -> play -> skip
-    }, [currentIndex, playNext, audioUrls.length, reset, isPromptingPaused, isLoading, chunks, isPlaying])
-
+    }
     useMemo(() => {
         if (isLoading && isStreamLoading) {
             setAudioUrlsBeforeStop(audioUrls.length);
@@ -179,7 +190,8 @@ const useAudioPlayer = (isDownload: boolean) => {
         }
     }, [audioPlayer, reset])
 
-    const play = useCallback(() => {
+    const play = () => {
+        // console.log('HANDLE_PLAY')
         if (!isPlaying && audioUrls.length) {
             if (audioPlayer.currentTime === 0) {
                 audioPlayer.playbackRate = playRate;
@@ -192,8 +204,7 @@ const useAudioPlayer = (isDownload: boolean) => {
             }
         }
     
-    }, [audioPlayer, isPlaying, currentIndex, playRate, audioUrls, currentTime])
-
+    }
     //handler to toggle rate change from the play button
     const handlePlayRateChange = useCallback((reset?: boolean, rate?: number) => {
         if (rate) {
@@ -362,7 +373,8 @@ const useAudioPlayer = (isDownload: boolean) => {
         progress, 
         setProgress,
         downloadPreviewText,
-        isLoopActive
+        isLoopActive,
+        isChunkProcessing
     }
 
 

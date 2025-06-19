@@ -19,9 +19,10 @@ interface PlayerProps {
     hasPlayBackEnded?: boolean;
     setHasPlayBackEnded: (state: boolean) => void;
     audioElementRef?: React.RefObject<HTMLAudioElement>;
+    isChunkProcessing?: boolean;
 }
 
-const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading, play, pause, handlePlayRateChange, playRate, hasPlayBackEnded, setHasPlayBackEnded, showControls, audioElementRef }) => {
+const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading, play, pause, handlePlayRateChange, playRate, hasPlayBackEnded, setHasPlayBackEnded, showControls, audioElementRef, isChunkProcessing }) => {
     const toastIdRef = useRef<string | null>(null); // Provide the type (string) for useRef
     const { toast, dismiss } = useToast();
 
@@ -58,29 +59,62 @@ const Player: FC<PlayerProps> = ({ isFirstChunk, isPaused, isPlaying, isLoading,
         }
     }, [showControls])
 
+    const isLoadingState = isLoading || (isChunkProcessing && !isPaused);
+    const shouldShowRestart = hasPlayBackEnded;
+    const shouldShowPlay = !hasPlayBackEnded && !isLoading  && !isFirstChunk && ((!isPlaying && !isPaused) || isPaused);
+    const shouldShowPause = isPlaying && !hasPlayBackEnded;
+    const shouldShowSlider = (isPlaying || isPaused) && !hasPlayBackEnded;
     //ToDo: animate like the theme toggle
     return (
         <div className={cn("absolute w-full -bottom-32 left-0 right-0 justify-center items-center flex z-50", { "-translate-y-36 transition-transform": showControls })}>
             <div className="mx-auto size-max flex justify-evenly items-center gap-2 p-4 border rounded-full border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow">
-                {isLoading ? <LoaderCircleIcon className="size-6 animate-spin ease-in-out" /> : null}
-                {hasPlayBackEnded && (!isPlaying || !isPaused)  ? (
-                    <Button disabled={isLoading} onClick={restart} size={"icon"} className="hover:scale-110  transition-all [&_svg]:size-6">
-                        <RotateCwIcon /> <span className="sr-only">{chrome.i18n.getMessage("restart")}</span>
+            {isLoadingState ? (
+                <LoaderCircleIcon className="size-6 animate-spin ease-in-out" />
+            ) : (
+                <>
+                {shouldShowRestart && (
+                    <Button
+                    disabled={isLoading}
+                    onClick={restart}
+                    size="icon"
+                    className="hover:scale-110 transition-all [&_svg]:size-6"
+                    >
+                    <RotateCwIcon />
+                    <span className="sr-only">{chrome.i18n.getMessage("restart")}</span>
                     </Button>
-                ) : null}
-                {((!isPaused && !isPlaying) || isPaused) && !hasPlayBackEnded && !isFirstChunk && !isLoading ? (
-                    <Button onClick={play} size={"icon"} className="hover:scale-110  transition-all [&_svg]:size-6">
-                        <PlayIcon /> <span className="sr-only">{chrome.i18n.getMessage("play")}</span>
+                )}
+
+                {shouldShowPlay && (
+                    <Button
+                    onClick={play}
+                    size="icon"
+                    className="hover:scale-110 transition-all [&_svg]:size-6"
+                    >
+                    <PlayIcon />
+                    <span className="sr-only">{chrome.i18n.getMessage("play")}</span>
                     </Button>
-                ) : null}
-                {isPlaying && !isLoading && !hasPlayBackEnded ? (
-                    <Button onClick={pause} size={"icon"} className="hover:scale-110  transition-all [&_svg]:size-6">
-                        <PauseIcon /> <span className="sr-only">{chrome.i18n.getMessage("pause")}</span>
+                )}
+
+                {shouldShowPause && (
+                    <Button
+                    onClick={pause}
+                    size="icon"
+                    className="hover:scale-110 transition-all [&_svg]:size-6"
+                    >
+                    <PauseIcon />
+                    <span className="sr-only">{chrome.i18n.getMessage("pause")}</span>
                     </Button>
-                ) : null}
-                {(isPlaying || isPaused) && !isLoading && !hasPlayBackEnded  ? (
-                    <PlayRateSlider playRate={playRate} setPlayRate={(rate) => handlePlayRateChange(false, rate)} disabled={isFirstChunk} />
-                ) : null}
+                )}
+
+                {shouldShowSlider && (
+                    <PlayRateSlider
+                    playRate={playRate}
+                    setPlayRate={(rate) => handlePlayRateChange(false, rate)}
+                    disabled={isFirstChunk}
+                    />
+                )}
+                </>
+            )}
             </div>
             <InfoIcon onClick={() => showToast(5000)} className="hover:cursor-pointer absolute bottom-0 right-4 rounded-full hover:scale-110  transition-all size-6" />
         </div>

@@ -32,7 +32,6 @@ const useVoice = () => {
         });
 
         if (voices.length > 0) {
-            console.log('Voices Updated')
             setVoices({
                 voices: voices,
                 selected: voices[0].voice
