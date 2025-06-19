@@ -4,6 +4,11 @@ import { pdfjs } from "react-pdf";
 // Path to the pdf.worker.js file
 pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL("pdf.worker.js");
 
+interface DocxExtractedText {
+    rawText: string;
+    html: string;
+}
+  
 const pdfToText = async (file: File | Blob | MediaSource): Promise<string> => {
     // Create a blob URL for the PDF file
     const blobUrl = URL.createObjectURL(file);
@@ -61,23 +66,31 @@ const cleanText = (text: string): string => {
         .replace(/^\s+|\s+$/g, "");     // Trim leading/trailing whitespace
 };
 
-const docxToText = async <T = string>(file: File): Promise<T | string> =>
+  
+  const docxToText = async (file: File): Promise<DocxExtractedText> =>
     new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = async (e: ProgressEvent<FileReader>) => {
-            const arrayBuffer = e.target?.result as ArrayBuffer;
-            try {
-                const { value: rawText } = await mammoth.extractRawText({ arrayBuffer });
-                const text = rawText;
-                if (text.length > 0) return resolve(text as T);
-                reject(new Error("The file contains no valid text."));
-            } catch (error) {
-                reject(error);
-            }
-        };
-        reader.onerror = (err) => reject(err);
-        reader.readAsArrayBuffer(file);
+      const reader = new FileReader();
+      reader.onload = async (e: ProgressEvent<FileReader>) => {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        try {
+          const [{ value: rawText }, { value: html }] = await Promise.all([
+            mammoth.extractRawText({ arrayBuffer }),
+            mammoth.convertToHtml({ arrayBuffer }),
+          ]);
+  
+          if (rawText.trim().length === 0 && html.trim().length === 0) {
+            return reject(new Error("The file contains no valid text."));
+          }
+  
+          resolve({ rawText, html });
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsArrayBuffer(file);
     });
+  
 // const docxToText = async <T = string>(file: File): Promise<T | string> =>
 //     new Promise((resolve, reject) => {
 //         const reader = new FileReader();

@@ -5,6 +5,11 @@ import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
 import { useToast } from "./use-toast";
 
+interface ExtractedText {
+    rawText: string;
+    html: string;
+  }
+  
 const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: number) => {
     const { toast } = useToast();
     const [audioUrls, setAudioUrls] = useState<string[]>([]);
@@ -290,9 +295,11 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     }, []);
 
 
-    const splitAndSendPrompt = async (text: string, voicelist?: any) => {
+    const splitAndSendPrompt = async (text: string, voicelist?: any, isDocxType?: boolean, html?: any) => {
         // console.log("SPLIT_AND_SEND_PROMPT");
-        setText(text);
+        const displayText = isDocxType ? (html?.trim() || text) : text;
+        setText(displayText);
+        
         const textWithoutTags = text.replace(/<img[^>]*src\s*=\s*["']\s*data:image\/[a-zA-Z]+;base64,[^"']*["'][^>]*>/gi, ''); //removes image tag if it exist in the prompt
         const chunks: Chunk[] = await splitIntoChunksV2(textWithoutTags);
         setChunks(chunks);
@@ -307,31 +314,38 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         return
     };
 
-    const extractText = async (file: File) => {
-        //console.log("EXTRACT_TEXT");
+    const extractText = async (file: File): Promise<ExtractedText | undefined> => {
         switch (file.type) {
-            case "application/pdf": {
-                // const text = await pdfToText(file);
-                // splitAndSendPrompt(text);
-                return await pdfToText(file);
-            }
-            case "application/msword":
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-                // const text = await docxToText(file);
-                // splitAndSendPrompt(text);
-                return await docxToText(file);
-            }
-            case "text/plain":
-            case "text/rtf": {
-                // const text = await textPlainToText(file);
-                // splitAndSendPrompt(text);
-                return await textPlainToText(file);
-            }
-            default:
-                toast({ description: chrome.i18n.getMessage('unsupported_file_type'), style: TOAST_STYLE_CONFIG });
-                break;
+          case "application/pdf": {
+            const text = await pdfToText(file); // returns string
+            return {
+              rawText: text,
+              html: `<p>${text.replace(/\n/g, "</p><p>")}</p>`,
+            };
+          }
+      
+          case "application/msword":
+          case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+            return await docxToText(file); // returns { rawText, html }
+          }
+      
+          case "text/plain":
+          case "text/rtf": {
+            const text = await textPlainToText(file); // returns string
+            return {
+              rawText: text,
+              html: `<p>${text.replace(/\n/g, "</p><p>")}</p>`,
+            };
+          }
+      
+          default:
+            toast({
+              description: chrome.i18n.getMessage("unsupported_file_type"),
+              style: TOAST_STYLE_CONFIG,
+            });
+            return;
         }
-    }
+      };
 
     const reset = () => {
         setAudioUrls([]);

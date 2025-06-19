@@ -82,20 +82,34 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         }
     }, [])
 
+    const isDocxType = (fileType: any) => {
+        return [
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/msword'
+        ].includes(fileType);
+    }
     const onSave = (files: File[]) => {
         if (!files?.length) return toast({ description: chrome.i18n.getMessage("no_files_selected"), style: TOAST_STYLE_CONFIG });
         if (isBackPressed) setIsBackPressed(false) //reseting back pressed state if the file is added
         setFiles(files);
-        extractText(files[0]).then((text) => {
+        extractText(files[0]).then((extracted) => {
+            if (!extracted) return;
+          
+            const { rawText, html } = extracted;
             setTitle(files[0].name);
-            setFileExtractedText(text);
-            // setShowDownloadOrListen(true)
-            onDownloadOrListenSubmit('LISTEN', text, files[0].name, voices);
+            setFileExtractedText(rawText);
+            // Optional: setHtmlContent(html); if you're displaying HTML somewhere
+            
+            if (isDocxType(files[0].type)) {
+                onDownloadOrListenSubmit('LISTEN', rawText, files[0].name, voices, true, html);
+            } else {
+                onDownloadOrListenSubmit('LISTEN', rawText, files[0].name, voices);
+            }
             isLoopActive.current = true;
-        }).catch((e) => {
+          }).catch((e) => {
             toast({ description: e.message, style: TOAST_STYLE_CONFIG });
             resetter();
-        })
+          });
     }
 
     useMemo(() => {
@@ -122,28 +136,28 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
             .replace(/^\s+|\s+$/g, "");     // Trim leading/trailing whitespace
     };
 
-    const listenOrDownloadAudio = useCallback(async (text?: string, voicelist?: any) => {
+    const listenOrDownloadAudio = useCallback(async (text?: string, voicelist?: any, isDocxType?: boolean, html?: any) => {
         if (files.length > 0 && fileExtractedText?.trim()?.length) {
 
             let rawText = cleanText(fileExtractedText);
-            return splitAndSendPrompt(rawText, voicelist).finally(() => {
+            return splitAndSendPrompt(rawText, voicelist, isDocxType, html).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
         if (text?.trim().length && !files.length) {
-            return splitAndSendPrompt(text, voicelist).finally(() => {
+            return splitAndSendPrompt(text, voicelist, isDocxType, html).finally(() => {
                 setShowDownloadOrListen(false);
             });
         }
     }, [pastedText, files, fileExtractedText]);
 
-    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN", text?: string, title?: string, voicelist?: any) => {
+    const onDownloadOrListenSubmit = useCallback(async (value: "DOWNLOAD" | "LISTEN", text?: string, title?: string, voicelist?: any, isDocxType?: boolean, html?: any) => {
         // console.log('onDownloadOrListenSubmit - called')
         // if(value === "DOWNLOAD"){
         //     setIsDownload(value === "DOWNLOAD");
         //     localStorage.setItem("gptr/download", "true");
         // }
-        listenOrDownloadAudio(text, voicelist)
+        listenOrDownloadAudio(text, voicelist, isDocxType, html)
         
     }, [listenOrDownloadAudio]);
 
