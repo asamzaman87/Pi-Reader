@@ -246,6 +246,22 @@ function Uploader() {
 		
 	
 	const onOpenChange = async (open: boolean) => {
+
+		if (open) {
+			const triggerButton = document.querySelector(
+				'button.z-10.bg-neutral-200.pl-4.text-neutral-900 > div[style*="transform: none;"]'
+			);
+			
+			if (triggerButton) {
+				const actionButton = document.querySelector(
+					'button.group.z-10.flex.items-center.text-neutral-800'
+				) as HTMLButtonElement | null;
+			
+				if (actionButton) {
+					actionButton.click();
+				}
+			}
+		}
 		isActiveRef.current = open;	
 		if (wasPopup.current) {
 			return toast({
