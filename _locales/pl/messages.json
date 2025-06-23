@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Darmowy AI Tekst na mowę z głosami ChatGPT, TTS"
+      "message": "Pi Reader: Darmowy AI Tekst na mowę z głosami Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Naturalna synteza mowy ChatGPT AI dla PDF, artykułów i dokumentów. Pobierz lub odczytaj na głos przy użyciu wysokiej jakości głosów w Pi Reader"
+      "message": "Naturalna synteza mowy Pi.ai AI dla PDF, artykułów i dokumentów. Pobierz lub odczytaj na głos przy użyciu wysokiej jakości głosów w Pi Reader"
     },
     "play_voice": {
       "message": "Odtwórz głos"
@@ -60,7 +60,7 @@
       "message": "Ładowanie podglądu"
     },
     "gpt4_download_note": {
-      "message": "Użytkownicy ChatGPT premium, wybierz GPT-4o mini dla szybszego pobierania. Zamknij okno, aby zmienić model."
+      "message": "Użytkownicy Pi.ai premium, wybierz GPT-4o mini dla szybszego pobierania. Zamknij okno, aby zmienić model."
     },
     "cancel": {
       "message": "Anuluj"
@@ -75,7 +75,7 @@
       "message": "Anuluj pobieranie"
     },
     "accuracy_warning": {
-      "message": "Pi Reader może generować audio, które nie jest w 100% dokładne. Jeśli zauważysz różnice, zamknij okno i rozpocznij nowy czat z ChatGPT."
+      "message": "Pi Reader może generować audio, które nie jest w 100% dokładne. Jeśli zauważysz różnice, zamknij okno i rozpocznij nowy czat z Pi.ai."
     },
     "playback_speed": {
       "message": "Prędkość odtwarzania"
@@ -120,7 +120,7 @@
       "message": "Komunikat Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader dzieli długi tekst na mniejsze części i wysyła je do ChatGPT. Możesz chwilowo osiągnąć limit. Jeśli tak, odczekaj około godziny."
+      "message": "Pi Reader dzieli długi tekst na mniejsze części i wysyła je do Pi.ai. Możesz chwilowo osiągnąć limit. Jeśli tak, odczekaj około godziny."
     },
     "acknowledge_and_accept": {
       "message": "Kontynuując, potwierdzasz i akceptujesz to jako część korzystania z rozszerzenia."
@@ -141,7 +141,7 @@
       "message": "Pi Reader działa wolniej niż zwykle. Zamknij okno, aby sprawdzić błędy. Zalecamy GPT-4."
     },
     "voice_selector_description": {
-      "message": "Wybierz spośród różnych ulepszonych głosów ChatGPT. Wybierz przed przesłaniem tekstu."
+      "message": "Wybierz spośród różnych ulepszonych głosów Pi.ai. Wybierz przed przesłaniem tekstu."
     },
     "cannot_upload_one_file": {
       "message": "Nie można przesłać więcej niż 1 pliku jednocześnie"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Nie udało się przesłać $1"
     },
-    "chatgpt_issue": {
-      "message": "Wygląda na to, że ChatGPT ma problemy; sprawdź ich stronę."
+    "pi_issue": {
+      "message": "Wygląda na to, że Pi.ai ma problemy; sprawdź ich stronę."
     },
     "unsupported_file_type": {
       "message": "Nieobsługiwany typ pliku"
@@ -186,7 +186,7 @@
       "message": "Trwa rozmowa lub przekroczyłeś limit godzinowy. Proszę poczekać!"
     },
     "chat_error": {
-      "message": "ChatGPT może wyświetlać błąd lub osiągnąłeś limit. Sprawdź ich stronę."
+      "message": "Pi.ai może wyświetlać błąd lub osiągnąłeś limit. Sprawdź ich stronę."
     },
     "gpt_reader_logo": {
       "message": "Logo Pi Reader"

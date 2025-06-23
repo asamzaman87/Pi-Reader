@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Libreng AI Text-to-Speech na may ChatGPT Voices, TTS"
+      "message": "Pi Reader: Libreng AI Text-to-Speech na may Pi.ai Voices, TTS"
     },
     "extensionDescription": {
-      "message": "Natural na ChatGPT AI text-to-speech (TTS) para sa PDF, artikulo, at docs. I-download o basahin nang malakas gamit ang de-kalidad na boses sa Pi Reader"
+      "message": "Natural na Pi.ai AI text-to-speech (TTS) para sa PDF, artikulo, at docs. I-download o basahin nang malakas gamit ang de-kalidad na boses sa Pi Reader"
     },
     "play_voice": {
       "message": "I-play ang Boses"
@@ -60,7 +60,7 @@
       "message": "Naglo-load ng Preview"
     },
     "gpt4_download_note": {
-      "message": "Sa mga premium user ng ChatGPT, piliin ang GPT-4o mini para mas mabilis na download. Isara ang overlay para magpalit ng model."
+      "message": "Sa mga premium user ng Pi.ai, piliin ang GPT-4o mini para mas mabilis na download. Isara ang overlay para magpalit ng model."
     },
     "cancel": {
       "message": "Kanselahin"
@@ -75,7 +75,7 @@
       "message": "Kanselahin ang Pag-download"
     },
     "accuracy_warning": {
-      "message": "Maaaring hindi 100% tumpak ang audio na ginawa ng Pi Reader. Kung may napansing pagkakaiba, isara ang overlay at gumawa ng bagong ChatGPT chat."
+      "message": "Maaaring hindi 100% tumpak ang audio na ginawa ng Pi Reader. Kung may napansing pagkakaiba, isara ang overlay at gumawa ng bagong Pi.ai chat."
     },
     "playback_speed": {
       "message": "Bilis ng Pag-play"
@@ -120,7 +120,7 @@
       "message": "Paunawa ng Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Hinahati ng Pi Reader ang mahabang teksto sa maliliit na bahagi at ipinapadala sa ChatGPT. Maaaring pansamantalang maabot mo ang limit. Maghintay ng mga isang oras kung mangyari."
+      "message": "Hinahati ng Pi Reader ang mahabang teksto sa maliliit na bahagi at ipinapadala sa Pi.ai. Maaaring pansamantalang maabot mo ang limit. Maghintay ng mga isang oras kung mangyari."
     },
     "acknowledge_and_accept": {
       "message": "Sa pagpapatuloy, kinikilala mo at tinatanggap ito."
@@ -141,7 +141,7 @@
       "message": "Mas matagal ang Pi Reader kaysa sa karaniwan. Isara ang overlay para tingnan ang error. Inirerekomenda ang GPT-4."
     },
     "voice_selector_description": {
-      "message": "Pumili mula sa iba't ibang ChatGPT-enhanced na boses. Gawin ang pagpili bago i-upload ang teksto."
+      "message": "Pumili mula sa iba't ibang Pi.ai-enhanced na boses. Gawin ang pagpili bago i-upload ang teksto."
     },
     "cannot_upload_one_file": {
       "message": "Hindi puwedeng mag-upload ng higit sa 1 file nang sabay"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Nabigong i-upload ang $1"
     },
-    "chatgpt_issue": {
-      "message": "Mukhang may problema sa ChatGPT. Tingnan ang kanilang website."
+    "pi_issue": {
+      "message": "Mukhang may problema sa Pi.ai. Tingnan ang kanilang website."
     },
     "unsupported_file_type": {
       "message": "Hindi suportadong uri ng file"
@@ -186,7 +186,7 @@
       "message": "May kasalukuyang pag-uusap o nalampasan mo na ang limit. Maghintay at subukang muli!"
     },
     "chat_error": {
-      "message": "Maaaring may error sa ChatGPT o naabot mo na ang limit. Tingnan ang kanilang site."
+      "message": "Maaaring may error sa Pi.ai o naabot mo na ang limit. Tingnan ang kanilang site."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader Logo"

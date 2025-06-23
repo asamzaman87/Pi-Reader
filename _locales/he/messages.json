@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: המרת טקסט לקול בחינם עם קולות ChatGPT, TTS"
+      "message": "Pi Reader: המרת טקסט לקול בחינם עם קולות Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "המרת טקסט לקול (TTS) טבעית של ChatGPT עבור PDF, מאמרים ומסמכים. הורד או האזן בקולות איכותיים באמצעות Pi Reader"
+      "message": "המרת טקסט לקול (TTS) טבעית של Pi.ai עבור PDF, מאמרים ומסמכים. הורד או האזן בקולות איכותיים באמצעות Pi Reader"
     },
     "play_voice": {
       "message": "נגן קול"
@@ -60,7 +60,7 @@
       "message": "טוען תצוגה מקדימה"
     },
     "gpt4_download_note": {
-      "message": "למשתמשי ChatGPT פרימיום, בחרו ב-GPT-4o mini להורדה מהירה. סגור את החלון להחלפת המודל."
+      "message": "למשתמשי Pi.ai פרימיום, בחרו ב-GPT-4o mini להורדה מהירה. סגור את החלון להחלפת המודל."
     },
     "cancel": {
       "message": "בטל"
@@ -75,7 +75,7 @@
       "message": "בטל הורדה"
     },
     "accuracy_warning": {
-      "message": "ייתכן ש-Pi Reader לא יהיה מדויק ב-100%. אם אתה מבחין בשוני, סגור את החלון, פתח צ'אט ChatGPT חדש ונסה שוב."
+      "message": "ייתכן ש-Pi Reader לא יהיה מדויק ב-100%. אם אתה מבחין בשוני, סגור את החלון, פתח צ'אט Pi.ai חדש ונסה שוב."
     },
     "playback_speed": {
       "message": "מהירות השמעה"
@@ -120,7 +120,7 @@
       "message": "הערת Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader מחלק טקסט ארוך לחלקים קטנים ושולח ל-ChatGPT. ייתכן שתגיע זמנית למגבלה. אם כן, המתן כשעה."
+      "message": "Pi Reader מחלק טקסט ארוך לחלקים קטנים ושולח ל-Pi.ai. ייתכן שתגיע זמנית למגבלה. אם כן, המתן כשעה."
     },
     "acknowledge_and_accept": {
       "message": "בהמשך, אתה מאשר ומקבל זאת כחלק מהשימוש בתוסף."
@@ -141,7 +141,7 @@
       "message": "Pi Reader איטי מהרגיל. סגור את החלון כדי לבדוק שגיאה. מומלץ GPT-4."
     },
     "voice_selector_description": {
-      "message": "בחר מתוך מגוון קולות משופרים של ChatGPT. בחר לפני העלאת הטקסט."
+      "message": "בחר מתוך מגוון קולות משופרים של Pi.ai. בחר לפני העלאת הטקסט."
     },
     "cannot_upload_one_file": {
       "message": "לא ניתן להעלות יותר מקובץ אחד בכל פעם"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "העלאת $1 נכשלה"
     },
-    "chatgpt_issue": {
-      "message": "נראה שיש בעיה ב-ChatGPT, בדוק באתר שלהם."
+    "pi_issue": {
+      "message": "נראה שיש בעיה ב-Pi.ai, בדוק באתר שלהם."
     },
     "unsupported_file_type": {
       "message": "סוג קובץ לא נתמך"
@@ -186,7 +186,7 @@
       "message": "יש שיחה מתמשכת או שהגעת למגבלה. אנא המתן ונסה שוב!"
     },
     "chat_error": {
-      "message": "ייתכן ש-ChatGPT מציג שגיאה או שהגעת למגבלה. בדוק באתר."
+      "message": "ייתכן ש-Pi.ai מציג שגיאה או שהגעת למגבלה. בדוק באתר."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader לוגו"

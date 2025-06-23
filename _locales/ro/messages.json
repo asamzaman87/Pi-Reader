@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: AI gratuit de conversie text-în-vorbire cu voci ChatGPT, TTS"
+      "message": "Pi Reader: AI gratuit de conversie text-în-vorbire cu voci Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Conversie naturală ChatGPT AI text-în-vorbire (TTS) pentru PDF-uri, articole și documente. Descarcă sau citește cu voci de înaltă calitate în Pi Reader"
+      "message": "Conversie naturală Pi.ai AI text-în-vorbire (TTS) pentru PDF-uri, articole și documente. Descarcă sau citește cu voci de înaltă calitate în Pi Reader"
     },
     "play_voice": {
       "message": "Redă voce"
@@ -60,7 +60,7 @@
       "message": "Se încarcă previzualizarea"
     },
     "gpt4_download_note": {
-      "message": "Utilizatori premium ChatGPT, folosiți GPT-4o mini pentru descărcări mai rapide. Închide fereastra pentru a schimba modelul."
+      "message": "Utilizatori premium Pi.ai, folosiți GPT-4o mini pentru descărcări mai rapide. Închide fereastra pentru a schimba modelul."
     },
     "cancel": {
       "message": "Anulează"
@@ -75,7 +75,7 @@
       "message": "Anulează descărcarea"
     },
     "accuracy_warning": {
-      "message": "Pi Reader poate genera audio care nu este 100% exact. Dacă observi diferențe, închide fereastra și pornește un nou chat ChatGPT."
+      "message": "Pi Reader poate genera audio care nu este 100% exact. Dacă observi diferențe, închide fereastra și pornește un nou chat Pi.ai."
     },
     "playback_speed": {
       "message": "Viteză redare"
@@ -120,7 +120,7 @@
       "message": "Notificare Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader împarte textul lung în segmente și le trimite la ChatGPT. Temporar, poți atinge limita. Dacă se întâmplă, așteaptă cam o oră."
+      "message": "Pi Reader împarte textul lung în segmente și le trimite la Pi.ai. Temporar, poți atinge limita. Dacă se întâmplă, așteaptă cam o oră."
     },
     "acknowledge_and_accept": {
       "message": "Continuând, recunoști și accepți acest lucru."
@@ -141,7 +141,7 @@
       "message": "Pi Reader răspunde mai încet decât de obicei. Închide fereastra pentru a verifica erorile. GPT-4 recomandat."
     },
     "voice_selector_description": {
-      "message": "Alege dintre vocile îmbunătățite ale ChatGPT. Selectează înainte de a încărca textul."
+      "message": "Alege dintre vocile îmbunătățite ale Pi.ai. Selectează înainte de a încărca textul."
     },
     "cannot_upload_one_file": {
       "message": "Nu poți încărca mai mult de 1 fișier simultan"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Încărcarea lui $1 a eșuat"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT pare să aibă probleme. Verifică site-ul lor."
+    "pi_issue": {
+      "message": "Pi.ai pare să aibă probleme. Verifică site-ul lor."
     },
     "unsupported_file_type": {
       "message": "Tip de fișier neacceptat"
@@ -186,7 +186,7 @@
       "message": "Există o conversație în desfășurare sau ai depășit limita. Așteaptă și încearcă mai târziu!"
     },
     "chat_error": {
-      "message": "E posibil ca ChatGPT să afișeze o eroare sau ai atins limita. Verifică site-ul lor."
+      "message": "E posibil ca Pi.ai să afișeze o eroare sau ai atins limita. Verifică site-ul lor."
     },
     "gpt_reader_logo": {
       "message": "Siglă Pi Reader"

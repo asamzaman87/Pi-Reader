@@ -1,9 +1,9 @@
 {
   "extensionName": {
-    "message": "Pi Reader: TTS AI gratis, voces ChatGPT"
+    "message": "Pi Reader: TTS AI gratis, voces Pi.ai"
   },
   "extensionDescription": {
-    "message": "Texto a voz natural ChatGPT para PDFs, artículos y docs. Descarga o escucha con voces premium en Pi Reader"
+    "message": "Texto a voz natural Pi.ai para PDFs, artículos y docs. Descarga o escucha con voces premium en Pi Reader"
   },
   "play_voice": {
     "message": "Tocar voz"
@@ -60,7 +60,7 @@
     "message": "Cargando"
   },
   "gpt4_download_note": {
-    "message": "Usuarios premium de ChatGPT, asegúrense de usar GPT-4o mini para descargas rápidas y eviten modelos lentos. Cierra la superposición para cambiar de modelo."
+    "message": "Usuarios premium de Pi.ai, asegúrense de usar GPT-4o mini para descargas rápidas y eviten modelos lentos. Cierra la superposición para cambiar de modelo."
   },
   "cancel": {
     "message": "Anula"
@@ -75,7 +75,7 @@
     "message": "Anula descarga"
   },
   "accuracy_warning": {
-    "message": "Pi Reader puede generar audio con imprecisiones. Si notas diferencias, cierra la superposición y abre un nuevo chat ChatGPT para usar Pi Reader de nuevo."
+    "message": "Pi Reader puede generar audio con imprecisiones. Si notas diferencias, cierra la superposición y abre un nuevo chat Pi.ai para usar Pi Reader de nuevo."
   },
   "playback_speed": {
     "message": "Velocidad"
@@ -120,7 +120,7 @@
     "message": "Aviso Pi Reader"
   },
   "gpt_reader_chunk_explanation": {
-    "message": "Pi Reader divide textos grandes en partes y las envía a ChatGPT. Es normal y, si excedes el límite, espera una hora antes de reintentar."
+    "message": "Pi Reader divide textos grandes en partes y las envía a Pi.ai. Es normal y, si excedes el límite, espera una hora antes de reintentar."
   },
   "acknowledge_and_accept": {
     "message": "Al continuar, aceptas esto como parte del uso de la extensión."
@@ -141,7 +141,7 @@
     "message": "Pi Reader tarda más de lo normal. Revisa si hay error cerrando la superposición. Se recomienda usar modelos GPT-4 para mejores resultados. Cambia modelo cerrando la superposición y usando el menú superior."
   },
   "voice_selector_description": {
-    "message": "Elige entre varias voces mejoradas de ChatGPT. La selección debe hacerse antes de subir tu texto."
+    "message": "Elige entre varias voces mejoradas de Pi.ai. La selección debe hacerse antes de subir tu texto."
   },
   "cannot_upload_one_file": {
     "message": "Solo se permite 1 archivo a la vez"
@@ -161,8 +161,8 @@
   "failed_upload": {
     "message": "Error al subir $1"
   },
-  "chatgpt_issue": {
-    "message": "ChatGPT presenta problemas. Consulta su web para detalles."
+  "pi_issue": {
+    "message": "Pi.ai presenta problemas. Consulta su web para detalles."
   },
   "unsupported_file_type": {
     "message": "Tipo de archivo no admitido"
@@ -186,7 +186,7 @@
     "message": "Conversación activa o límite superado. Espera e inténtalo más tarde!"
   },
   "chat_error": {
-    "message": "Parece que ChatGPT muestra un error, genera un aviso, o has superado el límite. Consulta la web de ChatGPT."
+    "message": "Parece que Pi.ai muestra un error, genera un aviso, o has superado el límite. Consulta la web de Pi.ai."
   },
   "gpt_reader_logo": {
     "message": "Logo Pi Reader"

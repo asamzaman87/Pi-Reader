@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Besplatan AI tekst-u-govor sa ChatGPT glasovima, TTS"
+      "message": "Pi Reader: Besplatan AI tekst-u-govor sa Pi.ai glasovima, TTS"
     },
     "extensionDescription": {
-      "message": "Prirodni ChatGPT AI tekst-u-govor (TTS) za PDF, članke i dokumenta. Preuzmi ili slušaj uz visokokvalitetne glasove u Pi Reader"
+      "message": "Prirodni Pi.ai AI tekst-u-govor (TTS) za PDF, članke i dokumenta. Preuzmi ili slušaj uz visokokvalitetne glasove u Pi Reader"
     },
     "play_voice": {
       "message": "Pusti glas"
@@ -60,7 +60,7 @@
       "message": "Učitavanje pregleda"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT premium korisnici, izaberite GPT-4o mini za brže preuzimanje. Zatvorite prozor za promenu modela."
+      "message": "Pi.ai premium korisnici, izaberite GPT-4o mini za brže preuzimanje. Zatvorite prozor za promenu modela."
     },
     "cancel": {
       "message": "Otkaži"
@@ -75,7 +75,7 @@
       "message": "Otkaži preuzimanje"
     },
     "accuracy_warning": {
-      "message": "Pi Reader možda neće biti 100% tačan. Ako primetite razlike, zatvorite prozor i pokrenite novi ChatGPT chat."
+      "message": "Pi Reader možda neće biti 100% tačan. Ako primetite razlike, zatvorite prozor i pokrenite novi Pi.ai chat."
     },
     "playback_speed": {
       "message": "Brzina reprodukcije"
@@ -120,7 +120,7 @@
       "message": "Pi Reader obaveštenje"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader deli dugačak tekst na manje delove i šalje ih ChatGPT-u. Privremeno možete dosegnuti limit. Ako se desi, sačekajte oko sat vremena."
+      "message": "Pi Reader deli dugačak tekst na manje delove i šalje ih Pi.ai-u. Privremeno možete dosegnuti limit. Ako se desi, sačekajte oko sat vremena."
     },
     "acknowledge_and_accept": {
       "message": "Nastavljajući, prihvatate ovo kao deo korišćenja."
@@ -141,7 +141,7 @@
       "message": "Pi Reader radi sporije nego obično. Zatvorite prozor da proverite grešku. GPT-4 se preporučuje."
     },
     "voice_selector_description": {
-      "message": "Izaberite neku od poboljšanih ChatGPT glasova. Učinite to pre slanja teksta."
+      "message": "Izaberite neku od poboljšanih Pi.ai glasova. Učinite to pre slanja teksta."
     },
     "cannot_upload_one_file": {
       "message": "Ne možete otpremiti više od 1 fajla odjednom"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Neuspešno otpremanje $1"
     },
-    "chatgpt_issue": {
-      "message": "Izgleda da ChatGPT ima problem, proverite njihov sajt."
+    "pi_issue": {
+      "message": "Izgleda da Pi.ai ima problem, proverite njihov sajt."
     },
     "unsupported_file_type": {
       "message": "Nesupported tip fajla"
@@ -186,7 +186,7 @@
       "message": "Postoji aktivan razgovor ili ste dostigli limit. Sačekajte i pokušajte kasnije!"
     },
     "chat_error": {
-      "message": "Možda ChatGPT prikazuje grešku ili ste dostigli limit. Proverite njihov sajt."
+      "message": "Možda Pi.ai prikazuje grešku ili ste dostigli limit. Proverite njihov sajt."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader logo"

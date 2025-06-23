@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Bezplatné AI text na reč s hlasmi ChatGPT, TTS"
+      "message": "Pi Reader: Bezplatné AI text na reč s hlasmi Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Prirodzené ChatGPT AI text-to-speech (TTS) pre PDF, články a dokumenty. Stiahni alebo prečítaj nahlas s kvalitnými hlasmi v Pi Reader"
+      "message": "Prirodzené Pi.ai AI text-to-speech (TTS) pre PDF, články a dokumenty. Stiahni alebo prečítaj nahlas s kvalitnými hlasmi v Pi Reader"
     },
     "play_voice": {
       "message": "Prehrať hlas"
@@ -60,7 +60,7 @@
       "message": "Načítavam náhľad"
     },
     "gpt4_download_note": {
-      "message": "Používatelia ChatGPT premium, zvoľte GPT-4o mini pre rýchlejšie sťahovanie. Zatvorte okno na zmenu modelu."
+      "message": "Používatelia Pi.ai premium, zvoľte GPT-4o mini pre rýchlejšie sťahovanie. Zatvorte okno na zmenu modelu."
     },
     "cancel": {
       "message": "Zrušiť"
@@ -75,7 +75,7 @@
       "message": "Zrušiť sťahovanie"
     },
     "accuracy_warning": {
-      "message": "Pi Reader nemusí byť 100 % presný. Ak si všimneš rozdiely, zatvor okno a začni nový ChatGPT chat."
+      "message": "Pi Reader nemusí byť 100 % presný. Ak si všimneš rozdiely, zatvor okno a začni nový Pi.ai chat."
     },
     "playback_speed": {
       "message": "Rýchlosť prehrávania"
@@ -120,7 +120,7 @@
       "message": "Oznámenie Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader rozdeľuje dlhý text na menšie časti a posiela ich do ChatGPT. Môžeš dočasne dosiahnuť limit. Ak áno, počkaj asi hodinu."
+      "message": "Pi Reader rozdeľuje dlhý text na menšie časti a posiela ich do Pi.ai. Môžeš dočasne dosiahnuť limit. Ak áno, počkaj asi hodinu."
     },
     "acknowledge_and_accept": {
       "message": "Pokračovaním to berieš na vedomie a súhlasíš."
@@ -141,7 +141,7 @@
       "message": "Pi Reader je pomalší než obvykle. Zavri okno a skontroluj chyby. Odporúča sa GPT-4."
     },
     "voice_selector_description": {
-      "message": "Vyber si z vylepšených ChatGPT hlasov. Urob to pred nahraním textu."
+      "message": "Vyber si z vylepšených Pi.ai hlasov. Urob to pred nahraním textu."
     },
     "cannot_upload_one_file": {
       "message": "Nemožno nahrať viac ako 1 súbor naraz"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Nahratie $1 zlyhalo"
     },
-    "chatgpt_issue": {
-      "message": "Zdá sa, že ChatGPT má problém, skontroluj ich stránku."
+    "pi_issue": {
+      "message": "Zdá sa, že Pi.ai má problém, skontroluj ich stránku."
     },
     "unsupported_file_type": {
       "message": "Nepodporovaný typ súboru"
@@ -186,7 +186,7 @@
       "message": "Prebieha konverzácia alebo si prekročil limit. Počkaj a skús neskôr!"
     },
     "chat_error": {
-      "message": "ChatGPT môže zobrazovať chybu alebo si dosiahol limit. Skontroluj ich stránku."
+      "message": "Pi.ai môže zobrazovať chybu alebo si dosiahol limit. Skontroluj ich stránku."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader logo"

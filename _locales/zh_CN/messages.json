@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: 免费AI文字转语音，含ChatGPT声音，TTS"
+      "message": "Pi Reader: 免费AI文字转语音，含Pi.ai声音，TTS"
     },
     "extensionDescription": {
-      "message": "自然ChatGPT AI文字转语音 (TTS)，用于PDF、文章、文档。用高质量语音在Pi Reader下载或朗读"
+      "message": "自然Pi.ai AI文字转语音 (TTS)，用于PDF、文章、文档。用高质量语音在Pi Reader下载或朗读"
     },
     "play_voice": {
       "message": "播放语音"
@@ -60,7 +60,7 @@
       "message": "加载预览"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT高级用户请使用GPT-4o mini以加速下载。关闭扩展界面后可切换模型。"
+      "message": "Pi.ai高级用户请使用GPT-4o mini以加速下载。关闭扩展界面后可切换模型。"
     },
     "cancel": {
       "message": "取消"
@@ -75,7 +75,7 @@
       "message": "取消下载"
     },
     "accuracy_warning": {
-      "message": "Pi Reader生成的音频可能并非完全准确。如发现差异，请关闭界面，新开ChatGPT对话再试。"
+      "message": "Pi Reader生成的音频可能并非完全准确。如发现差异，请关闭界面，新开Pi.ai对话再试。"
     },
     "playback_speed": {
       "message": "播放速度"
@@ -120,7 +120,7 @@
       "message": "Pi Reader通知"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader将长文本分段发送到ChatGPT，可能会暂时达到限额。若发生，请等待约一小时后重试。"
+      "message": "Pi Reader将长文本分段发送到Pi.ai，可能会暂时达到限额。若发生，请等待约一小时后重试。"
     },
     "acknowledge_and_accept": {
       "message": "继续即表示您承认并接受此情况。"
@@ -141,7 +141,7 @@
       "message": "Pi Reader响应比平时慢。关闭界面查看错误。建议使用GPT-4。"
     },
     "voice_selector_description": {
-      "message": "选择ChatGPT增强语音。请在上传文本前完成选择。"
+      "message": "选择Pi.ai增强语音。请在上传文本前完成选择。"
     },
     "cannot_upload_one_file": {
       "message": "一次只能上传1个文件"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "上传 $1 失败"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT似乎有问题，请查看其网站了解详情。"
+    "pi_issue": {
+      "message": "Pi.ai似乎有问题，请查看其网站了解详情。"
     },
     "unsupported_file_type": {
       "message": "不支持的文件类型"
@@ -186,7 +186,7 @@
       "message": "当前有会话或已超限，请稍后再试！"
     },
     "chat_error": {
-      "message": "ChatGPT可能出错或您已超限，请查看其网站。"
+      "message": "Pi.ai可能出错或您已超限，请查看其网站。"
     },
     "gpt_reader_logo": {
       "message": "Pi Reader标志"

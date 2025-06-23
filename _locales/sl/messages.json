@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: brezplačni AI pretvornik besedila v govor z glasovi ChatGPT TTS"
+      "message": "Pi Reader: brezplačni AI pretvornik besedila v govor z glasovi Pi.ai TTS"
     },
     "extensionDescription": {
-      "message": "Naravni ChatGPT AI pretvornik besedila v govor (TTS) za PDF, članke in dokumente. Prenesite ali poslušajte z visokokakovostnimi glasovi v Pi Reader"
+      "message": "Naravni Pi.ai AI pretvornik besedila v govor (TTS) za PDF, članke in dokumente. Prenesite ali poslušajte z visokokakovostnimi glasovi v Pi Reader"
     },
     "play_voice": {
       "message": "Predvajaj glas"
@@ -60,7 +60,7 @@
       "message": "Nalagam predogled"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT premium uporabniki, izberite GPT-4o mini za hitrejše prenose. Zaprite okno za spremembo modela."
+      "message": "Pi.ai premium uporabniki, izberite GPT-4o mini za hitrejše prenose. Zaprite okno za spremembo modela."
     },
     "cancel": {
       "message": "Prekliči"
@@ -75,7 +75,7 @@
       "message": "Prekliči prenos"
     },
     "accuracy_warning": {
-      "message": "Pi Reader morda ne bo 100% natančen. Če opazite razlike, zaprite okno in začnite nov ChatGPT pogovor."
+      "message": "Pi Reader morda ne bo 100% natančen. Če opazite razlike, zaprite okno in začnite nov Pi.ai pogovor."
     },
     "playback_speed": {
       "message": "Hitrost predvajanja"
@@ -120,7 +120,7 @@
       "message": "Obvestilo Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader razdeli dolga besedila na manjše dele in jih pošlje ChatGPT. Morda boste začasno dosegli omejitev. Če se to zgodi, počakajte približno eno uro."
+      "message": "Pi Reader razdeli dolga besedila na manjše dele in jih pošlje Pi.ai. Morda boste začasno dosegli omejitev. Če se to zgodi, počakajte približno eno uro."
     },
     "acknowledge_and_accept": {
       "message": "Z nadaljevanjem to priznavate in sprejemate."
@@ -141,7 +141,7 @@
       "message": "Pi Reader traja dlje kot običajno. Zaprite okno za preverjanje napak. Priporočamo GPT-4."
     },
     "voice_selector_description": {
-      "message": "Izberite med več izboljšanimi glasovi ChatGPT. Naredite to pred nalaganjem besedila."
+      "message": "Izberite med več izboljšanimi glasovi Pi.ai. Naredite to pred nalaganjem besedila."
     },
     "cannot_upload_one_file": {
       "message": "Ni mogoče naložiti več kot 1 datoteke naenkrat"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Nalaganje $1 ni uspelo"
     },
-    "chatgpt_issue": {
-      "message": "Zdi se, da ima ChatGPT težave, preverite njihovo spletno mesto."
+    "pi_issue": {
+      "message": "Zdi se, da ima Pi.ai težave, preverite njihovo spletno mesto."
     },
     "unsupported_file_type": {
       "message": "Nepodprta vrsta datoteke"
@@ -186,7 +186,7 @@
       "message": "Poteka pogovor ali ste presegli omejitev. Počakajte in poskusite pozneje!"
     },
     "chat_error": {
-      "message": "Morda ChatGPT prikazuje napako ali ste dosegli omejitev. Preverite njihovo spletno mesto."
+      "message": "Morda Pi.ai prikazuje napako ali ste dosegli omejitev. Preverite njihovo spletno mesto."
     },
     "gpt_reader_logo": {
       "message": "Logotip Pi Reader"

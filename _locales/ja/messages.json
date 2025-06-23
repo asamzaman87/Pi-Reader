@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: ChatGPT音声対応の無料AI音声変換, TTS"
+      "message": "Pi Reader: Pi.ai音声対応の無料AI音声変換, TTS"
     },
     "extensionDescription": {
-      "message": "自然なChatGPT AIテキスト読み上げ(TTS)をPDF、記事、文書で。高品質音声でのダウンロードまたは音読はPi Readerで"
+      "message": "自然なPi.ai AIテキスト読み上げ(TTS)をPDF、記事、文書で。高品質音声でのダウンロードまたは音読はPi Readerで"
     },
     "play_voice": {
       "message": "音声再生"
@@ -60,7 +60,7 @@
       "message": "プレビューを読み込み中"
     },
     "gpt4_download_note": {
-      "message": "ChatGPTプレミアムユーザーの方は、GPT-4o miniで高速ダウンロード可能です。モデル変更は拡張ウィンドウを閉じて行ってください。"
+      "message": "Pi.aiプレミアムユーザーの方は、GPT-4o miniで高速ダウンロード可能です。モデル変更は拡張ウィンドウを閉じて行ってください。"
     },
     "cancel": {
       "message": "キャンセル"
@@ -75,7 +75,7 @@
       "message": "ダウンロードをキャンセル"
     },
     "accuracy_warning": {
-      "message": "Pi Readerの音声は完全に正確ではない可能性があります。差異を感じた場合、ウィンドウを閉じ、新たにChatGPTチャットを開いて再試行してください。"
+      "message": "Pi Readerの音声は完全に正確ではない可能性があります。差異を感じた場合、ウィンドウを閉じ、新たにPi.aiチャットを開いて再試行してください。"
     },
     "playback_speed": {
       "message": "再生速度"
@@ -120,7 +120,7 @@
       "message": "Pi Reader通知"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Readerは長文を小分割しChatGPTに送信します。一時的に上限に達することがあります。発生した場合は約1時間お待ちください。"
+      "message": "Pi Readerは長文を小分割しPi.aiに送信します。一時的に上限に達することがあります。発生した場合は約1時間お待ちください。"
     },
     "acknowledge_and_accept": {
       "message": "続行することで、これを承認し受け入れたとみなします。"
@@ -141,7 +141,7 @@
       "message": "Pi Readerの応答が通常より遅いです。エラー確認のためウィンドウを閉じてください。GPT-4推奨。"
     },
     "voice_selector_description": {
-      "message": "ChatGPT強化音声の中から選択。テキストをアップロードする前に選んでください。"
+      "message": "Pi.ai強化音声の中から選択。テキストをアップロードする前に選んでください。"
     },
     "cannot_upload_one_file": {
       "message": "一度にアップロードできるファイルは1つまでです"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "$1 のアップロードに失敗しました"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPTに問題があるようです。サイトを確認してください。"
+    "pi_issue": {
+      "message": "Pi.aiに問題があるようです。サイトを確認してください。"
     },
     "unsupported_file_type": {
       "message": "対応していないファイル形式です"
@@ -186,7 +186,7 @@
       "message": "会話が進行中か、制限を超えています。しばらく待って再試行してください！"
     },
     "chat_error": {
-      "message": "ChatGPTがエラーを表示するか、上限に達した可能性があります。サイトを確認してください。"
+      "message": "Pi.aiがエラーを表示するか、上限に達した可能性があります。サイトを確認してください。"
     },
     "gpt_reader_logo": {
       "message": "Pi Readerロゴ"

@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Gratis AI text-till-tal med ChatGPT-röster, TTS"
+      "message": "Pi Reader: Gratis AI text-till-tal med Pi.ai-röster, TTS"
     },
     "extensionDescription": {
-      "message": "Naturligt ChatGPT AI text-till-tal (TTS) för PDF:er, artiklar och dokument. Ladda ner eller lyssna med högkvalitativa röster i Pi Reader"
+      "message": "Naturligt Pi.ai AI text-till-tal (TTS) för PDF:er, artiklar och dokument. Ladda ner eller lyssna med högkvalitativa röster i Pi Reader"
     },
     "play_voice": {
       "message": "Spela röst"
@@ -60,7 +60,7 @@
       "message": "Laddar förhandsvisning"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT premium-användare, välj GPT-4o mini för snabbare nedladdning. Stäng fönstret för att byta modell."
+      "message": "Pi.ai premium-användare, välj GPT-4o mini för snabbare nedladdning. Stäng fönstret för att byta modell."
     },
     "cancel": {
       "message": "Avbryt"
@@ -75,7 +75,7 @@
       "message": "Avbryt nedladdning"
     },
     "accuracy_warning": {
-      "message": "Pi Reader kanske inte är 100 % korrekt. Om du märker skillnader, stäng fönstret och starta en ny ChatGPT-chatt."
+      "message": "Pi Reader kanske inte är 100 % korrekt. Om du märker skillnader, stäng fönstret och starta en ny Pi.ai-chatt."
     },
     "playback_speed": {
       "message": "Uppspelningshastighet"
@@ -120,7 +120,7 @@
       "message": "Pi Reader-notis"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader delar upp långa texter i mindre delar och skickar dem till ChatGPT. Du kan tillfälligt nå en gräns. Om så, vänta en timme."
+      "message": "Pi Reader delar upp långa texter i mindre delar och skickar dem till Pi.ai. Du kan tillfälligt nå en gräns. Om så, vänta en timme."
     },
     "acknowledge_and_accept": {
       "message": "Genom att fortsätta godkänner du detta."
@@ -141,7 +141,7 @@
       "message": "Pi Reader tar längre tid än vanligt. Stäng fönstret för att kontrollera fel. GPT-4 rekommenderas."
     },
     "voice_selector_description": {
-      "message": "Välj bland olika ChatGPT-förbättrade röster. Gör valet innan du laddar upp texten."
+      "message": "Välj bland olika Pi.ai-förbättrade röster. Gör valet innan du laddar upp texten."
     },
     "cannot_upload_one_file": {
       "message": "Kan inte ladda upp mer än 1 fil åt gången"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Misslyckades med att ladda upp $1"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT verkar ha problem, kolla deras webbplats."
+    "pi_issue": {
+      "message": "Pi.ai verkar ha problem, kolla deras webbplats."
     },
     "unsupported_file_type": {
       "message": "Filtyp stöds ej"
@@ -186,7 +186,7 @@
       "message": "Det pågår en konversation eller gräns är nådd. Vänta och försök igen!"
     },
     "chat_error": {
-      "message": "ChatGPT visar kanske ett fel eller du nådde en gräns. Kolla deras webbplats."
+      "message": "Pi.ai visar kanske ett fel eller du nådde en gräns. Kolla deras webbplats."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader-logga"

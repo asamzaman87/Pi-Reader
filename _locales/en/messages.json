@@ -1,9 +1,9 @@
 {
   "extensionName": {
-    "message": "Pi Reader: Free AI Text to Speech with ChatGPT Voices, TTS"
+    "message": "Pi Reader: Free AI Text to Speech with Pi.ai Voices, TTS"
   },
   "extensionDescription": {
-    "message": "Natural ChatGPT AI text to speech (TTS) for PDFs, articles, & docs. Download or read aloud using high-quality voices with Pi Reader"
+    "message": "Natural Pi.ai AI text to speech (TTS) for PDFs, articles, & docs. Download or read aloud using high-quality voices with Pi Reader"
   },
   "play_voice": {
     "message": "Play Voice"
@@ -60,7 +60,7 @@
     "message": "Loading Preview"
   },
   "gpt4_download_note": {
-    "message": "Dear ChatGPT premium users, make sure the model you have chosen is GPT-4o mini for fastest download speeds, avoid choosing models that have a slow output speed. Close the extension overlay to change the model."
+    "message": "Dear Pi.ai premium users, make sure the model you have chosen is GPT-4o mini for fastest download speeds, avoid choosing models that have a slow output speed. Close the extension overlay to change the model."
   },
   "cancel": {
     "message": "Cancel"
@@ -75,7 +75,7 @@
     "message": "Cancel Download"
   },
   "accuracy_warning": {
-    "message": "Pi Reader may generate audio that is not 100% accurate. If you start to notice differences then it is recommended to close the overlay and create a new ChatGPT chat and try using the Pi Reader extension again."
+    "message": "Pi Reader may generate audio that is not 100% accurate. If you start to notice differences then it is recommended to close the overlay and try using the Pi Reader extension again."
   },
   "playback_speed": {
     "message": "Playback Speed"
@@ -141,7 +141,7 @@
     "message": "Pi Reader seems to be taking longer than usual. Please check for an error by closing the overlay. It is recommended to use the GPT-4 models for the best results. You can change models by closing the overlay and clicking on the top left drop down model button."
   },
   "voice_selector_description": {
-    "message": "Choose from a variety of ChatGPT's enhanced voice options. Please note that the voice selection must be made prior to uploading your text."
+    "message": "Choose from a variety of Pi.ai's enhanced voice options. Please note that the voice selection must be made prior to uploading your text."
   },
   "cannot_upload_one_file": {
     "message": "Cannot upload more than 1 file at a time"
@@ -161,8 +161,8 @@
   "failed_upload": {
     "message": "Failed to upload $1"
   },
-  "chatgpt_issue": {
-    "message": "ChatGPT seems to be having issues, please check the ChatGPT website for the exact issue."
+  "pi_issue": {
+    "message": "Pi.ai seems to be having issues, please check the Pi.ai website for the exact issue."
   },
   "unsupported_file_type": {
     "message": "Unsupported file type"
@@ -186,7 +186,7 @@
     "message": "There is an on-going conversation or you have exceeded the hourly limit. Please wait try again later!"
   },
   "chat_error": {
-    "message": "It seems that ChatGPT might be either displaying an error, generating a prompt, or you've reached your hourly limit. Please check the ChatGPT website for the exact issue."
+    "message": "It seems that Pi.ai might be either displaying an error, generating a prompt, or you've reached your hourly limit. Please check the Pi.ai website for the exact issue."
   },
   "gpt_reader_logo": {
     "message": "Pi Reader Logo"

@@ -34,18 +34,18 @@ const useStreamListener = (setIsLoading: (state: boolean) => void) => {
         if (response.status !== 200) {
             if (response.status === 429) {
                 ////console.log(response.status);
-                handleError("You have exceeded the hourly limit for your current ChatGPT model. Please switch to another model to continue using GPT Reader or wait an hour.");
+                handleError("You have exceeded the hourly limit for your current Pi.ai model. Please switch to another model to continue using Pi Reader or wait an hour.");
                 return
             }
             if (response.status === 403 || response.status === 404 || response.status === 503) {
                 if (retryCount.current !== 0) {
-                    handleError("ChatGPT seems to be having issues finding the audio, please click the back button on the top-left or close the overlay and try again.");
+                    handleError("Pi.ai seems to be having issues finding the audio, please click the back button on the top-left or close the overlay and try again.");
                     return
                 }
                 //retry fetching audio if 403 or 404 is returned
                 return retry(url);
             }
-            handleError("ChatGPT seems to be having issues, please close this overlay for the exact error message.");
+            handleError("Pi.ai seems to be having issues, please close this overlay for the exact error message.");
         }
         const blob = await response.blob();
         setBlobs(blobs => [...blobs, blob]);
@@ -71,7 +71,7 @@ const useStreamListener = (setIsLoading: (state: boolean) => void) => {
                     if (audioUrl) await setCompletedStreams(streams => [...streams, audioUrl]);
                 } catch {
                     if (retryCount.current !== 0) {
-                        handleError("ChatGPT seems to be having issues finding the audio, please click the back button on the top-left or close the overlay and try again.");
+                        handleError("Pi.ai seems to be having issues finding the audio, please click the back button on the top-left or close the overlay and try again.");
                         return;
                     }
                     await retry(`${SYNTETHIZE_ENDPOINT}?conversation_id=${conversationId}&message_id=${messageId}&voice=${voices.selected ?? VOICE}&format=${AUDIO_FORMAT}`)

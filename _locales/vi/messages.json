@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: AI chuyển văn bản thành giọng nói miễn phí, giọng ChatGPT, TTS"
+      "message": "Pi Reader: AI chuyển văn bản thành giọng nói miễn phí, giọng Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Chuyển văn bản thành giọng nói (TTS) ChatGPT tự nhiên cho PDF, bài viết, & tài liệu. Tải xuống hoặc nghe với giọng chất lượng cao trên Pi Reader"
+      "message": "Chuyển văn bản thành giọng nói (TTS) Pi.ai tự nhiên cho PDF, bài viết, & tài liệu. Tải xuống hoặc nghe với giọng chất lượng cao trên Pi Reader"
     },
     "play_voice": {
       "message": "Phát Giọng"
@@ -60,7 +60,7 @@
       "message": "Đang tải xem trước"
     },
     "gpt4_download_note": {
-      "message": "Người dùng ChatGPT cao cấp, chọn GPT-4o mini để tải nhanh hơn. Đóng cửa sổ để đổi mô hình."
+      "message": "Người dùng Pi.ai cao cấp, chọn GPT-4o mini để tải nhanh hơn. Đóng cửa sổ để đổi mô hình."
     },
     "cancel": {
       "message": "Hủy"
@@ -75,7 +75,7 @@
       "message": "Hủy Tải xuống"
     },
     "accuracy_warning": {
-      "message": "Pi Reader có thể tạo âm thanh không hoàn toàn chính xác. Nếu thấy khác biệt, đóng cửa sổ và mở cuộc trò chuyện ChatGPT mới."
+      "message": "Pi Reader có thể tạo âm thanh không hoàn toàn chính xác. Nếu thấy khác biệt, đóng cửa sổ và mở cuộc trò chuyện Pi.ai mới."
     },
     "playback_speed": {
       "message": "Tốc độ phát"
@@ -120,7 +120,7 @@
       "message": "Thông báo Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader chia văn bản dài thành đoạn nhỏ và gửi đến ChatGPT. Bạn có thể tạm thời chạm giới hạn. Nếu thế, hãy đợi khoảng một giờ."
+      "message": "Pi Reader chia văn bản dài thành đoạn nhỏ và gửi đến Pi.ai. Bạn có thể tạm thời chạm giới hạn. Nếu thế, hãy đợi khoảng một giờ."
     },
     "acknowledge_and_accept": {
       "message": "Tiếp tục nghĩa là bạn xác nhận và chấp nhận điều này."
@@ -141,7 +141,7 @@
       "message": "Pi Reader đang phản hồi chậm hơn bình thường. Đóng cửa sổ để kiểm tra lỗi. Khuyến nghị GPT-4."
     },
     "voice_selector_description": {
-      "message": "Chọn trong số các giọng ChatGPT được cải thiện. Thực hiện trước khi tải văn bản."
+      "message": "Chọn trong số các giọng Pi.ai được cải thiện. Thực hiện trước khi tải văn bản."
     },
     "cannot_upload_one_file": {
       "message": "Không thể tải lên hơn 1 tệp cùng lúc"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Tải lên $1 thất bại"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT có vẻ đang gặp vấn đề, hãy kiểm tra trang web của họ."
+    "pi_issue": {
+      "message": "Pi.ai có vẻ đang gặp vấn đề, hãy kiểm tra trang web của họ."
     },
     "unsupported_file_type": {
       "message": "Loại tệp không được hỗ trợ"
@@ -186,7 +186,7 @@
       "message": "Đang có cuộc trò chuyện hoặc bạn đã vượt giới hạn. Hãy đợi và thử lại!"
     },
     "chat_error": {
-      "message": "ChatGPT có thể hiển thị lỗi hoặc bạn đã đạt giới hạn. Hãy kiểm tra trang của họ."
+      "message": "Pi.ai có thể hiển thị lỗi hoặc bạn đã đạt giới hạn. Hãy kiểm tra trang của họ."
     },
     "gpt_reader_logo": {
       "message": "Logo Pi Reader"

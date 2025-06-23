@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: nemokamas AI teksto į kalbą su ChatGPT balsais, TTS"
+      "message": "Pi Reader: nemokamas AI teksto į kalbą su Pi.ai balsais, TTS"
     },
     "extensionDescription": {
-      "message": "Natūralus ChatGPT AI teksto į kalbą (TTS) PDF, straipsniams ir dokumentams. Atsisiųskite arba klausykitės aukštos kokybės balsų su Pi Reader"
+      "message": "Natūralus Pi.ai AI teksto į kalbą (TTS) PDF, straipsniams ir dokumentams. Atsisiųskite arba klausykitės aukštos kokybės balsų su Pi Reader"
     },
     "play_voice": {
       "message": "Leisti balsą"
@@ -60,7 +60,7 @@
       "message": "Įkeliama peržiūra"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT premium vartotojai, pasirinkite GPT-4o mini, kad paspartintumėte atsisiuntimą. Uždarykite langą norėdami pakeisti modelį."
+      "message": "Pi.ai premium vartotojai, pasirinkite GPT-4o mini, kad paspartintumėte atsisiuntimą. Uždarykite langą norėdami pakeisti modelį."
     },
     "cancel": {
       "message": "Atšaukti"
@@ -75,7 +75,7 @@
       "message": "Atšaukti atsisiuntimą"
     },
     "accuracy_warning": {
-      "message": "Pi Reader gali kurti ne visai tikslų garsą. Jei pastebite skirtumų, uždarykite langą ir pradėkite naują ChatGPT pokalbį."
+      "message": "Pi Reader gali kurti ne visai tikslų garsą. Jei pastebite skirtumų, uždarykite langą ir pradėkite naują Pi.ai pokalbį."
     },
     "playback_speed": {
       "message": "Atkūrimo greitis"
@@ -120,7 +120,7 @@
       "message": "Pi Reader pranešimas"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader ilgesnį tekstą suskaido į mažesnes dalis ir siunčia jas ChatGPT. Galite laikinai pasiekti ribą. Jei taip nutinka, palaukite apie valandą."
+      "message": "Pi Reader ilgesnį tekstą suskaido į mažesnes dalis ir siunčia jas Pi.ai. Galite laikinai pasiekti ribą. Jei taip nutinka, palaukite apie valandą."
     },
     "acknowledge_and_accept": {
       "message": "Tęsdami, jūs tai patvirtinate ir priimate."
@@ -141,7 +141,7 @@
       "message": "Pi Reader veikia lėčiau nei įprastai. Uždarykite langą, kad patikrintumėte klaidą. Rekomenduojama GPT-4."
     },
     "voice_selector_description": {
-      "message": "Rinkitės iš kelių ChatGPT patobulintų balsų. Atlikite pasirinkimą prieš įkeliant tekstą."
+      "message": "Rinkitės iš kelių Pi.ai patobulintų balsų. Atlikite pasirinkimą prieš įkeliant tekstą."
     },
     "cannot_upload_one_file": {
       "message": "Negalima įkelti daugiau nei 1 failo vienu metu"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "$1 įkelti nepavyko"
     },
-    "chatgpt_issue": {
-      "message": "Panašu, kad kyla ChatGPT problemų. Patikrinkite jų svetainę."
+    "pi_issue": {
+      "message": "Panašu, kad kyla Pi.ai problemų. Patikrinkite jų svetainę."
     },
     "unsupported_file_type": {
       "message": "Nepalaikomas failo tipas"
@@ -186,7 +186,7 @@
       "message": "Vyksta pokalbis arba pasiekėte ribą. Prašome palaukti ir bandyti vėliau!"
     },
     "chat_error": {
-      "message": "Galbūt ChatGPT rodo klaidą arba pasiekėte ribą. Patikrinkite jų svetainę."
+      "message": "Galbūt Pi.ai rodo klaidą arba pasiekėte ribą. Patikrinkite jų svetainę."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader logotipas"

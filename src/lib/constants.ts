@@ -68,7 +68,7 @@ export const MAX_FILE_SIZE = 1024 * 1024 * 24; // 24MB
 export const PROMPT_INPUT_SELECTOR = "textarea[role='textbox']";
 export const SUBMIT_BUTTON_SELECTOR  = "[aria-label='Submit text']";
 export const HELPER_PROMPT = "Repeat the text in this prompt without any changes, introduction or additional words. Do not summarize, analyze, or prepend/append anything. Just output this text exactly as provided:"
-export const SYNTETHIZE_ENDPOINT = "https://chatgpt.com/backend-api/synthesize";
+export const SYNTETHIZE_ENDPOINT = "https://Pi.ai.com/backend-api/synthesize";
 export const VOICE = "";
 export const AUDIO_FORMAT = "aac";
 export const CHUNK_SIZE = 300;
@@ -86,7 +86,7 @@ export const MIN_SLIDER_VALUE = 0.5;
 export const STEP_SLIDER_VALUE = 0.1;
 export const TICKS_TO_DISPLAY = [0.5, 1, 1.5, 2];
 export const MODELS_TO_REJECT = ["o1"];
-export const CHUNK_TO_PAUSE_ON = 9; //end of chunk
+export const CHUNK_TO_PAUSE_ON = 2; //end of chunk
 export const LOADING_TIMEOUT = 25000;
 export const LOADING_TIMEOUT_FOR_DOWNLOAD = 40000;
 export const DOWLOAD_CHUNK_SIZE = 4000;
