@@ -49,7 +49,7 @@ const PdfViewer: FC<PdfViewerProps> = ({ file }) => {
 
 
     return (
-        <div className='flex flex-row justify-center items-center gap-2 size-full mb-[120px]'>
+        <div className='flex flex-row justify-center items-center gap-2 size-full'>
             <Button
                 className="rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
                 variant={"ghost"}
@@ -61,11 +61,11 @@ const PdfViewer: FC<PdfViewerProps> = ({ file }) => {
                 <ChevronLeft />
             </Button>
 
-            <div className="flex flex-col gap-2 relative">
-                <span className="z-10 absolute bottom-2 right-2 px-4 py-2 text-sm font-medium text-muted-foreground text-center mx-auto rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow">
+            <div className="flex flex-col gap-2 relative overflow-y-auto max-h-full">
+                <span className="z-10 fixed bottom-2 right-32 px-4 py-2 text-sm font-medium text-muted-foreground text-center mx-auto rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shadow">
                     Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
                 </span>
-                <Document file={samplePDF} onLoadSuccess={onDocumentLoadSuccess}>
+                <Document className={'mb-24'} file={samplePDF} onLoadSuccess={onDocumentLoadSuccess}>
                     <Page pageNumber={pageNumber} loading={<div className="h-[628.5px] w-[393.4786px] flex items-center justify-center"><Loader2Icon className='size-6 animate-spin' /></div>} />
                 </Document>
             </div>
