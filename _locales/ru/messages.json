@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Не удалось загрузить $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Похоже, у Pi.ai проблемы. Проверьте их сайт."
     },
     "unsupported_file_type": {

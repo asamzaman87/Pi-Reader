@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Nalaganje $1 ni uspelo"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Zdi se, da ima Pi.ai težave, preverite njihovo spletno mesto."
     },
     "unsupported_file_type": {

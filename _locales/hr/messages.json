@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Neuspješan prijenos $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Čini se da Pi.ai ima poteškoća. Provjerite njihovu stranicu."
     },
     "unsupported_file_type": {

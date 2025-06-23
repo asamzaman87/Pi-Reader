@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 konnte nicht hochgeladen werden"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai hat offenbar Probleme. Prüfen Sie die Webseite."
     },
     "unsupported_file_type": {

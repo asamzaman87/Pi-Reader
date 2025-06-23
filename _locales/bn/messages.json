@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 আপলোড ব্যর্থ হয়েছে"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai তে সমস্যা হচ্ছে, সাইটে গিয়ে সমস্যা দেখুন।"
     },
     "unsupported_file_type": {

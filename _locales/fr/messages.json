@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Échec du téléversement de $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai semble rencontrer des problèmes, consultez leur site."
     },
     "unsupported_file_type": {

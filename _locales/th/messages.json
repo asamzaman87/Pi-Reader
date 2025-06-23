@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "อัปโหลด $1 ล้มเหลว"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "ดูเหมือนว่า Pi.ai มีปัญหา โปรดตรวจสอบเว็บไซต์"
     },
     "unsupported_file_type": {

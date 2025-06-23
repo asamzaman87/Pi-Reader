@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Încărcarea lui $1 a eșuat"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai pare să aibă probleme. Verifică site-ul lor."
     },
     "unsupported_file_type": {

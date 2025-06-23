@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "העלאת $1 נכשלה"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "נראה שיש בעיה ב-Pi.ai, בדוק באתר שלהם."
     },
     "unsupported_file_type": {

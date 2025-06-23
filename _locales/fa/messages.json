@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "آپلود $1 ناموفق بود"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "به نظر می‌رسد Pi.ai دچار مشکل شده. لطفاً وب‌سایت آن‌ها را بررسی کنید."
     },
     "unsupported_file_type": {

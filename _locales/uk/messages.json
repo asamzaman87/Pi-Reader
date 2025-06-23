@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Не вдалося завантажити $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Здається, у Pi.ai проблеми. Перевірте їх сайт."
     },
     "unsupported_file_type": {

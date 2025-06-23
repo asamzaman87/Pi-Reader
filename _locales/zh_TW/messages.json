@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "上傳 $1 失敗"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai似乎有問題，請查看其網站以獲取詳情。"
     },
     "unsupported_file_type": {

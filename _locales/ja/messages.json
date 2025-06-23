@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 のアップロードに失敗しました"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.aiに問題があるようです。サイトを確認してください。"
     },
     "unsupported_file_type": {

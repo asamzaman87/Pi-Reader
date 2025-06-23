@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Αποτυχία μεταφόρτωσης $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Το Pi.ai φαίνεται να έχει προβλήματα. Ελέγξτε τον ιστότοπό τους."
     },
     "unsupported_file_type": {

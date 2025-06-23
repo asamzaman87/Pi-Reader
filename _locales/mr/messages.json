@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 अपलोड करण्यात अयशस्वी"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai ला काही समस्या असाव्यात, कृपया त्यांच्या साइटवर तपासा."
     },
     "unsupported_file_type": {

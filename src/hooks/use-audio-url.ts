@@ -320,12 +320,12 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         const timeout = setTimeout(() => {
             observer.disconnect();
             activeSendObserver = null;
-            console.error("[sendPrompt] Send button not found after 35 seconds.");
+            console.error("[sendPrompt] Send button not found after 180 seconds.");
             toast({
                 description: `Pi Reader is having trouble, please click on the back button and try again`,
                 style: TOAST_STYLE_CONFIG
             })
-        }, 35000);
+        }, 180_000);
     };
 
     

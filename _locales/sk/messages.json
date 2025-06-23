@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Nahratie $1 zlyhalo"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Zdá sa, že Pi.ai má problém, skontroluj ich stránku."
     },
     "unsupported_file_type": {

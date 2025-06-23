@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Neuspešno otpremanje $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Izgleda da Pi.ai ima problem, proverite njihov sajt."
     },
     "unsupported_file_type": {

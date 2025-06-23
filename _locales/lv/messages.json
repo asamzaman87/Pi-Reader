@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 augšupielāde neizdevās"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Izskatās, ka Pi.ai piedzīvo problēmas. Lūdzu, pārbaudiet viņu vietni."
     },
     "unsupported_file_type": {

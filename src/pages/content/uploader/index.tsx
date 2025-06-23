@@ -157,7 +157,6 @@ function Uploader() {
 	}, [showRoutePopup]);
 
 	useEffect(() => {
-		console.log('checking for gptr/onload-open');
 		isInitialRender.current = true; // Set true initially
 		if (localStorage.getItem("pi/onload-open") === "true") {
 			setShowRoutePopup(false);
@@ -211,8 +210,8 @@ function Uploader() {
 				isActiveRef.current = false;
 			  }
 			  toast({
-				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. Sign in using an account to minimize these pop-ups. Note that you must be 18+ to use Pi Reader.",
-				duration: 15000,
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. NOTE: Sign in using an account to minimize these pop-ups. You must be 18+ to use Pi Reader.",
+				duration: 10000,
 				style: TOAST_STYLE_CONFIG,
 			  });
 			}

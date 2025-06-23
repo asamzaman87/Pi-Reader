@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 įkelti nepavyko"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Panašu, kad kyla Pi.ai problemų. Patikrinkite jų svetainę."
     },
     "unsupported_file_type": {

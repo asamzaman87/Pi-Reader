@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Faili $1 üleslaadimine ebaõnnestus"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai-l tundub olevat probleeme, vaadake nende veebisaiti."
     },
     "unsupported_file_type": {

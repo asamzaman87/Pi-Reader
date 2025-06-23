@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Tải lên $1 thất bại"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai có vẻ đang gặp vấn đề, hãy kiểm tra trang web của họ."
     },
     "unsupported_file_type": {

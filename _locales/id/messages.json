@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Gagal mengunggah $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai tampaknya bermasalah, silakan cek situs mereka."
     },
     "unsupported_file_type": {

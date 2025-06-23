@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 feltöltése sikertelen"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Úgy tűnik, a Pi.ai-nek gondjai vannak, nézd meg a weboldalukat."
     },
     "unsupported_file_type": {

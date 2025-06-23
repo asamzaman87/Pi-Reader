@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Upload van $1 mislukt"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai lijkt problemen te hebben. Bekijk de site voor details."
     },
     "unsupported_file_type": {

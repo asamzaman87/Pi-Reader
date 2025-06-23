@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Misslyckades med att ladda upp $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai verkar ha problem, kolla deras webbplats."
     },
     "unsupported_file_type": {

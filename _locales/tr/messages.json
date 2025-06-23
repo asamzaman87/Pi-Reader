@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "$1 yüklenemedi"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Pi.ai'de sorun var gibi görünüyor, sitelerini kontrol edin."
     },
     "unsupported_file_type": {

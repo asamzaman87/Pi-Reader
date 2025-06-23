@@ -161,7 +161,7 @@
     "failed_upload": {
       "message": "Nabigong i-upload ang $1"
     },
-    "Pi.ai_issue": {
+    "pi_issue": {
       "message": "Mukhang may problema sa Pi.ai. Tingnan ang kanilang website."
     },
     "unsupported_file_type": {
