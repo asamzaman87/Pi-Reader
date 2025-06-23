@@ -2,7 +2,7 @@
 <img src="public/logo-pi-reader.png" alt="logo"/>
 
 <h5>
-GPT READER is a Chrome Extension that simplifies reading long documents with GPT.
+Pi Reader is a Chrome Extension that simplifies reading long documents with GPT.
 <br />
 
 </div>
@@ -21,7 +21,7 @@ GPT READER is a Chrome Extension that simplifies reading long documents with GPT
 
 
 ## Intro <a name="intro"></a>
-This is a minimal quick start for using GPT Reader with Chrome and Firefox in dev mode.
+This is a minimal quick start for using Pi Reader with Chrome and Firefox in dev mode.
 
 It includes all possible pages such as **new tab**, **dev panel**, **pop up**, etc., as well as corresponding manifest settings by default.
 You will likely have to customize/delete some of the pages (see docs below).

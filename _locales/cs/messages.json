@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Zdarma AI převod textu na řeč s hlasy ChatGPT, TTS"
+      "message": "Pi Reader: Zdarma AI převod textu na řeč s hlasy Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Přirozený ChatGPT AI převod textu na řeč (TTS) pro PDF, články a dokumenty. Stáhněte nebo předčítejte kvalitními hlasy v Pi Reader"
+      "message": "Přirozený Pi.ai AI převod textu na řeč (TTS) pro PDF, články a dokumenty. Stáhněte nebo předčítejte kvalitními hlasy v Pi Reader"
     },
     "play_voice": {
       "message": "Přehrát hlas"
@@ -60,7 +60,7 @@
       "message": "Načítání náhledu"
     },
     "gpt4_download_note": {
-      "message": "Pro prémiové uživatele ChatGPT zvolte GPT-4o mini pro rychlejší stahování. Zavřete okno pro změnu modelu."
+      "message": "Pro prémiové uživatele Pi.ai zvolte GPT-4o mini pro rychlejší stahování. Zavřete okno pro změnu modelu."
     },
     "cancel": {
       "message": "Zrušit"
@@ -75,7 +75,7 @@
       "message": "Zrušit stahování"
     },
     "accuracy_warning": {
-      "message": "Pi Reader nemusí být 100% přesný. Pokud zaznamenáte rozdíly, zavřete okno, začněte nový ChatGPT chat a zkuste to znovu."
+      "message": "Pi Reader nemusí být 100% přesný. Pokud zaznamenáte rozdíly, zavřete okno, začněte nový Pi.ai chat a zkuste to znovu."
     },
     "playback_speed": {
       "message": "Rychlost přehrávání"
@@ -120,7 +120,7 @@
       "message": "Oznámení Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader dělí velký text na menší části a posílá je do ChatGPT. Dočasně můžete dosáhnout limitu. Pokud ano, vyčkejte asi hodinu."
+      "message": "Pi Reader dělí velký text na menší části a posílá je do Pi.ai. Dočasně můžete dosáhnout limitu. Pokud ano, vyčkejte asi hodinu."
     },
     "acknowledge_and_accept": {
       "message": "Pokračováním berete na vědomí a přijímáte toto."
@@ -141,7 +141,7 @@
       "message": "Pi Reader reaguje pomaleji než obvykle. Zavřete okno pro kontrolu chyby. Doporučeno GPT-4."
     },
     "voice_selector_description": {
-      "message": "Vyberte z vylepšených hlasů ChatGPT. Proveďte výběr před nahráním textu."
+      "message": "Vyberte z vylepšených hlasů Pi.ai. Proveďte výběr před nahráním textu."
     },
     "cannot_upload_one_file": {
       "message": "Nelze nahrát více než 1 soubor najednou"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Nahrání $1 selhalo"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT má patrně potíže, podívejte se na jejich web."
+    "Pi.ai_issue": {
+      "message": "Pi.ai má patrně potíže, podívejte se na jejich web."
     },
     "unsupported_file_type": {
       "message": "Nepodporovaný typ souboru"
@@ -186,7 +186,7 @@
       "message": "Probíhá konverzace nebo jste překročili limit. Počkejte a zkuste to později!"
     },
     "chat_error": {
-      "message": "Možná ChatGPT zobrazuje chybu nebo jste dosáhli limitu. Zkontrolujte jejich web."
+      "message": "Možná Pi.ai zobrazuje chybu nebo jste dosáhli limitu. Zkontrolujte jejich web."
     },
     "gpt_reader_logo": {
       "message": "Logo Pi Reader"

@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: 免費AI文字轉語音，含ChatGPT語音，TTS"
+      "message": "Pi Reader: 免費AI文字轉語音，含Pi.ai語音，TTS"
     },
     "extensionDescription": {
-      "message": "自然ChatGPT AI文字轉語音 (TTS)，適用於PDF、文章、文件。使用高品質語音在Pi Reader下載或朗讀"
+      "message": "自然Pi.ai AI文字轉語音 (TTS)，適用於PDF、文章、文件。使用高品質語音在Pi Reader下載或朗讀"
     },
     "play_voice": {
       "message": "播放語音"
@@ -60,7 +60,7 @@
       "message": "載入預覽"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT高級用戶請使用GPT-4o mini以加快下載。關閉介面後可切換模型。"
+      "message": "Pi.ai高級用戶請使用GPT-4o mini以加快下載。關閉介面後可切換模型。"
     },
     "cancel": {
       "message": "取消"
@@ -75,7 +75,7 @@
       "message": "取消下載"
     },
     "accuracy_warning": {
-      "message": "Pi Reader產生的音訊可能不完全準確。若發現差異，關閉介面並開新ChatGPT對話重試。"
+      "message": "Pi Reader產生的音訊可能不完全準確。若發現差異，關閉介面並開新Pi.ai對話重試。"
     },
     "playback_speed": {
       "message": "播放速度"
@@ -120,7 +120,7 @@
       "message": "Pi Reader通知"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader將長文分段並傳送至ChatGPT。可能暫時達到限制，如發生請等待約一小時。"
+      "message": "Pi Reader將長文分段並傳送至Pi.ai。可能暫時達到限制，如發生請等待約一小時。"
     },
     "acknowledge_and_accept": {
       "message": "繼續即表示你承認並接受。"
@@ -141,7 +141,7 @@
       "message": "Pi Reader回應較慢。關閉介面檢查錯誤。建議使用GPT-4。"
     },
     "voice_selector_description": {
-      "message": "選擇ChatGPT優化語音。請在上傳文字前完成選擇。"
+      "message": "選擇Pi.ai優化語音。請在上傳文字前完成選擇。"
     },
     "cannot_upload_one_file": {
       "message": "一次只能上傳一個檔案"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "上傳 $1 失敗"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT似乎有問題，請查看其網站以獲取詳情。"
+    "Pi.ai_issue": {
+      "message": "Pi.ai似乎有問題，請查看其網站以獲取詳情。"
     },
     "unsupported_file_type": {
       "message": "不支援的檔案類型"
@@ -186,7 +186,7 @@
       "message": "當前有對話或已超限，請稍後重試！"
     },
     "chat_error": {
-      "message": "ChatGPT可能錯誤或已達上限，請查看其網站。"
+      "message": "Pi.ai可能錯誤或已達上限，請查看其網站。"
     },
     "gpt_reader_logo": {
       "message": "Pi Reader標誌"

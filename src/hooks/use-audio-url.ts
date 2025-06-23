@@ -57,7 +57,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     //     //console.log("SEND_PROMPT");
     //     // setIsLoading(true);
     //     // const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
-    //     // // toast({ description:"It seems that ChatGPT might be either disPlaying an error, generating a prompt, or you've reached your hourly limit. Please check on the ChatGPT website for the exact error.", style: TOAST_STYLE_CONFIG });
+    //     // // toast({ description:"It seems that Pi.ai might be either disPlaying an error, generating a prompt, or you've reached your hourly limit. Please check on the Pi.ai website for the exact error.", style: TOAST_STYLE_CONFIG });
     //     // if (!sendButton) return
     //     // sendButton.click();
 
@@ -171,6 +171,18 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         }
     },[])
 
+    const handleRateLimitExceeded = useCallback((e: Event) => {
+        const { detail } = e as Event & { detail: string };
+        toast({ description: detail, style: TOAST_STYLE_CONFIG });
+    }, [toast]);
+
+    useEffect(() => {
+        window.addEventListener("GENERAL_RATE_LIMIT", handleRateLimitExceeded);
+        return () => {
+            window.removeEventListener("GENERAL_RATE_LIMIT", handleRateLimitExceeded);
+        };
+    }, [handleRateLimitExceeded]);
+    
     // wait until injected.js fires back the parsed SSE events
     const waitForChatStream = (): Promise<{ event: string; data: any }[]> =>
         new Promise(resolve => {
@@ -179,7 +191,16 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             resolve(e.detail);
         };
         window.addEventListener("PI_CHAT_STREAM", handler as any);
-        });
+    });
+
+    const waitForChatError = (): Promise<{ event: string; data: any }[]> =>
+        new Promise(resolve => {
+        const handler = (e: CustomEvent) => {
+            window.removeEventListener("GENERAL_ERROR", handler as any);
+            resolve(e.detail);
+        };
+        window.addEventListener("GENERAL_ERROR", handler as any);
+    });
     
      const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
         const allVoices: string[] = [];
@@ -191,32 +212,72 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             setConversationId(sid);
         }
         if (arr && arr.length > 0) {
+            for (let i = 0; i < arr.length && isLoopActive.current; i++) {
+                const el = arr[i];
 
-            for (const [index, el] of arr.entries()) {
-                if (!isLoopActive.current) break;
-                // 1) inject the prompt (fires off the real /api/v2/chat from the page)
+                // 1) inject the prompt
                 injectPrompt(el.text);
 
-                // 2) wait for injected.js to hand back the parsed SSE events
-                const events = await waitForChatStream();
+                // 2) race between a successful stream or an error event
+                const { type, events } = await Promise.race([
+                    waitForChatStream().then(ev => ({ type: 'stream' as const, events: ev })),
+                    waitForChatError().then(ev => ({ type: 'error' as const, events: ev }))
+                ]);
 
-                // 3) pull out the “message” event, build your voice-note URL
+                if (type === 'error') {
+                    console.warn('Chat error, retrying chunk:', el.text);
+                    await new Promise(res => setTimeout(res, 3000));
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    i--;              // rewind so we retry this same chunk
+                    continue;
+                }
+
+                // 3) build your voice-note URL
                 const msgEvent = events.find(ev => ev.event === "message");
-                // TODO: make use of mode here
                 const audioUrl = msgEvent
-                ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
-                : null;
+                    ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
+                    : null;
+
+                if (!audioUrl) {
+                    console.warn('No audio URL for chunk, retrying:', el.text);
+                    await new Promise(res => setTimeout(res, 3000));
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    i--;               // rewind so we retry this chunk
+                    continue;
+                }
+
+                // retry up to 4 times with 1s delay
+                const maxAttempts = 4;
+                let resp: Response | null = null;
+                let attempt = 0;
+
+                while (attempt < maxAttempts && isLoopActive.current) {
+                    resp = await fetch(audioUrl, { credentials: 'include' });
+                    if (resp.ok) break;
+                    attempt++;
+                    await new Promise(res => setTimeout(res, 3000));
+                }
+
+                if (!resp || !resp.ok) {
+                    console.warn(`Failed to fetch audio after ${maxAttempts} attempts for chunk, retrying:`, el.text);
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    i--;               // rewind so we retry this chunk
+                    continue;
+                }
+
+                let blob: Blob;
+                try {
+                    blob = await resp.blob();
+                } catch {
+                    console.warn(`Error blobbing audio, retrying...`);
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    i--;               // rewind so we retry this chunk
+                    continue;
+                }
                 
-                // 3) only add if we actually got one
-                if (audioUrl) {
-                    const resp = await fetch(audioUrl, { credentials: 'include' });
-                    // TODO: add retry logic here to re-inject prompt upon failure
-                    if (!resp.ok) throw new Error(`Audio fetch failed: ${resp.status}`);
-                    const blob = await resp.blob();
-                    const blobUrl = URL.createObjectURL(blob);
-                    if (isLoopActive.current) setAudioUrls(prev => [...prev, blobUrl]);
-                } else {
-                    console.warn('No audio URL for chunk, skipping:', el.text);
+                const blobUrl = URL.createObjectURL(blob);
+                if (isLoopActive.current) {
+                    setAudioUrls(prev => [...prev, blobUrl]);
                 }
             }
             // You can do something further with `allVoices` here
@@ -261,7 +322,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver = null;
             console.error("[sendPrompt] Send button not found after 35 seconds.");
             toast({
-                description: `Pi Reader is having trouble, please refresh your page and try again`,
+                description: `Pi Reader is having trouble, please click on the back button and try again`,
                 style: TOAST_STYLE_CONFIG
             })
         }, 35000);

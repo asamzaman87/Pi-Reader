@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: AI gratis de text a veu amb veus ChatGPT, TTS"
+      "message": "Pi Reader: AI gratis de text a veu amb veus Pi.ai, TTS"
     },
     "extensionDescription": {
-      "message": "Text a veu natural amb ChatGPT (TTS) per a PDFs, articles i documents. Descarrega o escolta amb veus d'alta qualitat amb Pi Reader"
+      "message": "Text a veu natural amb Pi.ai (TTS) per a PDFs, articles i documents. Descarrega o escolta amb veus d'alta qualitat amb Pi Reader"
     },
     "play_voice": {
       "message": "Reprodueix veu"
@@ -60,7 +60,7 @@
       "message": "Carregant vista prèvia"
     },
     "gpt4_download_note": {
-      "message": "Usuaris premium de ChatGPT, trieu GPT-4o mini per a més velocitat. Tanqueu la finestra per canviar de model."
+      "message": "Usuaris premium de Pi.ai, trieu GPT-4o mini per a més velocitat. Tanqueu la finestra per canviar de model."
     },
     "cancel": {
       "message": "Cancel·la"
@@ -75,7 +75,7 @@
       "message": "Cancel·la la descàrrega"
     },
     "accuracy_warning": {
-      "message": "Pi Reader pot generar àudio no 100% exacte. Si notes diferències, tanca la finestra i inicia un nou xat de ChatGPT i prova de nou."
+      "message": "Pi Reader pot generar àudio no 100% exacte. Si notes diferències, tanca la finestra i inicia un nou xat de Pi.ai i prova de nou."
     },
     "playback_speed": {
       "message": "Velocitat de reproducció"
@@ -120,7 +120,7 @@
       "message": "Avís de Pi Reader"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader processa textos llargs en trossos i els envia a ChatGPT. Podries arribar al límit temporalment. Si passa, espera una hora."
+      "message": "Pi Reader processa textos llargs en trossos i els envia a Pi.ai. Podries arribar al límit temporalment. Si passa, espera una hora."
     },
     "acknowledge_and_accept": {
       "message": "En continuar, reconeixes i acceptes això."
@@ -141,7 +141,7 @@
       "message": "Pi Reader està trigant més del normal. Tanca la finestra per comprovar l'error. Es recomana fer servir GPT-4."
     },
     "voice_selector_description": {
-      "message": "Tria entre diverses veus millorades de ChatGPT. Selecciona la veu abans de pujar el text."
+      "message": "Tria entre diverses veus millorades de Pi.ai. Selecciona la veu abans de pujar el text."
     },
     "cannot_upload_one_file": {
       "message": "No es pot pujar més d'un fitxer alhora"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "No s'ha pogut pujar $1"
     },
-    "chatgpt_issue": {
-      "message": "Sembla que ChatGPT té problemes. Comprova el lloc web de ChatGPT."
+    "Pi.ai_issue": {
+      "message": "Sembla que Pi.ai té problemes. Comprova el lloc web de Pi.ai."
     },
     "unsupported_file_type": {
       "message": "Tipus de fitxer no compatible"
@@ -186,7 +186,7 @@
       "message": "Hi ha una conversa en curs o has superat el límit horari. Espera i prova més tard!"
     },
     "chat_error": {
-      "message": "Sembla que ChatGPT mostra un error o has arribat al límit. Consulta el seu lloc web."
+      "message": "Sembla que Pi.ai mostra un error o has arribat al límit. Consulta el seu lloc web."
     },
     "gpt_reader_logo": {
       "message": "Logotip Pi Reader"

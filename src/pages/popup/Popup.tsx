@@ -58,7 +58,7 @@ export default function Popup(): JSX.Element {
   const isCurrentTabGpt = async () => {
     const activeTab = await getActiveTab();
     if (!activeTab) return;
-    return activeTab.url?.includes("chat.com") || activeTab.url?.includes("chatgpt.com");
+    return activeTab.url?.includes("chat.com") || activeTab.url?.includes("Pi.ai.com");
   }
 
   useEffect(() => {
@@ -73,10 +73,10 @@ export default function Popup(): JSX.Element {
       {/* <div className={"absolute top-4 left-4 size-max"}>
         <FeedbackPopup />
       </div> */}
-      <div className="inline-flex flex-col justify-center items-center gap-2 font-medium text-lg"><img src={logo} alt="GPT Reader Logo" className="size-10" />GPT Reader</div>
+      <div className="inline-flex flex-col justify-center items-center gap-2 font-medium text-lg"><img src={logo} alt="Pi Reader Logo" className="size-10" />Pi Reader</div>
       {isAuthenticated && isValidUrl && <Button disabled={isActive} onClick={onClick} className="text-xl rounded-lg bg-black text-white">{isActive ? "Active" : "Activate"}</Button>}
-      {!isAuthenticated && isValidUrl && <Button onClick={onClick} className="text-xl rounded-lg bg-black text-white">Login to use GPT Reader</Button>}
-      {!isValidUrl && <Button onClick={switchToActiveTab} className="text-xl rounded-lg bg-black text-white">Click here to go to ChatGPT</Button>}
+      {!isAuthenticated && isValidUrl && <Button onClick={onClick} className="text-xl rounded-lg bg-black text-white">Login to use Pi Reader</Button>}
+      {!isValidUrl && <Button onClick={switchToActiveTab} className="text-xl rounded-lg bg-black text-white">Click here to go to Pi.ai</Button>}
     </div>
   );
 }

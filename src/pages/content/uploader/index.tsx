@@ -22,7 +22,7 @@ function RouteSpecificPopup({ onClose }: { onClose: () => void }) {
 	return (
 		<div className="fixed top-10 right-10 bg-white text-black p-4 rounded-lg shadow-lg border w-80 max-w-[90vw] z-[9999]">
 			<div className="flex items-center gap-2 mb-3">
-				<img src={LOGO} alt="GPT Reader Logo" className="w-6 h-6" />
+				<img src={LOGO} alt="Pi Reader Logo" className="w-6 h-6" />
 				<span className="text-base font-semibold">Pi Reader</span>
 			</div>
 			<p className="text-sm leading-snug font-ui">
@@ -176,13 +176,14 @@ function Uploader() {
 			'better when you create an account',
 		];
 		const popupMarkers = [
-		...onboardingMarkers,
-		'Just checking',
-		"Try Pi's new features",
+			...onboardingMarkers,
+			'Just checking',
+			"Try Pi's new features",
+			"check back again soon",
 		];
 	  
 		const detectPopup = () => {
-			const headings = Array.from(document.querySelectorAll('.t-heading-m'));
+			const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
 			return headings.some(h => {
 			  const txt = h.textContent?.trim() ?? '';
 		  
@@ -210,7 +211,7 @@ function Uploader() {
 				isActiveRef.current = false;
 			  }
 			  toast({
-				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. Note that you must be 18+ to use Pi Reader.",
+				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. Sign in using an account to minimize these pop-ups. Note that you must be 18+ to use Pi Reader.",
 				duration: 15000,
 				style: TOAST_STYLE_CONFIG,
 			  });
@@ -218,6 +219,8 @@ function Uploader() {
 		  } else if (wasPopup.current && !isActiveRef.current) {
 			wasPopup.current = false;
 			onOpenChange(true);
+		  } else {
+			wasPopup.current = false;
 		  }
 		}, 1000);
 	  
@@ -237,7 +240,7 @@ function Uploader() {
 		
 			// look for the highest-priority button
 			const btn = await waitForButtonWithText(btnTexts);
-			if (btn) {
+			if (btn && window.location.pathname === '/onboarding') {
 				btn.click();
 				firstRun = false;
 			}
@@ -246,22 +249,6 @@ function Uploader() {
 		
 	
 	const onOpenChange = async (open: boolean) => {
-
-		if (open) {
-			const triggerButton = document.querySelector(
-				'button.z-10.bg-neutral-200.pl-4.text-neutral-900 > div[style*="transform: none;"]'
-			);
-			
-			if (triggerButton) {
-				const actionButton = document.querySelector(
-					'button.group.z-10.flex.items-center.text-neutral-800'
-				) as HTMLButtonElement | null;
-			
-				if (actionButton) {
-					actionButton.click();
-				}
-			}
-		}
 		isActiveRef.current = open;	
 		if (wasPopup.current) {
 			return toast({
@@ -284,6 +271,19 @@ function Uploader() {
 		} 
 		
 		if (SubmitBtn) {
+			const triggerButton = document.querySelector(
+				'button.z-10.bg-neutral-200.pl-4.text-neutral-900 > div[style*="transform: none;"]'
+			);
+			
+			if (triggerButton) {
+				const actionButton = document.querySelector(
+					'button.group.z-10.flex.items-center.text-neutral-800'
+				) as HTMLButtonElement | null;
+			
+				if (actionButton) {
+					actionButton.click();
+				}
+			}
 			setIsActive(open);
 			// Skip the automatic call during the initial render
 			if (isInitialRender.current) {
@@ -336,7 +336,7 @@ function Uploader() {
 								}
 							)}
 						>
-							<img src={LOGO} alt="GPT Reader Logo" className="size-6" />
+							<img src={LOGO} alt="Pi Reader Logo" className="size-6" />
 							{!minimised && (
 								<>
 									{isOnboarding

@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Ingyenes AI szöveg-beszéd ChatGPT hangokkal, TTS"
+      "message": "Pi Reader: Ingyenes AI szöveg-beszéd Pi.ai hangokkal, TTS"
     },
     "extensionDescription": {
-      "message": "Természetes ChatGPT AI szöveg-beszéd (TTS) PDF-ekhez, cikkekhez és dokumentumokhoz. Töltsd le vagy hallgasd meg kiváló hangokkal a Pi Readerben"
+      "message": "Természetes Pi.ai AI szöveg-beszéd (TTS) PDF-ekhez, cikkekhez és dokumentumokhoz. Töltsd le vagy hallgasd meg kiváló hangokkal a Pi Readerben"
     },
     "play_voice": {
       "message": "Hang lejátszása"
@@ -60,7 +60,7 @@
       "message": "Előnézet betöltése"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT prémium felhasználóknak ajánlott a GPT-4o mini a gyorsabb letöltéshez. Zárd be az ablakot a modellváltáshoz."
+      "message": "Pi.ai prémium felhasználóknak ajánlott a GPT-4o mini a gyorsabb letöltéshez. Zárd be az ablakot a modellváltáshoz."
     },
     "cancel": {
       "message": "Mégse"
@@ -75,7 +75,7 @@
       "message": "Letöltés megszakítása"
     },
     "accuracy_warning": {
-      "message": "A Pi Reader által létrehozott hang nem feltétlenül 100% pontos. Ha eltérést látsz, zárd be az ablakot, nyiss új ChatGPT-csevegést, és próbáld újra."
+      "message": "A Pi Reader által létrehozott hang nem feltétlenül 100% pontos. Ha eltérést látsz, zárd be az ablakot, nyiss új Pi.ai-csevegést, és próbáld újra."
     },
     "playback_speed": {
       "message": "Lejátszási sebesség"
@@ -120,7 +120,7 @@
       "message": "Pi Reader figyelmeztetés"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "A Pi Reader hosszú szöveget kisebb részekre bont, és elküldi ChatGPT-nek. Ideiglenesen elérheted a limitet. Ha ez történik, várj kb. egy órát."
+      "message": "A Pi Reader hosszú szöveget kisebb részekre bont, és elküldi Pi.ai-nek. Ideiglenesen elérheted a limitet. Ha ez történik, várj kb. egy órát."
     },
     "acknowledge_and_accept": {
       "message": "A folytatással elfogadod ezt a feltételt."
@@ -141,7 +141,7 @@
       "message": "A Pi Reader lassabb a szokásosnál. Zárd be az ablakot a hibakereséshez. Ajánlott a GPT-4."
     },
     "voice_selector_description": {
-      "message": "Válassz a ChatGPT által javított hangok közül. Feltöltés előtt dönts."
+      "message": "Válassz a Pi.ai által javított hangok közül. Feltöltés előtt dönts."
     },
     "cannot_upload_one_file": {
       "message": "Egyszerre csak 1 fájlt tölthetsz fel"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "$1 feltöltése sikertelen"
     },
-    "chatgpt_issue": {
-      "message": "Úgy tűnik, a ChatGPT-nek gondjai vannak, nézd meg a weboldalukat."
+    "Pi.ai_issue": {
+      "message": "Úgy tűnik, a Pi.ai-nek gondjai vannak, nézd meg a weboldalukat."
     },
     "unsupported_file_type": {
       "message": "Nem támogatott fájltípus"
@@ -186,7 +186,7 @@
       "message": "Folyamatban lévő beszélgetés vagy elérted a limitet. Várj és próbáld később!"
     },
     "chat_error": {
-      "message": "Lehet, hogy a ChatGPT hibát jelez, vagy elérted a limitet. Nézd meg az oldalukat."
+      "message": "Lehet, hogy a Pi.ai hibát jelez, vagy elérted a limitet. Nézd meg az oldalukat."
     },
     "gpt_reader_logo": {
       "message": "Pi Reader logó"

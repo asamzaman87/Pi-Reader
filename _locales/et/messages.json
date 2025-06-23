@@ -1,9 +1,9 @@
 {
     "extensionName": {
-      "message": "Pi Reader: Tasuta AI teksti kõneks ChatGPT häältega, TTS"
+      "message": "Pi Reader: Tasuta AI teksti kõneks Pi.ai häältega, TTS"
     },
     "extensionDescription": {
-      "message": "Loomulik ChatGPT AI tekst-kõneks (TTS) PDF-ide, artiklite ja dokumentide jaoks. Laadi alla või kuula kvaliteetsete häältega Pi Readeris"
+      "message": "Loomulik Pi.ai AI tekst-kõneks (TTS) PDF-ide, artiklite ja dokumentide jaoks. Laadi alla või kuula kvaliteetsete häältega Pi Readeris"
     },
     "play_voice": {
       "message": "Esita hääl"
@@ -60,7 +60,7 @@
       "message": "Eelvaate laadimine"
     },
     "gpt4_download_note": {
-      "message": "ChatGPT premium-kasutajatele: valige GPT-4o mini kiiremaks allalaadimiseks. Mudeli vahetamiseks sulgege aken."
+      "message": "Pi.ai premium-kasutajatele: valige GPT-4o mini kiiremaks allalaadimiseks. Mudeli vahetamiseks sulgege aken."
     },
     "cancel": {
       "message": "Tühista"
@@ -75,7 +75,7 @@
       "message": "Tühista allalaadimine"
     },
     "accuracy_warning": {
-      "message": "Pi Readeri loodud heli ei pruugi olla 100% täpne. Kui märkate erinevusi, sulgege aken, avage uus ChatGPT vestlus ja proovige uuesti."
+      "message": "Pi Readeri loodud heli ei pruugi olla 100% täpne. Kui märkate erinevusi, sulgege aken, avage uus Pi.ai vestlus ja proovige uuesti."
     },
     "playback_speed": {
       "message": "Taasesituse kiirus"
@@ -120,7 +120,7 @@
       "message": "Pi Reader teade"
     },
     "gpt_reader_chunk_explanation": {
-      "message": "Pi Reader jagab pika teksti väikesteks osadeks ja saadab need ChatGPT-le. Võite ajutiselt jõuda limiidini. Sel juhul oodake umbes tund."
+      "message": "Pi Reader jagab pika teksti väikesteks osadeks ja saadab need Pi.ai-le. Võite ajutiselt jõuda limiidini. Sel juhul oodake umbes tund."
     },
     "acknowledge_and_accept": {
       "message": "Jätkates kinnitate ja nõustute sellega."
@@ -141,7 +141,7 @@
       "message": "Pi Reader töötab tavalisest aeglasemalt. Vigade kontrollimiseks sulgege aken. Soovitatav on GPT-4."
     },
     "voice_selector_description": {
-      "message": "Valige mitmesuguste ChatGPT täiustatud häälte hulgast. Valik tehke enne teksti üleslaadimist."
+      "message": "Valige mitmesuguste Pi.ai täiustatud häälte hulgast. Valik tehke enne teksti üleslaadimist."
     },
     "cannot_upload_one_file": {
       "message": "Ei saa korraga rohkem kui 1 faili üles laadida"
@@ -161,8 +161,8 @@
     "failed_upload": {
       "message": "Faili $1 üleslaadimine ebaõnnestus"
     },
-    "chatgpt_issue": {
-      "message": "ChatGPT-l tundub olevat probleeme, vaadake nende veebisaiti."
+    "Pi.ai_issue": {
+      "message": "Pi.ai-l tundub olevat probleeme, vaadake nende veebisaiti."
     },
     "unsupported_file_type": {
       "message": "Failitüüp pole toetatud"
@@ -186,7 +186,7 @@
       "message": "Käimasolev vestlus või olete limiidi ületanud. Oodake ja proovige hiljem!"
     },
     "chat_error": {
-      "message": "ChatGPT võib kuvada tõrget või olete jõudnud limiidini. Kontrollige nende saiti."
+      "message": "Pi.ai võib kuvada tõrget või olete jõudnud limiidini. Kontrollige nende saiti."
     },
     "gpt_reader_logo": {
       "message": "Pi Readeri logo"

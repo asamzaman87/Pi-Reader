@@ -56,7 +56,7 @@ window.addEventListener('load', function () {
   chrome.runtime.sendMessage(
     { action: "getCookies", url: window.location.href },
     function (response) {
-      console.log("📜 Received Cookies:", response.cookies);
+      // console.log("📜 Received Cookies:", response.cookies);
       // You can now use the cookies as needed in your content script
     }
   );
@@ -105,7 +105,7 @@ window.addEventListener('load', function () {
 //         const stream = clonedResponse.body; // Use the body of the cloned response
 //         if (clonedResponse.status === 429) {
 //             const rateLimitExceededEvent = new CustomEvent('RATE_LIMIT_EXCEEDED', {
-//                 detail: "You have exceeded the hourly limit for ChatGPT. You will not be able to generate any more audio for around 1 hour.",
+//                 detail: "You have exceeded the hourly limit for Pi.ai. You will not be able to generate any more audio for around 1 hour.",
 //             });
 //             window.dispatchEvent(rateLimitExceededEvent);
 //         }
@@ -178,7 +178,7 @@ window.fetch = async function (...args) {
     headers.forEach((value, key) => {
       headersObject[key] = value;
     });
-    console.log("📜 Request Headers:", headersObject);
+    // console.log("📜 Request Headers:", headersObject);
   }
   
 // Convert Headers object to plain object and log it
@@ -188,41 +188,49 @@ window.fetch = async function (...args) {
     headers.forEach((value, key) => {
       headersObject[key] = value; // Convert to a plain object
     });
-    console.log("📜 Request Headers:", headersObject); // Log the headers as a plain object
+    // console.log("📜 Request Headers:", headersObject); // Log the headers as a plain object
   } else if (headers) {
-    console.log("📜 Request Headers (Object):", headers);
+    // console.log("📜 Request Headers (Object):", headers);
   } else {
-    console.log("📜 No Headers Found");
+    // console.log("📜 No Headers Found");
   }
 
-  console.log("📜 Request Headers:", headers, url); // Log the headers
+  // console.log("📜 Request Headers:", headers, url); // Log the headers
   const hasConversationEndpoint = url.includes(CONVERSATION_ENDPOINT);
 
   const response = await originalFetch.apply(this, args);
   if (hasConversationEndpoint && method === 'POST') {
     const clonedResponse = response.clone();
-    const stream = clonedResponse.body;
-    if (clonedResponse.status === 429) {
-
+    // const stream = clonedResponse.body;
+    if (clonedResponse.status !== 200) {
+        const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
+            detail: "Something went wrong with the chat endpont.",
+        });
+        window.dispatchEvent(generalErrorEvent);
     }
-
-    if (stream) {
-        const reader = stream.getReader();
-        loopThroughReaderToExtractMessageId(reader, args)
-                .then((data) => {
-                    // Dispatch custom event after stream reading is complete
-                    const event = new CustomEvent("END_OF_STREAM", {
-                        detail: { ...data } // Custom data if needed
-                    });
-                    window.dispatchEvent(event);
-                })
-                .catch(error => console.error("Error in stream reading:", error));
-    }
+    // if (stream) {
+    //     const reader = stream.getReader();
+    //     loopThroughReaderToExtractMessageId(reader, args)
+    //             .then((data) => {
+    //                 // Dispatch custom event after stream reading is complete
+    //                 const event = new CustomEvent("END_OF_STREAM", {
+    //                     detail: { ...data } // Custom data if needed
+    //                 });
+    //                 window.dispatchEvent(event);
+    //             })
+    //             .catch(error => console.error("Error in stream reading:", error));
+    // }
   }
   try {
     // Clone so we don't consume original response
     const clone = response.clone();
-
+    // General rate limiting toast that we'll show
+    if (clone.status === 429 && !hasConversationEndpoint) {
+       const event = new CustomEvent("GENERAL_RATE_LIMIT", {
+            detail: 'It seems like you have exceeded the limit of pi.ai, if you notice issues then please refresh or try again after a few seconds.',
+       });
+       window.dispatchEvent(event);
+    }
     const contentType = clone.headers.get("content-type") || "";
 
     if (contentType.includes("application/json")) {
@@ -259,12 +267,12 @@ window.fetch = async function (...args) {
       
         // console.log("✅ Parsed SSE Events:", events);
     } else if (contentType.includes("event-stream")) {
-      console.log("📥 [SSE Stream] — use reader to process this");
+      // console.log("📥 [SSE Stream] — use reader to process this");
     } else {
-      console.log("📥 Unknown Response Type:", contentType);
+      // console.log("📥 Unknown Response Type:", contentType);
     }
   } catch (err) {
-    console.error("❌ Error reading response:", err);
+    // console.error("❌ Error reading response:", err);
   }
 
   return response; 
@@ -285,7 +293,7 @@ window.addEventListener("GET_TOKEN", () => {
 window.addEventListener("GET_VOICES", async () => {
     if (window && window?.__reactRouterContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken) {
         // console.log("GET_VOICES")
-        const response = await fetch("https://chatgpt.com/backend-api/settings/voices", { headers: { "authorization": `Bearer ${window.__reactRouterContext?.state.loaderData.root.clientBootstrap.session.accessToken}` } });
+        const response = await fetch("https://Pi.ai.com/backend-api/settings/voices", { headers: { "authorization": `Bearer ${window.__reactRouterContext?.state.loaderData.root.clientBootstrap.session.accessToken}` } });
         const data = await response.json();
         const voicesEvent = new CustomEvent("VOICES", {
             detail: data,
@@ -298,7 +306,7 @@ window.addEventListener("GET_VOICES", async () => {
 window.addEventListener("STOP_CONVERSATION", async (e) => {
     if (window && window?.__reactRouterContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken) {
         const { conversation_id } = e.detail;
-        const response = await fetch("https://chatgpt.com/backend-api/stop_conversation", { method: "POST", body: JSON.stringify({ conversation_id }), headers: { "authorization": `Bearer ${window.__reactRouterContext?.state.loaderData.root.clientBootstrap.session.accessToken}` } });
+        const response = await fetch("https://Pi.ai.com/backend-api/stop_conversation", { method: "POST", body: JSON.stringify({ conversation_id }), headers: { "authorization": `Bearer ${window.__reactRouterContext?.state.loaderData.root.clientBootstrap.session.accessToken}` } });
         const data = await response.json();
         const conversationStoppedEvent = new CustomEvent("CONVERSATION_STOPPED", {
             detail: data,
