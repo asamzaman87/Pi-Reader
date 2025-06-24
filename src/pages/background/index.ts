@@ -108,7 +108,7 @@ const setBadState = (state: boolean) => {
     return state;
 }
 
-// Check if the active tab is GPT and update the badge
+// Check if the active tab is Pi.ai and update the badge
 const checkActiveTab = async () => {
     const queryOptions = { active: true, currentWindow: true };
     const tabs = await chrome.tabs.query(queryOptions);
@@ -122,17 +122,17 @@ const checkActiveTab = async () => {
     return false;  //was setBadState(false);
 }
 
-//check if updated tab or current tab changes URL on redirect is/is redirected to gpt and update badge
+//check if updated tab or current tab changes URL on redirect is/is redirected to pi.ai and update badge
 chrome.tabs.onUpdated.addListener(async () => {
     checkActiveTab();
 })
 
-//check if active tab is gpt and update badge
+//check if active tab is pi.ai and update badge
 chrome.tabs.onActivated.addListener(async () => {
     checkActiveTab();
 });
 
-//switch to gpt when extension is installed
+//switch to pi.ai when extension is installed
 chrome.runtime.onInstalled.addListener(async () => {
     const manifest = chrome.runtime.getManifest();
     const currentVersion = manifest.version;
@@ -159,7 +159,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     }
 })
 
-//click on extension icon to switch to gpt
+//click on extension icon to switch to pi.ai
 chrome.action.onClicked.addListener(async () => {
     const tabId = await switchToActiveTab();
     if (tabId) {

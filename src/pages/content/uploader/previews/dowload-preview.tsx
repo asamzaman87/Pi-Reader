@@ -40,7 +40,7 @@ const DownloadPreview: FC<DownloadPreviewProps> = ({
   useMemo(() => {
     if (progress === 100) {
       onDownload?.();
-      localStorage.removeItem("gptr/download"); //prevent downloading multiple times on close
+      localStorage.removeItem("pi/download"); //prevent downloading multiple times on close
     }
   }, [progress, onDownload]);
 

@@ -4,7 +4,7 @@ import Options from '@pages/options/Options';
 import '@pages/options/index.css';
 
 function init() {
-  const rootContainer = document.querySelector("#__gpt-reader-shadow");
+  const rootContainer = document.querySelector("#__pi-reader-shadow");
   if (!rootContainer) throw new Error("Can't find Options root element");
   const root = createRoot(rootContainer);
   root.render(<Options />);

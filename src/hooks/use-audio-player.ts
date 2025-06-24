@@ -84,10 +84,10 @@ const useAudioPlayer = (isDownload: boolean) => {
     }, [token, audioUrls, audioPlayer, playRate])
 
     const resetTimeout = () => {
-        const timeoutId = localStorage.getItem("gptr/audio-timeout");
+        const timeoutId = localStorage.getItem("pi/audio-timeout");
         if (timeoutId) {
             clearTimeout(parseInt(timeoutId));
-            localStorage.removeItem("gptr/audio-timeout");
+            localStorage.removeItem("pi/audio-timeout");
         }
     }
 
@@ -251,15 +251,15 @@ const useAudioPlayer = (isDownload: boolean) => {
     }, [audioPlayer, handleAudioEnd]);
 
     const checkForLoadingAfterNSeconds = () => {
-        const isActive = localStorage.getItem("gptr/active") === "true";
-        const isAudioLoading = localStorage.getItem("gptr/is-first-audio-loading") === "true";
+        const isActive = localStorage.getItem("pi/active") === "true";
+        const isAudioLoading = localStorage.getItem("pi/is-first-audio-loading") === "true";
         if (isActive && isAudioLoading) {
             const { id } = toast({ description: chrome.i18n.getMessage("slow_response_warning"), style: TOAST_STYLE_CONFIG });
             toast15SecRef.current = id;
         } else {
             if (toast15SecRef.current) dismiss(toast15SecRef.current);
         }
-        localStorage.removeItem("gptr/is-first-audio-loading");
+        localStorage.removeItem("pi/is-first-audio-loading");
     }
 
     useMemo(() => {
@@ -269,7 +269,7 @@ const useAudioPlayer = (isDownload: boolean) => {
         }
 
         setAudioLoading(audioUrls.length === 0); //initial loading state if the first chunk is being prompted and not playing
-        localStorage.setItem("gptr/is-first-audio-loading", String(audioUrls.length === 0));
+        localStorage.setItem("pi/is-first-audio-loading", String(audioUrls.length === 0));
 
         if (audioUrls.length === 1) {
             setCompletedPlaying([]);
@@ -324,7 +324,7 @@ const useAudioPlayer = (isDownload: boolean) => {
             const id = setTimeout(() => {
                 checkForLoadingAfterNSeconds();
             }, isDownload ? LOADING_TIMEOUT_FOR_DOWNLOAD :LOADING_TIMEOUT);
-            localStorage.setItem("gptr/audio-timeout", `${id}`);
+            localStorage.setItem("pi/audio-timeout", `${id}`);
             setTimeoutId(id)
         } else {
             if (timeoutId) clearTimeout(timeoutId);

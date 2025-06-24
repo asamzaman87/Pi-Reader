@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "你確定嗎"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader通知"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader將長文分段並傳送至Pi.ai。可能暫時達到限制，如發生請等待約一小時。"
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai可能錯誤或已達上限，請查看其網站。"
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader標誌"
     },
     "login_to_use": {

@@ -55,14 +55,14 @@ export default function Popup(): JSX.Element {
     statusCheck();
   };
 
-  const isCurrentTabGpt = async () => {
+  const isCurrentTabPiAi = async () => {
     const activeTab = await getActiveTab();
     if (!activeTab) return;
     return activeTab.url?.includes("chat.com") || activeTab.url?.includes("Pi.ai.com");
   }
 
   useEffect(() => {
-    isCurrentTabGpt().then((isGpt) => setIsValidUrl(!!isGpt));
+    isCurrentTabPiAi().then((isPiAi) => setIsValidUrl(!!isPiAi));
     statusCheck();
   }, []);
 

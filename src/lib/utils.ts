@@ -230,16 +230,16 @@ export const removeAllListeners = () => {
 }
 
 //get all tabs with urls matching the match urls
-export const getGPTTabs = async () => {
+export const getPiAITabs = async () => {
   const tabs = await chrome.tabs.query({ url: MATCH_URLS });
   if (tabs.length === 0 || !tabs[0].id) return;
 
   return tabs
 }
 
-//switch to active gpt tab if exists otherwise create a new tab and make it active
+//switch to active pi.ai tab if exists otherwise create a new tab and make it active
 export const switchToActiveTab = async () => {
-  const activeTab = await getGPTTabs();
+  const activeTab = await getPiAITabs();
   if (!activeTab?.length || !activeTab[0].id) {
     const tab = await chrome.tabs.create({ url: "https://pi.ai/talk" });
     if (tab.id) {
@@ -274,7 +274,7 @@ export const generateRange = (min: number = MIN_SLIDER_VALUE, max: number = MAX_
   return range;
 }
 
-//check if shadow gpt root is present (needs to be observed as it get remove on conflic with other extensions like gramarly)
+//check if shadow pi.ai root is present (needs to be observed as it get remove on conflic with other extensions like gramarly)
 export function observeElement(toObserve: string, cb?: (s: boolean) => void): void {
   const targetNode: Document = document;
 

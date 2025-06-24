@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "Apakah Anda yakin"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pemberitahuan Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader memecah teks panjang menjadi potongan lebih kecil dan mengirimkannya ke Pi.ai. Anda bisa mencapai batas sementara. Jika itu terjadi, tunggu sekitar satu jam."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Mungkin Pi.ai menampilkan kesalahan atau Anda mencapai batas. Periksa situs mereka."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Logo Pi Reader"
     },
     "login_to_use": {

@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "શું તમે ખાતરી કરો છો"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader સૂચના"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader લાંબા ટેક્સ્ટને નાના ભાગોમાં વહેંચે છે, Pi.aiને મોકલે છે. તમે તાત્કાલિક לימિટ પર પહોંચી શકો. એક કલાક રાહ જુઓ."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "શાયદ Pi.ai ભૂલ બતાવી રહ્યું છે અથવા તમે לימિટ પાર કરી. વધુ માહિતી માટે તેમની સાઇટ જુઓ."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader લોગો"
     },
     "login_to_use": {

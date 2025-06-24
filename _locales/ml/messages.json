@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "നിങ്ങൾക്ക് തീർച്ചയാണോ"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader അറിയിപ്പ്"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader വലിയ ടെക്സ്റ്റ് ചെറിയ ചെറിയ ഭാഗങ്ങളായി വേർതിരിച്ച് Pi.ai-ലേക്ക് അയയ്ക്കുന്നു. ചിലപ്പോൾ ലിമിറ്റ് വരെ എത്താം. അതിനാൽ ~1 മണിക്കൂർ കാത്തിരിക്കണം."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai ഒരു പിഴവ് കാണിക്കുന്നതാകാം, അല്ലെങ്കിൽ ലിമിറ്റ് കടന്നിരിക്കുന്നു. സൈറ്റ് പരിശോധിക്കുക."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader ലോഗോ"
     },
     "login_to_use": {

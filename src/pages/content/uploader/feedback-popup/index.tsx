@@ -36,7 +36,7 @@ const FeedbackPopup: FC<FeedbackPopupProps> = ({ ...props }) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${window.localStorage.getItem("gptr/token")}`,
+                "Authorization": `Bearer ${window.localStorage.getItem("pi/token")}`,
             },
             body: JSON.stringify({
                 feedback: `Rating: ${values.rating} \n Comment: ${values.comments}`,

@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "확실하신가요"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader 알림"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader는 긴 텍스트를 작은 단위로 나누어 Pi.ai에 전송합니다. 일시적으로 제한에 도달할 수 있습니다. 그 경우 약 한 시간 기다려주세요."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai가 오류를 표시하거나 제한에 도달한 것 같습니다. 해당 사이트를 확인하세요."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader 로고"
     },
     "login_to_use": {

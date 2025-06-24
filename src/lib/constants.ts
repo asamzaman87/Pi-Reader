@@ -1,6 +1,6 @@
 import { Accept } from "react-dropzone";
 
-export const THEME_STORAGE_KEY = "gptr/theme";
+export const THEME_STORAGE_KEY = "pi/theme";
 export const MAX_FILES = 1;
 export const ACCEPTED_FILE_TYPES: Accept = {
   "application/pdf": [],
@@ -93,5 +93,5 @@ export const DOWLOAD_CHUNK_SIZE = 4000;
 export const PI_VOICE_STREAM_URL: string | null = "https://pi.ai/api/chat/voice"
 export const PI_CHAT_URL: string = "https://pi.ai/api/v2/chat";
 export const PI_START_URL: string = 'https://pi.ai/api/chat/start';
-export const REVIEWS_CHROME = "https://chromewebstore.google.com/detail/gpt-reader-free-ai-text-t/aeggkceabpfajnglgaeadofdmeboimml/reviews";
-export const REVIEWS_FIREFOX = "https://addons.mozilla.org/en-US/firefox/addon/gpt-reader";
+export const REVIEWS_CHROME = "https://chromewebstore.google.com/detail/pi-reader-free-ai-text-t/aeggkceabpfajnglgaeadofdmeboimml/reviews";
+export const REVIEWS_FIREFOX = "https://addons.mozilla.org/en-US/firefox/addon/pi-reader";
