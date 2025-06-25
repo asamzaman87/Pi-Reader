@@ -17,8 +17,8 @@ export const baseManifest = {
     version: pkg.version,
     ...(isDev ? devManifest : {} as ManifestV3Export),
     ...(localize ? {
-      name: '__MSG_extName__',
-      description: '__MSG_extDescription__',
+      name: '__EXT_PiReader__',
+      description: '__EXT_PiReader__',
       default_locale : 'en'
     } : {})
 } as ManifestV3Export
