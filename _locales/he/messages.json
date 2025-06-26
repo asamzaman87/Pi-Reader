@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "האם אתה בטוח"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "הערת Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader מחלק טקסט ארוך לחלקים קטנים ושולח ל-Pi.ai. ייתכן שתגיע זמנית למגבלה. אם כן, המתן כשעה."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "ייתכן ש-Pi.ai מציג שגיאה או שהגעת למגבלה. בדוק באתר."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader לוגו"
     },
     "login_to_use": {

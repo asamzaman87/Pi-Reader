@@ -22,10 +22,10 @@ const AlertPopup: FC<AlertPopupProps> = ({ setConfirmed }) => {
         <section className="flex flex-col justify-center items-center gap-4 text-justify">
           <img src={LOGO} alt="Pi Reader Logo" className="size-12" />
           <h1 className="text-xl font-medium">
-            {chrome.i18n.getMessage("gpt_reader_notice")}
+            {chrome.i18n.getMessage("pi_reader_notice")}
           </h1>
           <p className="dark:text-gray-200 text-gray-600 leading-loose">
-            {chrome.i18n.getMessage("gpt_reader_chunk_explanation")}
+            {chrome.i18n.getMessage("pi_reader_chunk_explanation")}
           </p>
           <p className="font-medium">
             {chrome.i18n.getMessage("acknowledge_and_accept")}

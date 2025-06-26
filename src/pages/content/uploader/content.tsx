@@ -50,7 +50,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         setShowDownloadCancelConfirmation(false)
         setProgress(0);
         setIsBackPressed(true); //to avoid unnecessary audio play on cancel download
-        localStorage.removeItem("gptr/download");
+        localStorage.removeItem("pi/download");
         isLoopActive.current = false;
     }
 
@@ -63,7 +63,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
     }
 
     const onBackClick = () => {
-        if(isDownload && localStorage.getItem("gptr/download") === "true") return setShowDownloadCancelConfirmation(true);
+        if(isDownload && localStorage.getItem("pi/download") === "true") return setShowDownloadCancelConfirmation(true);
         //if is playing, wait for 500ms before resetting to avoid further chunk from being sent (May not work with 2g-3g networks)
         if(isPlaying){
             setTimeout(()=>{
@@ -155,14 +155,14 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
         // console.log('onDownloadOrListenSubmit - called')
         // if(value === "DOWNLOAD"){
         //     setIsDownload(value === "DOWNLOAD");
-        //     localStorage.setItem("gptr/download", "true");
+        //     localStorage.setItem("pi/download", "true");
         // }
         listenOrDownloadAudio(text, voicelist, isDocxType, html)
         
     }, [listenOrDownloadAudio]);
 
     const handleDownload = () => {
-        const fileName = title ?? "gpt-reader-audio.aac";
+        const fileName = title ?? "pi-reader-audio.aac";
         downloadCombinedFile(fileName);
     }
 
@@ -196,7 +196,7 @@ const Content: FC<ContentProps> = ({ setPrompts, prompts, onOverlayOpenChange, i
             <DialogHeader className={cn("h-max", { "sr-only": isDownload })}>
                 <DialogTitle className={"inline-flex flex-col justify-center items-center gap-2"}>
                     {title ? title
-                        : <>{!prompts.length && <img src={logo} alt={chrome.i18n.getMessage("gpt_reader_logo")} className="size-10" />} {chrome.i18n.getMessage("gpt_reader")}</>}
+                        : <>{!prompts.length && <img src={logo} alt={chrome.i18n.getMessage("pi_reader_logo")} className="size-10" />} {chrome.i18n.getMessage("pi_reader")}</>}
                 </DialogTitle>
                 <DialogDescription className="sr-only">{chrome.i18n.getMessage("simplify_reading")}</DialogDescription>
             </DialogHeader>

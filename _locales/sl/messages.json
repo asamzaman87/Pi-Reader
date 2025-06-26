@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "Ste prepričani"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Obvestilo Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader razdeli dolga besedila na manjše dele in jih pošlje Pi.ai. Morda boste začasno dosegli omejitev. Če se to zgodi, počakajte približno eno uro."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Morda Pi.ai prikazuje napako ali ste dosegli omejitev. Preverite njihovo spletno mesto."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Logotip Pi Reader"
     },
     "login_to_use": {

@@ -8,8 +8,8 @@ export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
 
     useEffect(() => {
-        const gptrTheme = localStorage.getItem("gptr/next-theme") ?? "system";
-        setTheme(gptrTheme as Theme);
+        const piTheme = localStorage.getItem("pi/next-theme") ?? "system";
+        setTheme(piTheme as Theme);
         return () => {
             const theme = localStorage.getItem("theme") ?? "system";
             setTheme(theme as Theme)
@@ -17,7 +17,7 @@ export function ThemeToggle() {
     }, []);
 
     const toggleTheme = () => {
-        localStorage.setItem("gptr/next-theme", theme === "light" ? "dark" : "light")
+        localStorage.setItem("pi/next-theme", theme === "light" ? "dark" : "light")
         setTheme(theme === "light" ? "dark" : "light")
     }
 

@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "আপনি কি নিশ্চিত"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader নোটিশ"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader বড় টেক্সটকে ছোট অংশে ভাগ করে Pi.ai তে পাঠায়। ব্যবহার বেশি হলে সাময়িকভাবে লিমিটে পৌঁছতে পারেন। এক ঘণ্টা অপেক্ষা করে আবার চেষ্টা করুন।"
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "সম্ভবত Pi.ai ত্রুটি দিচ্ছে বা সীমা অতিক্রম হয়েছে। বিস্তারিত জানতে সাইট দেখুন।"
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader লোগো"
     },
     "login_to_use": {

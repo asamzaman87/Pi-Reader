@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "คุณแน่ใจหรือ"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "ประกาศ Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader จะแบ่งข้อความยาวเป็นส่วนเล็ก ๆ และส่งไปยัง Pi.ai บางครั้งคุณอาจถึงขีดจำกัดชั่วคราว หากเกิดขึ้น โปรดรอประมาณ 1 ชั่วโมง"
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai อาจแสดงข้อผิดพลาดหรือคุณถึงขีดจำกัด ตรวจสอบเว็บไซต์"
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "โลโก้ Pi Reader"
     },
     "login_to_use": {

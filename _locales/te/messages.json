@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "మీరు ఖచ్చితంగా అలా అనుకుంటున్నారా"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader నోటీసు"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader పెద్ద టెక్స్ట్‌ని చిన్న భాగాలుగా విభజించి Pi.aiకి పంపుతుంది. మీరు తాత్కాలికంగా లిమిట్‌కు చేరవచ్చు. అలా అయితే, గంట సేపు వేచిచూడండి."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.aiలో ఏదో లోపం ఉంది లేదా మీరు పరిమితికి చేరుకున్నారు. వారి సైట్ని చెక్ చేయండి."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader లోగో"
     },
     "login_to_use": {

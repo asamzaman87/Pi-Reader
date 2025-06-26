@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "Сигурни ли сте"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Известие Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader разбива големи текстове на части и ги праща към Pi.ai. Може временно да достигнете лимита. Ако се случи, изчакайте около час."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Възможно е Pi.ai да показва грешка или сте достигнали лимит. Проверете сайта на Pi.ai."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Лого на Pi Reader"
     },
     "login_to_use": {

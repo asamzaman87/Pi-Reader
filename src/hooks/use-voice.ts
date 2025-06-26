@@ -9,7 +9,7 @@ const useVoice = () => {
     const handleVoiceReceived = useCallback((event: Event) => {
         const { detail } = event as Event & { detail: Voice };
         setIsLoading(true);
-        const storedVoice = window.localStorage.getItem("gptr/voice");
+        const storedVoice = window.localStorage.getItem("pi/voice");
         if (storedVoice) {
             detail.selected = storedVoice;
         }
@@ -63,13 +63,13 @@ const useVoice = () => {
 
     // const handleVoiceChange = useCallback((voice: string) => {
     //     console.log('handleVoiceChange: ', voice, voices);
-    //     if (window) window.localStorage.setItem("gptr/voice", voice);
+    //     if (window) window.localStorage.setItem("pi/voice", voice);
     //     setVoices(p => ({ ...p, selected: voice }));
     // }, []);
 
     const handleVoiceChange = (voice: string) => {
         console.log('handleVoiceChange: ', voice, voices);
-        if (window) window.localStorage.setItem("gptr/voice", voice);
+        if (window) window.localStorage.setItem("pi/voice", voice);
         setVoices(p => ({ ...p, selected: voice }));
     };
 

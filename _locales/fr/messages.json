@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "Êtes-vous sûr"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Note Pi Reader"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader divise les textes longs en segments et les envoie à Pi.ai. Vous pourriez temporairement atteindre une limite. Si c'est le cas, attendez environ une heure."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai affiche peut-être une erreur ou vous avez atteint la limite. Consultez leur site."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Logo Pi Reader"
     },
     "login_to_use": {

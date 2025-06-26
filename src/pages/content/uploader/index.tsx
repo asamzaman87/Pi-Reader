@@ -79,9 +79,9 @@ function Uploader() {
 	}, [isAuthenticated]);
 
 	useEffect(() => {
-		if (!document.getElementById("gpt-reader-injected")) {
+		if (!document.getElementById("pi-reader-injected")) {
 			const s = document.createElement('script');
-			s.id = "gpt-reader-injected";
+			s.id = "pi-reader-injected";
 			s.src = chrome.runtime.getURL('injected.js');
 			(document.head || document.documentElement).appendChild(s);
 
@@ -96,7 +96,7 @@ function Uploader() {
 
 					//if origin is verified, open the overlay
 					if (message.payload === "ORIGIN_VERIFIED") {
-						const active = window.localStorage.getItem("gptr/active");
+						const active = window.localStorage.getItem("pi/active");
 						//if overlay is set to closed, open the overlay
 						if (active && active !== "true") {
 							activateButton.current?.click();
@@ -117,7 +117,7 @@ function Uploader() {
 	//toddo: refactor as this might exceed space
 	useEffect(() => {
 		const interval = setInterval(() => {
-			const active = window.localStorage.getItem("gptr/active");
+			const active = window.localStorage.getItem("pi/active");
 			if (active && active === "true") {
 				setIsOverlayFallback(true);
 			}
@@ -130,7 +130,7 @@ function Uploader() {
 
 	useEffect(() => {
 		//if redirection to login page is set and user is authenticated, open the overlay after 1s
-		const isRedirectToLogin = window.localStorage.getItem("gptr/redirect-to-login");
+		const isRedirectToLogin = window.localStorage.getItem("pi/redirect-to-login");
 		if (isRedirectToLogin && isRedirectToLogin === "true" && isAuthenticated) {
 			//console.log("redirecting to login");
 			chrome.runtime.sendMessage({ type: "CONTENT_LOADED" }); //indicate to background script that content is loaded
@@ -301,18 +301,18 @@ function Uploader() {
 
 	useMemo(() => {
 		// chrome.runtime.sendMessage({ type: "UPDATE_BADGE_STATE", state: isActive });
-		window.localStorage.setItem("gptr/active", String(isActive)); //set overlay state to storage
+		window.localStorage.setItem("pi/active", String(isActive)); //set overlay state to storage
 		if (isActive) {
 			//set active overlay count
-			const aoc = window.localStorage.getItem("gptr/aoc");
+			const aoc = window.localStorage.getItem("pi/aoc");
 			const count = aoc ? +aoc : 0;
-			window.localStorage.setItem("gptr/aoc", String(count + 1));
+			window.localStorage.setItem("pi/aoc", String(count + 1));
 
 			//clear the origins (onClick and onInstall once overlay is opened)
 			chrome.runtime.sendMessage({ type: "CLEAR_ORIGIN" });
 		} else {
 			//reset active overlay count
-			window.localStorage.setItem("gptr/aoc", "0");
+			window.localStorage.setItem("pi/aoc", "0");
 		}
 	}, [isActive])
 

@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "Vai esat pārliecināts"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader paziņojums"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader sadala garu tekstu mazākos gabalos un nosūta tos uz Pi.ai. Iespējams, uz laiku sasniegsiet limitu. Ja tā notiek, pagaidiet aptuveni stundu."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Iespējams, Pi.ai rāda kļūdu vai esat sasniedzis limitu. Pārbaudiet vietni."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader logotips"
     },
     "login_to_use": {

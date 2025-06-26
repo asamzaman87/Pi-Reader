@@ -116,10 +116,10 @@
     "are_you_sure": {
       "message": "உறுதியா"
     },
-    "gpt_reader_notice": {
+    "pi_reader_notice": {
       "message": "Pi Reader அறிவிப்பு"
     },
-    "gpt_reader_chunk_explanation": {
+    "pi_reader_chunk_explanation": {
       "message": "Pi Reader நீளமான உரையை சிறிய பகுதியாக பிரித்து Pi.ai க்கு அனுப்புகிறது. ஒரு நேரத்தில் வரம்பை அடையலாம். அப்படி நடந்தால், ஒரு மணி நேரம் காத்திருக்கவும்."
     },
     "acknowledge_and_accept": {
@@ -173,7 +173,7 @@
     "untitled_file": {
       "message": "Untitled.txt"
     },
-    "gpt_reader": {
+    "pi_reader": {
       "message": "Pi Reader"
     },
     "simplify_reading": {
@@ -188,7 +188,7 @@
     "chat_error": {
       "message": "Pi.ai ஒரு பிழை காட்டக்கூடும் அல்லது வரம்பை அடைந்திருக்கலாம். அவர்களின் தளத்தை சரிபார்க்கவும்."
     },
-    "gpt_reader_logo": {
+    "pi_reader_logo": {
       "message": "Pi Reader லோகோ"
     },
     "login_to_use": {
