@@ -15,7 +15,7 @@ export default mergeConfig(
           "name": "Pi Reader: Free AI Text to Speech (TTS)",
           "browser_specific_settings": {
             "gecko": {
-              "id": "democraticdeveloper@gmail.com"
+              "id": "asamzaman87@gmail.com"
             }
           },
           background: {
