@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "version": "1.0.0",
-  "name": "__EXT_PiReader__",
-  "description": "__EXT_PiReader__",
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "options_ui": {
     "page": "src/pages/options/index.html"
