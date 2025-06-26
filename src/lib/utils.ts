@@ -94,7 +94,7 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
 
   const initialChunkSize = chunkSize; // Initial chunk size in characters
   let targetSize = initialChunkSize;   // Current target chunk size
-  const maxChunkSize = 3000;           // Maximum chunk size in characters
+  const maxChunkSize = 300;           // Maximum chunk size in characters
 
   const chunks = sentences.reduce((chunks, sentence, i, arr) => {
     // Calculate the potential new chunk if the current sentence is added
