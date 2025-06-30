@@ -91,10 +91,7 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
   // const sentences = text.match(/[^.!?]+[.!?]+[\])'"`’”]*|.+/g) || [];
   let currentChunk = "";
   let chunkId = 0;
-
-  const initialChunkSize = chunkSize; // Initial chunk size in characters
-  let targetSize = initialChunkSize;   // Current target chunk size
-  const maxChunkSize = 300;           // Maximum chunk size in characters
+  let targetSize = CHUNK_SIZE * 2;   // Current target chunk size
 
   const chunks = sentences.reduce((chunks, sentence, i, arr) => {
     // Calculate the potential new chunk if the current sentence is added
@@ -114,15 +111,14 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
       currentChunk = sentence.trim();
 
       // Determine if the next chunk should reset based on chunkId
-      const isEvery12thChunk = (chunkId % 12) === 0;
+      const isEveryNthChunk = (chunkId % 9) === 0;
 
       // Adjust the target size based on conditions
-      if (isEvery12thChunk) {
-        // Reset to the initial chunk size
-        targetSize = initialChunkSize;
+      if (chunks.length === 0 || isEveryNthChunk) {
+        targetSize = CHUNK_SIZE * 2;
       } else {
-        // Increase the target size by 50%, ensuring it does not exceed maxChunkSize
-        targetSize = Math.min(Math.floor(targetSize * 1.5), maxChunkSize);
+        // LATER TODO: Increase the target size by 50%, ensuring it does not exceed maxChunkSize
+        targetSize = CHUNK_SIZE;
       }
     } else {
       // Accumulate the sentence into the current chunk

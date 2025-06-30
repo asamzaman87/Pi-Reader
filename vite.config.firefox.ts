@@ -12,7 +12,7 @@ export default mergeConfig(
       crx({
         manifest: {
           ...baseManifest,
-          "name": "Pi Reader: Free AI Text to Speech for Adults, TTS",
+          "name": "Pi Reader: Free AI Text to Speech",
           "browser_specific_settings": {
             "gecko": {
               "id": "asamzaman87@gmail.com"

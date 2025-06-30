@@ -1,9 +1,9 @@
 {
   "name": "pi-reader",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Natural Pi.ai AI text to speech (TTS) for PDFs, articles, & docs. Download or read aloud using high-quality voices with Pi Reader",
   "license": "MIT",
-  "url": "https://www.pi-reader.com/",
+  "url": "https://www.pi-reader.net/",
   "scripts": {
     "build": "bun run build:chrome && bun run build:firefox && cp -r _locales dist_chrome/ && cp -r _locales dist_firefox/",
     "zip:build": "zip -r dist_chrome.zip dist_chrome/ && (cd dist_firefox && zip -r ../dist_firefox.zip .) && zip -r dist_edge.zip dist_chrome/ -x \"dist_chrome/.vite/*\"",
