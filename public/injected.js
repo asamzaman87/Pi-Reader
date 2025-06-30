@@ -248,7 +248,6 @@ window.fetch = async function (...args) {
       const data = await clone.json();
       // console.log("📥 Response JSON:", data);
     } else if (contentType.includes("text")) {
-        // chatgpt todo: lets create a variable named actual and if actual normalized with the alphanum function and target normalized are not the same at the time of dispatching the PI_CHAT_EVENT then we return another boolean, which will true upon a mismatch and false otherwise. 
         const raw = await clone.text();
         const events = [];
         const chunks = raw.split("\n\n");

@@ -289,7 +289,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     };
 
 
-    const sendPrompt = async () => {
+    const sendPrompt = () => {
         if (!isPlaying && audioUrls.length < chunks.length) {
             setIsLoading(true);
         } else {
@@ -316,7 +316,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver = null;
         }
 
-        const observer = new MutationObserver(async (mutations, obs) => {
+        const observer = new MutationObserver((mutations, obs) => {
             const btn = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
             if (btn && !btn.disabled) {
                 btn.click();
