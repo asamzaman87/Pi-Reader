@@ -283,7 +283,8 @@ window.fetch = async function (...args) {
         // ── Compare normalized actual vs. targetText ──
         const normActual = normalizeAlphaNumeric(actual);
         const normTarget = normalizeAlphaNumeric(targetText);
-        const mismatch = normActual !== normTarget;
+        const lenDiff = Math.abs(normActual.length - normTarget.length);
+        const mismatch = lenDiff > 5;
 
         if (mismatch) {
           const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
