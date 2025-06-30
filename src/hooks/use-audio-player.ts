@@ -42,6 +42,7 @@ const useAudioPlayer = (isDownload: boolean) => {
             setHasCompletePlaying(true);
             setAudioUrls(completedPlaying);
             audioPlayer.src = completedPlaying[0];
+            audioPlayer.playbackRate = playRate;
             audioPlayer.id = "1";
             // audioPlayer.pause();
 
@@ -65,7 +66,7 @@ const useAudioPlayer = (isDownload: boolean) => {
             setIsChunkProcessing(false);
             setHasCompletePlaying(false);
         }
-    }, [completedPlaying, audioUrls, chunks, currentIndex, isPlaying]);
+    }, [completedPlaying, audioUrls, chunks, currentIndex, isPlaying, playRate]);
 
     const playNext = useCallback(async (index: number) => {
         try {

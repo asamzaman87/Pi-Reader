@@ -1,4 +1,4 @@
-import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR } from "@/lib/constants";
+import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG_INFO, HELPER_PROMPT_2 } from "@/lib/constants";
 import { Chunk, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
@@ -29,6 +29,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     const [conversationId, setConversationId] = useState<string | null>(null);
     const isLoopActive = useRef(true);
     let activeSendObserver: MutationObserver | null = null;
+    const changePrompt = useRef(false);
     
     
     useEffect(()=> {
@@ -211,10 +212,27 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             sid = await startConversation();
             setConversationId(sid);
         }
+        
         if (arr && arr.length > 0) {
+            const pending: Record<number, string> = {};
+            let nextToAppend = 0;
+            const tryDrain = () => {
+                // If blobUrl for nextToAppend is ready, append it, then loop
+                if (!isLoopActive.current) return;
+                setAudioUrls(prev => {
+                    const newArr = [...prev];
+                    while (pending[nextToAppend] !== undefined) {
+                        newArr.push(pending[nextToAppend]);
+                        delete pending[nextToAppend];
+                        nextToAppend++;
+                    }
+                    return newArr;
+                });
+            };
             for (let i = 0; i < arr.length && isLoopActive.current; i++) {
                 const el = arr[i];
 
+                // console.log('INJECTING PROMPT: ', el.text);
                 // 1) inject the prompt
                 injectPrompt(el.text);
 
@@ -227,8 +245,9 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                 if (type === 'error') {
                     console.warn('Chat error, retrying chunk:', el.text);
                     await new Promise(res => setTimeout(res, 3000));
-                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                     i--;              // rewind so we retry this same chunk
+                    changePrompt.current = true;
                     continue;
                 }
 
@@ -241,44 +260,29 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                 if (!audioUrl) {
                     console.warn('No audio URL for chunk, retrying:', el.text);
                     await new Promise(res => setTimeout(res, 3000));
-                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
+                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                     i--;               // rewind so we retry this chunk
                     continue;
                 }
 
-                // retry up to 4 times with 1s delay
-                const maxAttempts = 4;
-                let resp: Response | null = null;
-                let attempt = 0;
-
-                while (attempt < maxAttempts && isLoopActive.current) {
-                    resp = await fetch(audioUrl, { credentials: 'include' });
-                    if (resp.ok) break;
-                    attempt++;
-                    await new Promise(res => setTimeout(res, 3000));
-                }
-
-                if (!resp || !resp.ok) {
-                    console.warn(`Failed to fetch audio after ${maxAttempts} attempts for chunk, retrying:`, el.text);
-                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
-                    i--;               // rewind so we retry this chunk
-                    continue;
-                }
-
-                let blob: Blob;
-                try {
-                    blob = await resp.blob();
-                } catch {
-                    console.warn(`Error blobbing audio, retrying...`);
-                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG });
-                    i--;               // rewind so we retry this chunk
-                    continue;
-                }
-                
-                const blobUrl = URL.createObjectURL(blob);
-                if (isLoopActive.current) {
-                    setAudioUrls(prev => [...prev, blobUrl]);
-                }
+                (async (chunkIndex: number) => {
+                    const maxAttempts = 4;
+                    for (let attempt = 0; attempt < maxAttempts && isLoopActive.current; attempt++) {
+                        try {
+                            const resp = await fetch(audioUrl, { credentials: 'include' });
+                            if (!resp.ok) throw new Error(`status ${resp.status}`);
+                            const blob = await resp.blob();
+                            pending[chunkIndex] = URL.createObjectURL(blob);
+                            tryDrain();
+                            return;
+                        } catch (err) {
+                            console.warn(`audio fetch error for chunk ${chunkIndex}, attempt ${attempt}`, err);
+                            await new Promise(r => setTimeout(r, 3000));
+                            toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
+                        }
+                    }
+                    console.warn(`Failed to fetch audio for chunk ${chunkIndex} after ${maxAttempts} attempts`);
+                })(i);
             }
             // You can do something further with `allVoices` here
         }
@@ -293,6 +297,14 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         }    
     
         const sendButton = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
+        if (!sendButton) {
+            toast({
+                description: `Pi Reader is having trouble sending your chunks in for processing...`,
+                style: TOAST_STYLE_CONFIG
+            })
+            return;
+        } 
+
         if (sendButton && !sendButton.disabled) {
             sendButton.click();
             return;
@@ -313,27 +325,35 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                 clearTimeout(timeout);
             }
         });
-    
-        observer.observe(document.body, { childList: true, subtree: true });
+
+        observer.observe(sendButton, {
+            attributes: true,
+            attributeFilter: ['disabled']
+        });
         activeSendObserver = observer;
     
         const timeout = setTimeout(() => {
             observer.disconnect();
             activeSendObserver = null;
-            console.error("[sendPrompt] Send button not found after 180 seconds.");
+            console.error("[sendPrompt] Send button not found after 120 seconds.");
             toast({
                 description: `Pi Reader is having trouble, please click on the back button and try again`,
                 style: TOAST_STYLE_CONFIG
             })
-        }, 180_000);
+        }, 120_000);
     };
 
     
     const injectPrompt = useCallback((text: string) => {
         const textarea = document.querySelector(PROMPT_INPUT_SELECTOR) as HTMLTextAreaElement;
-
+        let hp = HELPER_PROMPT;
+        if (changePrompt.current) {
+            hp = HELPER_PROMPT_2;
+            changePrompt.current = false;
+        }
         if (textarea) {
-            const raw = `${HELPER_PROMPT}\n\n${text}`;
+            const sanitized = text.replace(/\r?\n+/g, ' ');
+            const raw = `${hp}\n${sanitized}`;
             // ── Use the native setter so React sees the change ──
             if (document.activeElement !== textarea) {
                 textarea.focus();
@@ -341,10 +361,17 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             setNativeValue(textarea, raw);
 
             // ── Let React’s onChange/onInput fire ──
-            textarea.dispatchEvent(new Event("input",  { bubbles: true }));
-            textarea.dispatchEvent(new Event("change", { bubbles: true }));
+            textarea.dispatchEvent(new InputEvent('input', { bubbles: true, cancelable: true }));
 
-            sendPrompt();
+            requestAnimationFrame(() => {
+                // DEBUG: confirm React saw it
+                // console.log('[injectPrompt] textarea.value=', textarea.value);
+                // const btn = document.querySelector(SUBMIT_BUTTON_SELECTOR) as HTMLButtonElement | null;
+                // console.log('[injectPrompt] send button disabled=', btn?.disabled);
+
+                // Now trigger sendPrompt
+                sendPrompt();
+            });
         } else {
             const errorMessage = `Pi Reader is having trouble, please refresh your page and try again`;
             window.dispatchEvent(new CustomEvent(LISTENERS.ERROR, { detail: { message: errorMessage } }));
@@ -425,6 +452,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver.disconnect();
             activeSendObserver = null;
         }
+        changePrompt.current = false;
     }
 
     useMemo(() => {

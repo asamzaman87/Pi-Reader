@@ -1,3 +1,8 @@
+function normalizeAlphaNumeric(str) {
+  // This will keep all Unicode letters and digits
+  return str.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
+}
+
 const loopThroughReaderToExtractMessageId = async (reader, args) => {
     let messageId = "";
     let conversationId = "";
@@ -157,7 +162,6 @@ XMLHttpRequest.prototype.open = function (method, url, ...rest) {
 };
 
 
-// const originalFetch = window.fetch;
 window.fetch = async function (...args) {
   let url = "";
   let method = "GET";
@@ -199,7 +203,14 @@ window.fetch = async function (...args) {
   const hasConversationEndpoint = url.includes(CONVERSATION_ENDPOINT);
 
   const response = await originalFetch.apply(this, args);
+  let targetText = "";
   if (hasConversationEndpoint && method === 'POST') {
+    const req = JSON.parse(args[1].body);
+    const text = req.text || "";
+    const markerPos = text.lastIndexOf("<<<");
+    targetText = markerPos >= 0
+        ? text.slice(markerPos + 3)
+        : text;
     const clonedResponse = response.clone();
     // const stream = clonedResponse.body;
     if (clonedResponse.status !== 200) {
@@ -263,7 +274,27 @@ window.fetch = async function (...args) {
             }
           }
         }
-        window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
+
+        const actual = events
+          .filter(ev => ev.event === "partial" && ev.data.text)
+          .map(ev => ev.data.text)
+          .join("");
+
+        // ── Compare normalized actual vs. targetText ──
+        const normActual = normalizeAlphaNumeric(actual);
+        const normTarget = normalizeAlphaNumeric(targetText);
+        const lenDiff = Math.abs(normActual.length - normTarget.length);
+        const mismatch = lenDiff > 5;
+
+        if (mismatch) {
+          const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
+            detail: "Something went wrong with the chat endpont.",
+          });
+          window.dispatchEvent(generalErrorEvent);
+        } else {
+          window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
+        }
+        
       
         // console.log("✅ Parsed SSE Events:", events);
     } else if (contentType.includes("event-stream")) {
