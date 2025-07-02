@@ -219,9 +219,6 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     const normT = normalizeAlphaNumeric(target)
                     // mid‐stream: only fail if actual outgrows target by >5
                     if (normA.length > normT.length + 5) {
-                        console.log('mid‐stream match');
-                        console.log("normA: ", normA);
-                        console.log("normT: ", normT);
                         fail("mismatch mid‐stream")
                     }
                 }
@@ -232,15 +229,10 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             buffer = parts[parts.length - 1]
         }
 
-        clearTimeout(inactivity)
-
         // final absolute‐difference check
         const normA = normalizeAlphaNumeric(actualText)
         const normT = normalizeAlphaNumeric(target)
         if (Math.abs(normA.length - normT.length) > 5) {
-            console.log('final match');
-            console.log("normA: ", normA);
-            console.log("normT: ", normT);
             fail("final mismatch")
         }
 
