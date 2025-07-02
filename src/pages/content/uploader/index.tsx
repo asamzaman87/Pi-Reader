@@ -12,7 +12,6 @@ import { cn, waitForButtonWithText, waitForElement } from "@/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import AlertPopup from "./alert-popup";
 import Content from "./content";
-import { set } from "react-hook-form";
 export interface PromptProps {
 	text: string | undefined
 }
@@ -256,20 +255,25 @@ function Uploader() {
 				style: TOAST_STYLE_CONFIG,
 			})
 		}
-		const SubmitBtn = await waitForElement(SUBMIT_BUTTON_SELECTOR, 1_500);
-		// const SubmitBtn = document.querySelector(SUBMIT_BUTTON_SELECTOR);
+
+		await Promise.race([
+			waitForElement(SUBMIT_BUTTON_SELECTOR, 5_000),
+			waitForElement(PROMPT_INPUT_SELECTOR, 5_000),
+			waitForButtonWithText(["Continue"]),
+      	]);
+
 		if (!['/onboarding', '/talk', '/discover', '/profile'].includes(window.location.pathname)) {
 			localStorage.setItem("pi/onload-open", "true");
 			window.location.href = "https://pi.ai/talk";
 		}
 
-		if (!SubmitBtn && window.location.pathname === '/onboarding') {
+		if (window.location.pathname === '/onboarding') {
 			localStorage.setItem("pi/onload-open", "true");
 			setShowRoutePopup(true);
 			await skipOnboardingFlow(true);
 		} 
 		
-		if (SubmitBtn) {
+		if (window.location.pathname !== '/onboarding') {
 			const triggerButton = document.querySelector(
 				'button.z-10.bg-neutral-200.pl-4.text-neutral-900 > div[style*="transform: none;"]'
 			);

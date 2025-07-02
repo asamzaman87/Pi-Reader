@@ -1,5 +1,5 @@
-import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG_INFO, HELPER_PROMPT_2 } from "@/lib/constants";
-import { Chunk, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
+import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG_INFO, HELPER_PROMPT_2, PI_CHAT_URL } from "@/lib/constants";
+import { Chunk, delay, normalizeAlphaNumeric, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
@@ -9,6 +9,11 @@ interface ExtractedText {
     rawText: string;
     html: string;
   }
+
+interface ChatEvent { event: string; data: any }
+type ChatResult =
+    | { type: "stream"; events: ChatEvent[] }
+    | { type: "error";  events: ChatEvent[] }
   
 const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: number) => {
     const { toast } = useToast();
@@ -30,6 +35,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     const isLoopActive = useRef(true);
     let activeSendObserver: MutationObserver | null = null;
     const changePrompt = useRef(false);
+    const fallBack = useRef(false);
     
     
     useEffect(()=> {
@@ -50,62 +56,6 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         }
         setProgress(((blobs.length ?? 0) / (chunks.length ?? 0)) * 100);
     }, [chunks, blobs, currentCompletedStream]);
-
-
-    // const sendPrompt = async () => {
-
-    //     // fetc
-    //     //console.log("SEND_PROMPT");
-    //     // setIsLoading(true);
-    //     // const sendButton: HTMLButtonElement | null = document.querySelector("[data-testid='send-button']");
-    //     // // toast({ description:"It seems that Pi.ai might be either disPlaying an error, generating a prompt, or you've reached your hourly limit. Please check on the Pi.ai website for the exact error.", style: TOAST_STYLE_CONFIG });
-    //     // if (!sendButton) return
-    //     // sendButton.click();
-
-    //     const textarea = document.querySelector('textarea');
-    //     const button = textarea?.closest('div.relative')?.querySelector('button');
-    //     // console.log('Button: ', button);
-
-    //     const audio = document.querySelector('main audio');
-    //     const AudioButton = audio?.closest('main')?.querySelector('button');
-    //     var test = document.querySelector('.relative.flex.items-center.justify-end.self-end.overflow-hidden.p-2.bg-neutral-200');
-
-    //     if (AudioButton) {
-    //         // AudioButton.click(); // Unmutte the voice
-    //     }
-    //     if (button) {
-    //         // button.click(); //  triggers the click
-    //     }
-    //     // Step 1: Select the audio element
-    //     const audio1 = document.querySelector('audio');
-
-    //     // Step 2: Go to the div after audio
-    //     const parentDiv = audio1?.nextElementSibling;
-
-    //     // Step 3: Go to the first child inside that div
-    //     const innerWrapper = parentDiv?.firstElementChild;
-
-    //     // Step 4: Get the second div inside the innerWrapper
-    //     const targetDiv = innerWrapper?.children[1]; // Index 1 = second div
-
-    //     // Step 5: Count buttons inside the targetDiv
-    //     if (targetDiv) {
-    //         const buttons = targetDiv.querySelectorAll('button');
-    //         // console.log('Number of buttons:', buttons.length);
-
-    //         if (buttons.length === 1) {
-    //             // buttons[0]?.click();
-    //         }
-
-    //     } else {
-    //         console.log('Target div not found');
-    //     }
-
-    //     // const buttons = test ? test.querySelectorAll('button') : [];
-    //     // console.log('Buttons: ',  buttons.length);
-
-
-    // };
 
     const stopPrompt = async () => {
         //console.log("STOP_PROMPT");
@@ -183,7 +133,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             window.removeEventListener("GENERAL_RATE_LIMIT", handleRateLimitExceeded);
         };
     }, [handleRateLimitExceeded]);
-    
+
     // wait until injected.js fires back the parsed SSE events
     const waitForChatStream = (): Promise<{ event: string; data: any }[]> =>
         new Promise(resolve => {
@@ -202,53 +152,192 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
         };
         window.addEventListener("GENERAL_ERROR", handler as any);
     });
-    
-     const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
-        const allVoices: string[] = [];
-        const selectedVoiceObject = voicelist.voices.find((v: { voice: string }) => v.voice === voicelist.selected);
-        let sid: string | null = conversationId;
-            
-        if (!conversationId) {
-            sid = await startConversation();
-            setConversationId(sid);
+
+    const buildPrompt = (text: string): string => {
+        // pick helper prompt and reset changePrompt if needed
+        let hp = HELPER_PROMPT;
+        if (changePrompt.current) {
+            hp = HELPER_PROMPT_2;
+            changePrompt.current = false;
         }
-        
-        if (arr && arr.length > 0) {
-            const pending: Record<number, string> = {};
-            let nextToAppend = 0;
-            const tryDrain = () => {
-                // If blobUrl for nextToAppend is ready, append it, then loop
-                if (!isLoopActive.current) return;
-                setAudioUrls(prev => {
-                    const newArr = [...prev];
-                    while (pending[nextToAppend] !== undefined) {
-                        newArr.push(pending[nextToAppend]);
-                        delete pending[nextToAppend];
-                        nextToAppend++;
+        // sanitize whitespace exactly like injectPrompt
+        const sanitized = text.replace(/\r?\n+/g, ' ');
+        return `${hp}\n${sanitized}`;
+    };
+
+    async function fetchChatEvents(
+        promptText: string,
+        sid: string,
+        target: string
+    ) {
+        const fail = (msg: string) => {
+            throw new Error(msg)
+        }
+
+        const res = await fetch(PI_CHAT_URL, {
+            method:      "POST",
+            credentials: "include",
+            headers:     { "Content-Type": "application/json" },
+            body:        JSON.stringify({ conversation: sid, text: promptText }),
+        })
+        if (!res.ok) fail("HTTP " + res.status)
+
+        const reader  = res.body!.getReader()
+        const decoder = new TextDecoder("utf-8")
+        let buffer    = ""
+        const events: { event: string; data: any }[] = []
+        let actualText = ""
+
+        let inactivity: ReturnType<typeof setTimeout> | undefined;
+        // const resetTimer = () => {
+        //     clearTimeout(inactivity)
+        //     inactivity = setTimeout(() => fail("no-stream activity"), timeoutMs)
+        // }
+        // resetTimer()
+
+        while (true) {
+            const { done, value } = await reader.read().catch(e => fail(e.message))
+            if (done) break
+            // resetTimer()
+            buffer += decoder.decode(value!, { stream: true })
+
+            const parts = buffer.split("\n\n")
+            for (let i = 0; i < parts.length - 1; i++) {
+            let ev: string | null = null, dataRaw = ""
+            for (const line of parts[i].split("\n")) {
+                if (line.startsWith("event:")) ev      = line.slice(6).trim()
+                if (line.startsWith("data:"))  dataRaw += line.slice(5).trim()
+            }
+            if (ev && dataRaw) {
+                try {
+                const parsed = JSON.parse(dataRaw)
+                events.push({ event: ev, data: parsed })
+
+                if (ev === "partial" && parsed.text) {
+                    actualText += parsed.text
+                    const normA = normalizeAlphaNumeric(actualText)
+                    const normT = normalizeAlphaNumeric(target)
+                    // mid‐stream: only fail if actual outgrows target by >5
+                    if (normA.length > normT.length + 5) {
+                        console.log('mid‐stream match');
+                        console.log("normA: ", normA);
+                        console.log("normT: ", normT);
+                        fail("mismatch mid‐stream")
                     }
-                    return newArr;
-                });
-            };
-            for (let i = 0; i < arr.length && isLoopActive.current; i++) {
+                }
+                } catch { /* no‐op */ }
+            }
+            }
+
+            buffer = parts[parts.length - 1]
+        }
+
+        clearTimeout(inactivity)
+
+        // final absolute‐difference check
+        const normA = normalizeAlphaNumeric(actualText)
+        const normT = normalizeAlphaNumeric(target)
+        if (Math.abs(normA.length - normT.length) > 5) {
+            console.log('final match');
+            console.log("normA: ", normA);
+            console.log("normT: ", normT);
+            fail("final mismatch")
+        }
+
+        return events
+    }
+
+    const getCompleteTextChunks = async (arr: any[], voicelist?: any) => {
+       const selectedVoiceObject = voicelist.voices.find((v: { voice: string }) => v.voice === voicelist.selected);
+       let sid: string | null = conversationId;
+          
+       if (!conversationId) {
+           sid = await startConversation();
+           setConversationId(sid);
+       }
+
+       if (!sid) { return; }
+      
+       if (arr && arr.length > 0) {
+           const pending: Record<number, string> = {};
+           let nextToAppend = 0;
+           let events: ChatEvent[];
+           let type: ChatResult["type"];
+           const tryDrain = () => {
+               // If blobUrl for nextToAppend is ready, append it, then loop
+               if (!isLoopActive.current) return;
+               setAudioUrls(prev => {
+                   const newArr = [...prev];
+                   while (pending[nextToAppend] !== undefined) {
+                       newArr.push(pending[nextToAppend]);
+                       delete pending[nextToAppend];
+                       nextToAppend++;
+                   }
+                   return newArr;
+               });
+           };
+
+
+           for (let i = 0; i < arr.length && isLoopActive.current; i++) {
                 const el = arr[i];
+                const prompt = buildPrompt(el.text);
+                // 1) Start a 15 s timer that will fire a toast if the call is still pending
+                const longCallTimer = setTimeout(() => {
+                    toast({
+                        description: "Pi Reader is taking longer than usual...you may want to refresh your page and open the extension again if you are getting issues.",
+                        style: TOAST_STYLE_CONFIG_INFO
+                    });
+                }, 15_000);
+                
+                if (!fallBack.current) {
+                    try {
+                        events = await fetchChatEvents(prompt, sid, el.text);
+                    } catch (err: any) {
+                        // timeout or mismatch or HTTP error → retry
+                        console.warn("chat fetch failed for chunk, retrying:", err.message);
+                        if (err.message.includes("429")) {
+                            toast({
+                                description:
+                                    "You may have reached pi.ai's rate limits, trying again...",
+                                style: TOAST_STYLE_CONFIG_INFO
+                            });
+                            await delay(5000);
+                        } else {
+                            toast({
+                                description:
+                                    "Pi Reader is taking a bit long to get the next audio chunk… retrying",
+                                style: TOAST_STYLE_CONFIG_INFO
+                            });
+                        }
+                        if (/(HTTP 404|HTTP 410|HTTP 400|HTTP 422)/.test(err.message)) {
+                            fallBack.current = true;
+                        }
+                        changePrompt.current = true;
+                        i--;
+                        continue;
+                    } finally {
+                        clearTimeout(longCallTimer);
+                    }
+                } else {
+                    // 1) inject the prompt
+                    injectPrompt(el.text);
 
-                // console.log('INJECTING PROMPT: ', el.text);
-                // 1) inject the prompt
-                injectPrompt(el.text);
+                    // 2) race between a successful stream or an error event
+                    ;({ type, events } = await Promise.race<ChatResult>([
+                        waitForChatStream().then((ev) => ({ type: "stream", events: ev })),
+                        waitForChatError().then((ev) => ({ type: "error",  events: ev })),
+                    ]));
 
-                // 2) race between a successful stream or an error event
-                const { type, events } = await Promise.race([
-                    waitForChatStream().then(ev => ({ type: 'stream' as const, events: ev })),
-                    waitForChatError().then(ev => ({ type: 'error' as const, events: ev }))
-                ]);
+                    clearTimeout(longCallTimer);
 
-                if (type === 'error') {
-                    console.warn('Chat error, retrying chunk:', el.text);
-                    await new Promise(res => setTimeout(res, 3000));
-                    toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
-                    i--;              // rewind so we retry this same chunk
-                    changePrompt.current = true;
-                    continue;
+                    if (type === 'error') {
+                        console.warn('Chat error, retrying chunk:', el.text);
+                        await new Promise(res => setTimeout(res, 3000));
+                        toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
+                        i--;              // rewind so we retry this same chunk
+                        changePrompt.current = true;
+                        continue;
+                    }
                 }
 
                 // 3) build your voice-note URL
@@ -257,9 +346,10 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
                     : null;
 
+
                 if (!audioUrl) {
                     console.warn('No audio URL for chunk, retrying:', el.text);
-                    await new Promise(res => setTimeout(res, 3000));
+                    await new Promise(res => setTimeout(res, 1000));
                     toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                     i--;               // rewind so we retry this chunk
                     continue;
@@ -277,16 +367,15 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                             return;
                         } catch (err) {
                             console.warn(`audio fetch error for chunk ${chunkIndex}, attempt ${attempt}`, err);
-                            await new Promise(r => setTimeout(r, 3000));
+                            await new Promise(r => setTimeout(r, 1000));
                             toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                         }
                     }
                     console.warn(`Failed to fetch audio for chunk ${chunkIndex} after ${maxAttempts} attempts`);
                 })(i);
-            }
-            // You can do something further with `allVoices` here
-        }
-    };
+           }
+       }
+   };
 
 
     const sendPrompt = () => {
@@ -453,6 +542,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver = null;
         }
         changePrompt.current = false;
+        fallBack.current = false;
     }
 
     useMemo(() => {
@@ -524,6 +614,6 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
 
     return { downloadPreviewText, downloadCombinedFile, progress, setProgress, blobs, isFetching, wasPromptStopped, setWasPromptStopped, chunks, voices, setVoices, isVoiceLoading, text, audioUrls, setAudioUrls, extractText, splitAndSendPrompt, ended: currentCompletedStream?.chunkNumber && +currentCompletedStream?.chunkNumber === chunks.length - 1, isLoading, setIsLoading, reset, is9ThChunk, reStartChunkProcess, setIs9thChunk, isPromptingPaused, setIsPromptingPaused, isBackPressed, setIsBackPressed, isLoopActive }
 
-}
+};
 
 export default useAudioUrl;
