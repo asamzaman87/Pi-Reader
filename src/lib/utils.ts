@@ -85,6 +85,10 @@ export function formatBytes(
 //   return chunks;
 // }
 
+export function delay(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
   // Split the text into sentences based on common delimiters
   const sentences = text.match(/(?:[^.!?•]+[.!?•]+[\])'"`’”]*|[^.!?•]+(?:$))/g) || [];
@@ -137,6 +141,10 @@ export function splitIntoChunksV2(text: string, chunkSize: number = CHUNK_SIZE):
   }, [] as Chunk[]);
 
   return chunks;
+}
+
+export function normalizeAlphaNumeric(str: string) {
+  return str.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
 }
 
 export function splitIntoChunksV3(text: string, chunkSize: number = CHUNK_SIZE): Chunk[] {
@@ -260,6 +268,7 @@ export const detectBrowser = () => {
     return 'unknown';
   }
 };
+
 
 //generate array of number from a specified range (min and max)
 export const generateRange = (min: number = MIN_SLIDER_VALUE, max: number = MAX_SLIDER_VALUE, step: number = STEP_SLIDER_VALUE) => {
