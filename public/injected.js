@@ -3,6 +3,18 @@ function normalizeAlphaNumeric(str) {
   return str.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
 }
 
+const detectErrorPopup = () => {
+  const popupMarkers = [
+    "check back again soon"
+  ];
+  const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
+  return headings.some(h => {
+    const txt = h.textContent?.trim() ?? '';
+    // return true for any of our popups
+    return popupMarkers.some(marker => txt.includes(marker));
+  });
+};
+
 const loopThroughReaderToExtractMessageId = async (reader, args) => {
     let messageId = "";
     let conversationId = "";
@@ -226,7 +238,7 @@ window.fetch = async function (...args) {
         : text;
     const clonedResponse = response.clone();
     // const stream = clonedResponse.body;
-    if (clonedResponse.status !== 200) {
+    if (clonedResponse.status !== 200 || detectErrorPopup()) {
         const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
             detail: "Something went wrong with the chat endpont.",
         });

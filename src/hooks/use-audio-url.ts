@@ -35,6 +35,8 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     const isLoopActive = useRef(true);
     let activeSendObserver: MutationObserver | null = null;
     const changePrompt = useRef(false);
+    const retryCounts = useRef<Record<number, number>>({});
+    const MAX_RETRY = 3;
     
     
     useEffect(()=> {
@@ -284,6 +286,12 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     try {
                         events = await fetchChatEvents(prompt, sid, el.text);
                     } catch (err: any) {
+                        if ((retryCounts.current[i] ?? 0) >= MAX_RETRY) {
+                            return toast({
+                                description: "Pi Reader seems to be experiencing issues getting the next audio chunk, please refresh the page and try again.",    
+                                style: TOAST_STYLE_CONFIG
+                            })
+                        }
                         // timeout or mismatch or HTTP error → retry
                         console.warn("chat fetch failed for chunk, retrying:", err.message);
                         if (err.message.includes("429")) {
@@ -300,6 +308,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                                 style: TOAST_STYLE_CONFIG_INFO
                             });
                         }
+                        retryCounts.current[i] = (retryCounts.current[i] ?? 0) + 1;
                         changePrompt.current = true;
                         i--;
                         continue;
@@ -319,9 +328,16 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     clearTimeout(longCallTimer);
 
                     if (type === 'error') {
+                        if ((retryCounts.current[i] ?? 0) >= MAX_RETRY) {
+                            return toast({
+                                description: "Pi Reader seems to be experiencing issues getting the next audio chunk, please refresh the page and try again.",    
+                                style: TOAST_STYLE_CONFIG
+                            })
+                        }
                         console.warn('Chat error, retrying chunk:', i);
                         await new Promise(res => setTimeout(res, 3000));
                         toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
+                        retryCounts.current[i] = (retryCounts.current[i] ?? 0) + 1;
                         i--;              // rewind so we retry this same chunk
                         changePrompt.current = true;
                         continue;
@@ -534,6 +550,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver = null;
         }
         changePrompt.current = false;
+        retryCounts.current = {};
     }
 
     useMemo(() => {
