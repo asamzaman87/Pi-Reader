@@ -303,6 +303,42 @@ export function observeElement(toObserve: string, cb?: (s: boolean) => void): vo
 
 }
 
+export const detectPopup = () => {
+  const onboardingMarkers = [
+    'Sorry to interrupt',
+    'better when you create an account',
+  ];
+  const popupMarkers = [
+    ...onboardingMarkers,
+    'Just checking',
+    "Try Pi's new features"
+  ];
+  const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
+  return headings.some(h => {
+    const txt = h.textContent?.trim() ?? '';
+  
+    // if this is one of the onboarding modals, set the onload flag
+    if (onboardingMarkers.some(marker => txt.includes(marker))) {
+      localStorage.setItem('pi/onload-open', 'true');
+    }
+
+    // return true for any of our popups
+    return popupMarkers.some(marker => txt.includes(marker));
+  });
+};
+
+export const detectErrorPopup = () => {
+  const popupMarkers = [
+    "check back again soon"
+  ];
+  const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
+  return headings.some(h => {
+    const txt = h.textContent?.trim() ?? '';
+    // return true for any of our popups
+    return popupMarkers.some(marker => txt.includes(marker));
+  });
+};
+
 //find the key in local storage that matches the given key
 export const findMatchLocalStorageKey = (key: string) => {
   const keys = Object.keys(localStorage);

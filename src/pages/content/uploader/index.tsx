@@ -7,8 +7,8 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import useAuthToken from "@/hooks/use-auth-token";
 import { useToast } from "@/hooks/use-toast";
-import { LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG, TOAST_STYLE_CONFIG_INFO } from "@/lib/constants";
-import { cn, waitForButtonWithText, waitForElement } from "@/lib/utils";
+import { LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG } from "@/lib/constants";
+import { cn, detectPopup, waitForButtonWithText, waitForElement } from "@/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import AlertPopup from "./alert-popup";
 import Content from "./content";
@@ -169,33 +169,6 @@ function Uploader() {
 
 	
     useEffect(() => {
-		const onboardingMarkers = [
-			'Sorry to interrupt',
-			'better when you create an account',
-		];
-		const popupMarkers = [
-			...onboardingMarkers,
-			'Just checking',
-			"Try Pi's new features",
-			"check back again soon",
-		];
-	  
-		const detectPopup = () => {
-			const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
-			return headings.some(h => {
-			  const txt = h.textContent?.trim() ?? '';
-		  
-			  // if this is one of the onboarding modals, set the onload flag
-			  if (onboardingMarkers.some(marker => txt.includes(marker))) {
-				localStorage.setItem('pi/onload-open', 'true');
-			  }
-		  
-			  // return true for any of our popups
-			  return popupMarkers.some(marker => txt.includes(marker));
-			});
-		  };
-		  
-	  
 		const interval = setInterval(() => {
 		  // 1) don’t start polling if we’re on /onboarding
 		  if (window.location.pathname === '/onboarding') {
@@ -205,9 +178,9 @@ function Uploader() {
 			if (!wasPopup.current) {
 			  if (isActiveRef.current) {
 				wasPopup.current = true;
-			  	setIsActive(false);
 				isActiveRef.current = false;
 			  }
+			  setIsActive(false);
 			  toast({
 				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader. NOTE: Sign in using an account to minimize these pop-ups. You must be 18+ to use Pi Reader.",
 				duration: 10000,
@@ -247,14 +220,16 @@ function Uploader() {
 		
 	
 	const onOpenChange = async (open: boolean) => {
-		isActiveRef.current = open;	
-		if (wasPopup.current) {
+		if (detectPopup()) {
+			setIsActive(false);
 			return toast({
 				description: "Pi Reader Alert: pi.ai has opened a pop-up that’s blocking the extension. Please resolve it to continue using Pi Reader.",
 				duration: 15000,
 				style: TOAST_STYLE_CONFIG,
 			})
 		}
+
+		isActiveRef.current = open;	
 
 		await Promise.race([
 			waitForElement(SUBMIT_BUTTON_SELECTOR, 5_000),
@@ -287,7 +262,9 @@ function Uploader() {
 					actionButton.click();
 				}
 			}
-			setIsActive(open);
+			if (!detectPopup()) {
+				setIsActive(open);
+			}
 			// Skip the automatic call during the initial render
 			if (isInitialRender.current) {
 				isInitialRender.current = false; // Set it to false after first render
