@@ -3,6 +3,18 @@ function normalizeAlphaNumeric(str) {
   return str.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
 }
 
+const detectErrorPopup = () => {
+  const popupMarkers = [
+    "check back again soon"
+  ];
+  const headings = Array.from(document.querySelectorAll('.t-heading-m, .t-body-m'));
+  return headings.some(h => {
+    const txt = h.textContent?.trim() ?? '';
+    // return true for any of our popups
+    return popupMarkers.some(marker => txt.includes(marker));
+  });
+};
+
 const loopThroughReaderToExtractMessageId = async (reader, args) => {
     let messageId = "";
     let conversationId = "";
@@ -49,7 +61,7 @@ const loopThroughReaderToExtractMessageId = async (reader, args) => {
     return { messageId, conversationId, createTime, text };
 };
 
-const CONVERSATION_ENDPOINT = "/chat";
+const CONVERSATION_ENDPOINT = "v2/chat";
 const SYNTHESIS_ENDPOINT = "backend-api/synthesize";
 const VOICES_ENDPOINT = "backend-api/settings/voices";
 const { fetch: origFetch } = window;
@@ -202,6 +214,19 @@ window.fetch = async function (...args) {
   // console.log("📜 Request Headers:", headers, url); // Log the headers
   const hasConversationEndpoint = url.includes(CONVERSATION_ENDPOINT);
 
+  // // ── CHAT-ENDPOINT ABORT INJECTION ──
+  // if (hasConversationEndpoint && method.toUpperCase() === "POST") {
+  //   // attach a signal and then immediately abort
+  //   const controller = new AbortController();
+  //   args[1] = { ...(args[1] || {}), signal: controller.signal };
+  //   controller.abort(); 
+  //   const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
+  //           detail: "Something went wrong with the chat endpont.",
+  //       });
+  //   window.dispatchEvent(generalErrorEvent);
+  // }
+
+
   const response = await originalFetch.apply(this, args);
   let targetText = "";
   if (hasConversationEndpoint && method === 'POST') {
@@ -213,11 +238,13 @@ window.fetch = async function (...args) {
         : text;
     const clonedResponse = response.clone();
     // const stream = clonedResponse.body;
-    if (clonedResponse.status !== 200) {
+    if (clonedResponse.status !== 200 || detectErrorPopup()) {
         const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
             detail: "Something went wrong with the chat endpont.",
         });
         window.dispatchEvent(generalErrorEvent);
+        console.warn('injected.js detected status code: ', clonedResponse.status);
+        return response;
     }
     // if (stream) {
     //     const reader = stream.getReader();
@@ -248,55 +275,61 @@ window.fetch = async function (...args) {
       const data = await clone.json();
       // console.log("📥 Response JSON:", data);
     } else if (contentType.includes("text")) {
-        const raw = await clone.text();
-        const events = [];
-        const chunks = raw.split("\n\n");
-      
-        for (const chunk of chunks) {
-          const lines = chunk.split("\n");
-          let event = null;
-          let data = "";
-      
-          for (const line of lines) {
-            if (line.startsWith("event:")) {
-              event = line.replace("event:", "").trim();
-            } else if (line.startsWith("data:")) {
-              data += line.replace("data:", "").trim();
-            }
-          }
-      
-          if (event && data) {
-            try {
-              const parsedData = JSON.parse(data);
-              events.push({ event, data: parsedData });
-            } catch (e) {
-              console.warn("❗ Failed to parse SSE data:", data);
-            }
+      const raw      = await clone.text();
+      const events   = [];
+      const chunks   = raw.split("\n\n");
+      let   actual   = "";
+      const normTarget = normalizeAlphaNumeric(targetText);
+
+      // — mid-stream parsing with on-the-fly validation —
+      for (const chunk of chunks) {
+        const lines = chunk.split("\n");
+        let   event = null;
+        let   data  = "";
+
+        for (const line of lines) {
+          if (line.startsWith("event:")) {
+            event = line.slice(6).trim();
+          } else if (line.startsWith("data:")) {
+            data += line.slice(5).trim();
           }
         }
 
-        const actual = events
-          .filter(ev => ev.event === "partial" && ev.data.text)
-          .map(ev => ev.data.text)
-          .join("");
+        if (event && data) {
+          let parsedData;
+          try {
+            parsedData = JSON.parse(data);
+          } catch {
+            console.warn("❗ Failed to parse SSE chunk:", data);
+            continue;
+          }
+          events.push({ event, data: parsedData });
 
-        // ── Compare normalized actual vs. targetText ──
-        const normActual = normalizeAlphaNumeric(actual);
-        const normTarget = normalizeAlphaNumeric(targetText);
-        const lenDiff = Math.abs(normActual.length - normTarget.length);
-        const mismatch = lenDiff > 5;
-
-        if (mismatch) {
-          const generalErrorEvent = new CustomEvent('GENERAL_ERROR', {
-            detail: "Something went wrong with the chat endpont.",
-          });
-          window.dispatchEvent(generalErrorEvent);
-        } else {
-          window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
+          // — mid-stream length check exactly as in fetchChatEvents —
+          if (event === "partial" && parsedData.text) {
+            actual += parsedData.text;
+            const normActual = normalizeAlphaNumeric(actual);
+            if (normActual.length > normTarget.length + 5) {
+              console.log('mid-stream length check');
+              window.dispatchEvent(new CustomEvent("GENERAL_ERROR", {
+                detail: "Something went wrong with the chat endpoint."
+              }));
+              return response;
+            }
+          }
         }
-        
-      
-        // console.log("✅ Parsed SSE Events:", events);
+      }
+
+      // — final absolute-difference check —
+      const normActual = normalizeAlphaNumeric(actual);
+      if (Math.abs(normActual.length - normTarget.length) > 5) {
+        window.dispatchEvent(new CustomEvent("GENERAL_ERROR", {
+          detail: "Something went wrong with the chat endpoint."
+        }));
+      } else {
+        window.dispatchEvent(new CustomEvent("PI_CHAT_STREAM", { detail: events }));
+      }
+      // console.log("✅ Parsed SSE Events:", events);
     } else if (contentType.includes("event-stream")) {
       // console.log("📥 [SSE Stream] — use reader to process this");
     } else {

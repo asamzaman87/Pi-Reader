@@ -1,5 +1,5 @@
 import { CHUNK_TO_PAUSE_ON, HELPER_PROMPT, LISTENERS, PI_START_URL, PI_VOICE_STREAM_URL, PROMPT_INPUT_SELECTOR, TOAST_STYLE_CONFIG, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG_INFO, HELPER_PROMPT_2, PI_CHAT_URL } from "@/lib/constants";
-import { Chunk, delay, normalizeAlphaNumeric, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
+import { Chunk, delay, detectErrorPopup, detectPopup, normalizeAlphaNumeric, setNativeValue, splitIntoChunksV2 } from "@/lib/utils";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useFileReader from "./use-file-reader";
 import useStreamListener from "./use-stream-listener";
@@ -35,7 +35,8 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
     const isLoopActive = useRef(true);
     let activeSendObserver: MutationObserver | null = null;
     const changePrompt = useRef(false);
-    const fallBack = useRef(false);
+    const retryCounts = useRef<Record<number, number>>({});
+    const MAX_RETRY = 3;
     
     
     useEffect(()=> {
@@ -281,10 +282,16 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     });
                 }, 15_000);
                 
-                if (!fallBack.current) {
+                if (detectErrorPopup()) {
                     try {
                         events = await fetchChatEvents(prompt, sid, el.text);
                     } catch (err: any) {
+                        if ((retryCounts.current[i] ?? 0) >= MAX_RETRY) {
+                            return toast({
+                                description: "Pi Reader seems to be experiencing issues getting the next audio chunk, please refresh the page and try again.",    
+                                style: TOAST_STYLE_CONFIG
+                            })
+                        }
                         // timeout or mismatch or HTTP error → retry
                         console.warn("chat fetch failed for chunk, retrying:", err.message);
                         if (err.message.includes("429")) {
@@ -301,9 +308,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                                 style: TOAST_STYLE_CONFIG_INFO
                             });
                         }
-                        if (/(HTTP 404|HTTP 410|HTTP 400|HTTP 422)/.test(err.message)) {
-                            fallBack.current = true;
-                        }
+                        retryCounts.current[i] = (retryCounts.current[i] ?? 0) + 1;
                         changePrompt.current = true;
                         i--;
                         continue;
@@ -323,9 +328,16 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     clearTimeout(longCallTimer);
 
                     if (type === 'error') {
-                        console.warn('Chat error, retrying chunk:', el.text);
+                        if ((retryCounts.current[i] ?? 0) >= MAX_RETRY) {
+                            return toast({
+                                description: "Pi Reader seems to be experiencing issues getting the next audio chunk, please refresh the page and try again.",    
+                                style: TOAST_STYLE_CONFIG
+                            })
+                        }
+                        console.warn('Chat error, retrying chunk:', i);
                         await new Promise(res => setTimeout(res, 3000));
                         toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
+                        retryCounts.current[i] = (retryCounts.current[i] ?? 0) + 1;
                         i--;              // rewind so we retry this same chunk
                         changePrompt.current = true;
                         continue;
@@ -365,6 +377,10 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                     }
                     console.warn(`Failed to fetch audio for chunk ${chunkIndex} after ${maxAttempts} attempts`);
                 })(i);
+
+                if (detectErrorPopup()) {
+                    await delay(1500);
+                }
            }
        }
    };
@@ -534,7 +550,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
             activeSendObserver = null;
         }
         changePrompt.current = false;
-        fallBack.current = false;
+        retryCounts.current = {};
     }
 
     useMemo(() => {
