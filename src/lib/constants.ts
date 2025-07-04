@@ -67,6 +67,7 @@ export const PI_VOICE_OTHER_INFO:any = {
 export const MAX_FILE_SIZE = 1024 * 1024 * 24; // 24MB
 export const PROMPT_INPUT_SELECTOR = "textarea[role='textbox']";
 export const SUBMIT_BUTTON_SELECTOR  = "[aria-label='Submit text']";
+export const DISCOVER_BUTTON_SELECTOR = "[aria-label='Go to Discover page']";
 // export const HELPER_PROMPT = "Repeat the text in this prompt without any changes, introduction or additional words. Do not summarize, analyze, or prepend/append anything. Just output this text exactly as provided:"
 export const HELPER_PROMPT_2 = `Why are you not repeating the text exactly as given? Again, heed these instructions:
 

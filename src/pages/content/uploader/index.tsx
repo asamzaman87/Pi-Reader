@@ -7,7 +7,7 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import useAuthToken from "@/hooks/use-auth-token";
 import { useToast } from "@/hooks/use-toast";
-import { LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG } from "@/lib/constants";
+import { DISCOVER_BUTTON_SELECTOR, LISTENERS, PROMPT_INPUT_SELECTOR, SUBMIT_BUTTON_SELECTOR, TOAST_STYLE_CONFIG } from "@/lib/constants";
 import { cn, detectPopup, waitForButtonWithText, waitForElement } from "@/lib/utils";
 import { useEffect, useMemo, useRef, useState } from "react";
 import AlertPopup from "./alert-popup";
@@ -234,6 +234,7 @@ function Uploader() {
 		await Promise.race([
 			waitForElement(SUBMIT_BUTTON_SELECTOR, 5_000),
 			waitForElement(PROMPT_INPUT_SELECTOR, 5_000),
+			waitForElement(DISCOVER_BUTTON_SELECTOR, 5_000),
 			waitForButtonWithText(["Continue"]),
       	]);
 

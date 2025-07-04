@@ -60,7 +60,7 @@
     "message": "Loading Preview"
   },
   "gpt4_download_note": {
-    "message": "Dear Pi.ai premium users, make sure the model you have chosen is GPT-4o mini for fastest download speeds, avoid choosing models that have a slow output speed. Close the extension overlay to change the model."
+    "message": "Dear Pi reader users, if you start to experience issues, then please refresh the page and open the extension again."
   },
   "cancel": {
     "message": "Cancel"

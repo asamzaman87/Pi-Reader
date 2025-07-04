@@ -281,10 +281,9 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                         style: TOAST_STYLE_CONFIG_INFO
                     });
                 }, 15_000);
-                
-                if (detectErrorPopup()) {
+                if (detectErrorPopup() || !document.querySelector(SUBMIT_BUTTON_SELECTOR)) {
                     try {
-                        events = await fetchChatEvents(prompt, sid, el.text);
+                        events = await fetchChatEvents(prompt, sid!, el.text);
                     } catch (err: any) {
                         if ((retryCounts.current[i] ?? 0) >= MAX_RETRY) {
                             return toast({
@@ -292,6 +291,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                                 style: TOAST_STYLE_CONFIG
                             })
                         }
+                        sid = await startConversation();
                         // timeout or mismatch or HTTP error → retry
                         console.warn("chat fetch failed for chunk, retrying:", err.message);
                         if (err.message.includes("429")) {
@@ -335,6 +335,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
                             })
                         }
                         console.warn('Chat error, retrying chunk:', i);
+                        sid = await startConversation();
                         await new Promise(res => setTimeout(res, 3000));
                         toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                         retryCounts.current[i] = (retryCounts.current[i] ?? 0) + 1;
@@ -353,6 +354,7 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
 
                 if (!audioUrl) {
                     console.warn('No audio URL for chunk, retrying:', el.text);
+                    sid = await startConversation();
                     await new Promise(res => setTimeout(res, 1000));
                     toast({ description: `Pi Reader is taking a bit long to get the next audio chunk, please wait a few seconds...`, style: TOAST_STYLE_CONFIG_INFO });
                     i--;               // rewind so we retry this chunk
