@@ -347,8 +347,10 @@ const useAudioUrl = (isDownload: boolean, isPlaying?: boolean, currentIndex?: nu
 
                 // 3) build your voice-note URL
                 const msgEvent = events.find(ev => ev.event === "message");
+                let voice_name = selectedVoiceObject?.name
+                if (!voice_name) {voice_name = 'voice1' }
                 const audioUrl = msgEvent
-                    ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${selectedVoiceObject?.name}&messageSid=${msgEvent.data.sid}`
+                    ? `${PI_VOICE_STREAM_URL}?mode=eager&voice=${voice_name}&messageSid=${msgEvent.data.sid}`
                     : null;
 
 
